@@ -20,7 +20,7 @@ function slugify(string $text): string
 
 function formatPrice(float $price): string
 {
-    return number_format($price, 2, ',', '.') . ' RON';
+    return number_format($price, 2, ',', '.') . ' MDL';
 }
 
 function cartItemsCount(): int

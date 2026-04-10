@@ -43,7 +43,7 @@ $productSchema = [
     'image' => [$product['image']],
     'offers' => [
         '@type' => 'Offer',
-        'priceCurrency' => 'RON',
+        'priceCurrency' => 'MDL',
         'price' => (float) $product['price'],
         'availability' => 'https://schema.org/InStock',
     ],
