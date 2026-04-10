@@ -3,6 +3,36 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/helpers.php';
 require_once __DIR__ . '/models/ProductModel.php';
 
+set_exception_handler(static function (Throwable $e): void {
+    http_response_code(500);
+    $message = $e->getMessage();
+    $isDbError = str_contains($message, 'Conexiunea la baza de date a esuat');
+    ?>
+    <!doctype html>
+    <html lang="ro">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Eroare server</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-zinc-50 text-zinc-800">
+      <main class="max-w-3xl mx-auto p-6 md:p-10">
+        <div class="bg-white border border-zinc-200 rounded-lg p-6">
+          <h1 class="text-2xl font-semibold mb-3">Eroare de configurare</h1>
+          <?php if ($isDbError): ?>
+            <p class="mb-3">Aplicatia nu se poate conecta la baza de date.</p>
+            <p class="text-sm text-zinc-600">Seteaza in hosting credentialele corecte: <code>DB_HOST</code>, <code>DB_NAME</code>, <code>DB_USER</code>, <code>DB_PASS</code>.</p>
+          <?php else: ?>
+            <p class="text-sm text-zinc-600">A aparut o eroare interna. Verifica log-urile serverului.</p>
+          <?php endif; ?>
+        </div>
+      </main>
+    </body>
+    </html>
+    <?php
+});
+
 $path = routePath();
 $routeParams = [];
 

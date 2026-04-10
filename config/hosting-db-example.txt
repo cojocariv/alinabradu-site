@@ -1,0 +1,10 @@
+Seteaza aceste variabile in hosting (sau in Apache/Nginx env):
+
+DB_HOST=localhost
+DB_NAME=ab_db_
+DB_USER=<userul_real_din_hosting>
+DB_PASS=<parola_reala_din_hosting>
+
+Observatii:
+- In multe host-uri shared, userul NU este "admin".
+- Numele bazei poate avea prefix automat (ex: account_ab_db_).
