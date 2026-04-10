@@ -15,6 +15,8 @@ $orgSchema = [
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="https://alinabradupozestorage.blob.core.windows.net/poze/favicon.png">
+  <link rel="apple-touch-icon" href="https://alinabradupozestorage.blob.core.windows.net/poze/favicon.png">
   <title><?= e($seo['title']) ?></title>
   <meta name="description" content="<?= e($seo['description']) ?>">
   <meta name="keywords" content="<?= e($seo['keywords']) ?>">
