@@ -3,21 +3,21 @@ declare(strict_types=1);
 require_once __DIR__ . '/includes/helpers.php';
 require_once __DIR__ . '/models/ProductModel.php';
 
-$path = trim(currentUrlPath(), '/');
+$path = routePath();
 $routeParams = [];
 
 if ($path === 'sitemap.xml') {
     header('Content-Type: application/xml; charset=utf-8');
     $host = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
-    $staticUrls = ['/', '/magazin', '/despre-noi', '/contact'];
+    $staticUrls = [url('/'), url('/magazin'), url('/despre-noi'), url('/contact')];
     $products = ProductModel::filter();
     echo '<?xml version="1.0" encoding="UTF-8"?>';
     echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-    foreach ($staticUrls as $url) {
-        echo '<url><loc>' . e($host . $url) . '</loc><changefreq>weekly</changefreq></url>';
+    foreach ($staticUrls as $staticUrl) {
+        echo '<url><loc>' . e($host . $staticUrl) . '</loc><changefreq>weekly</changefreq></url>';
     }
     foreach ($products as $product) {
-        echo '<url><loc>' . e($host . '/produs/' . $product['slug']) . '</loc><changefreq>weekly</changefreq></url>';
+        echo '<url><loc>' . e($host . url('/produs/' . $product['slug'])) . '</loc><changefreq>weekly</changefreq></url>';
     }
     echo '</urlset>';
     exit;

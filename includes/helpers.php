@@ -34,6 +34,39 @@ function currentUrlPath(): string
     return $path ?: '/';
 }
 
+function appBasePath(): string
+{
+    $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '/index.php');
+    $baseDir = rtrim(str_replace('/index.php', '', $scriptName), '/');
+    return $baseDir === '' ? '' : $baseDir;
+}
+
+function routePath(): string
+{
+    $path = currentUrlPath();
+    $base = appBasePath();
+    if ($base !== '' && str_starts_with($path, $base)) {
+        $path = substr($path, strlen($base)) ?: '/';
+    }
+    return trim($path, '/');
+}
+
+function url(string $path = '/'): string
+{
+    $base = appBasePath();
+    $path = '/' . ltrim($path, '/');
+    if ($path === '//') {
+        $path = '/';
+    }
+    return ($base === '' ? '' : $base) . $path;
+}
+
+function redirectTo(string $path): void
+{
+    header('Location: ' . url($path));
+    exit;
+}
+
 function seoDefaults(): array
 {
     return [

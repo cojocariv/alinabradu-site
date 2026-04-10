@@ -4,8 +4,7 @@ require_once __DIR__ . '/../models/OrderModel.php';
 
 $cart = $_SESSION['cart'] ?? [];
 if (!$cart) {
-    header('Location: /cos');
-    exit;
+    redirectTo('/cos');
 }
 
 $errors = [];

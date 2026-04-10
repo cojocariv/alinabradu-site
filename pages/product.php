@@ -23,8 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'selected_size' => $size,
             'qty' => (($_SESSION['cart'][$key]['qty'] ?? 0) + 1),
         ];
-        header('Location: /cos');
-        exit;
+        redirectTo('/cos');
     }
 }
 
@@ -75,7 +74,7 @@ $productSchema = [
   <h2 class="font-serif text-2xl mb-4">Produse similare</h2>
   <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
     <?php foreach ($similar as $item): ?>
-      <a href="/produs/<?= e($item['slug']) ?>" class="bg-white rounded shadow-sm overflow-hidden card-hover">
+      <a href="<?= e(url('/produs/' . $item['slug'])) ?>" class="bg-white rounded shadow-sm overflow-hidden card-hover">
         <img src="<?= e($item['image']) ?>" alt="<?= e($item['name']) ?>" class="h-56 w-full object-cover" loading="lazy">
         <div class="p-3">
           <p class="font-serif"><?= e($item['name']) ?></p>

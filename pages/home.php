@@ -14,7 +14,7 @@ require __DIR__ . '/../includes/header.php';
   <div class="absolute inset-0 max-w-7xl mx-auto px-4 flex items-center">
     <div class="text-white max-w-xl">
       <h1 class="font-serif text-4xl md:text-6xl leading-tight mb-4">Eleganta traditionala reinterpretata modern</h1>
-      <a href="/magazin" class="inline-block bg-gold text-white px-6 py-3 rounded hover:opacity-90">Descopera colectiile</a>
+      <a href="<?= e(url('/magazin')) ?>" class="inline-block bg-gold text-white px-6 py-3 rounded hover:opacity-90">Descopera colectiile</a>
     </div>
   </div>
 </section>
@@ -23,7 +23,7 @@ require __DIR__ . '/../includes/header.php';
   <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
     <?php foreach ($products as $product): ?>
       <article class="bg-white rounded-lg overflow-hidden shadow-sm card-hover">
-        <a href="/produs/<?= e($product['slug']) ?>">
+        <a href="<?= e(url('/produs/' . $product['slug'])) ?>">
           <img src="<?= e($product['image']) ?>" alt="<?= e($product['name']) ?>" class="w-full h-72 object-cover" loading="lazy">
         </a>
         <div class="p-4">

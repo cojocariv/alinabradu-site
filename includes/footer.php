@@ -8,9 +8,9 @@
       <div>
         <h4 class="font-semibold mb-2">Navigare</h4>
         <ul class="space-y-1 text-sm text-zinc-300">
-          <li><a href="/magazin" class="hover:text-gold">Magazin</a></li>
-          <li><a href="/despre-noi" class="hover:text-gold">Despre noi</a></li>
-          <li><a href="/contact" class="hover:text-gold">Contact</a></li>
+          <li><a href="<?= e(url('/magazin')) ?>" class="hover:text-gold">Magazin</a></li>
+          <li><a href="<?= e(url('/despre-noi')) ?>" class="hover:text-gold">Despre noi</a></li>
+          <li><a href="<?= e(url('/contact')) ?>" class="hover:text-gold">Contact</a></li>
         </ul>
       </div>
       <div>
@@ -20,6 +20,6 @@
       </div>
     </div>
   </footer>
-  <script src="/assets/js/app.js"></script>
+  <script src="<?= e(url('/assets/js/app.js')) ?>"></script>
 </body>
 </html>

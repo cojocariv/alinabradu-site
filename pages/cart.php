@@ -12,8 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-    header('Location: /cos');
-    exit;
+    redirectTo('/cos');
 }
 
 $cart = $_SESSION['cart'] ?? [];
@@ -28,7 +27,7 @@ require __DIR__ . '/../includes/header.php';
 <section class="max-w-5xl mx-auto px-4 py-10">
   <h1 class="font-serif text-4xl mb-6">Cosul tau</h1>
   <?php if (!$cart): ?>
-    <p>Cosul este gol. <a href="/magazin" class="underline">Continua cumparaturile</a></p>
+    <p>Cosul este gol. <a href="<?= e(url('/magazin')) ?>" class="underline">Continua cumparaturile</a></p>
   <?php else: ?>
     <form method="post">
       <div class="space-y-4">
@@ -49,7 +48,7 @@ require __DIR__ . '/../includes/header.php';
         <p class="text-xl font-semibold">Total: <?= e(formatPrice($total)) ?></p>
         <div class="flex gap-3">
           <button class="px-4 py-2 border rounded">Actualizeaza</button>
-          <a href="/checkout" class="px-6 py-2 bg-zinc-900 text-white rounded">Checkout</a>
+          <a href="<?= e(url('/checkout')) ?>" class="px-6 py-2 bg-zinc-900 text-white rounded">Checkout</a>
         </div>
       </div>
     </form>

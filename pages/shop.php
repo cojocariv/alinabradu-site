@@ -45,14 +45,14 @@ require __DIR__ . '/../includes/header.php';
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <?php foreach ($products as $product): ?>
       <article class="bg-white rounded-lg overflow-hidden shadow-sm card-hover">
-        <a href="/produs/<?= e($product['slug']) ?>">
+        <a href="<?= e(url('/produs/' . $product['slug'])) ?>">
           <img src="<?= e($product['image']) ?>" alt="<?= e($product['name']) ?>" class="w-full h-80 object-cover" loading="lazy">
         </a>
         <div class="p-4">
           <h2 class="font-serif text-xl"><?= e($product['name']) ?></h2>
           <p class="text-sm text-zinc-500"><?= e($product['category']) ?> <?= $product['subcategory'] ? ' - ' . e($product['subcategory']) : '' ?></p>
           <p class="mt-2 text-gold font-semibold"><?= e(formatPrice((float) $product['price'])) ?></p>
-          <a href="/produs/<?= e($product['slug']) ?>" class="inline-block mt-3 text-sm underline">Vezi produs</a>
+          <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="inline-block mt-3 text-sm underline">Vezi produs</a>
         </div>
       </article>
     <?php endforeach; ?>
