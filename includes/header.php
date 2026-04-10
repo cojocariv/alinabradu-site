@@ -55,12 +55,12 @@ $orgSchema = [
       <a href="<?= e(url('/')) ?>" class="flex items-center gap-3 <?= $headerOverlay ? 'drop-shadow-md' : 'drop-shadow-sm' ?>">
         <img src="https://alinabradupozestorage.blob.core.windows.net/poze/image-2-1.png" alt="Alina Bradu" class="h-10 w-auto" loading="lazy">
       </a>
-      <nav class="hidden md:flex items-center gap-6 text-sm uppercase tracking-wide <?= $headerOverlay ? 'text-white' : 'text-zinc-100' ?>">
-        <a href="<?= e(url('/')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold transition-colors' ?>">Acasă</a>
-        <a href="<?= e(url('/magazin')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold transition-colors' ?>">Magazin</a>
-        <a href="<?= e(url('/despre-noi')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold transition-colors' ?>">Despre noi</a>
-        <a href="<?= e(url('/contact')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold transition-colors' ?>">Contact</a>
-        <a href="<?= e(url('/cos')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold transition-colors' ?>">Coș (<?= cartItemsCount() ?>)</a>
+      <nav class="header-nav hidden md:flex items-center gap-8 text-sm uppercase tracking-wide <?= $headerOverlay ? 'text-white' : 'text-zinc-100' ?>">
+        <a href="<?= e(url('/')) ?>" class="header-nav__link <?= $headerOverlay ? 'header-nav__link--hero' : '' ?>">Acasă</a>
+        <a href="<?= e(url('/magazin')) ?>" class="header-nav__link <?= $headerOverlay ? 'header-nav__link--hero' : '' ?>">Magazin</a>
+        <a href="<?= e(url('/despre-noi')) ?>" class="header-nav__link <?= $headerOverlay ? 'header-nav__link--hero' : '' ?>">Despre noi</a>
+        <a href="<?= e(url('/contact')) ?>" class="header-nav__link <?= $headerOverlay ? 'header-nav__link--hero' : '' ?>">Contact</a>
+        <a href="<?= e(url('/cos')) ?>" class="header-nav__link <?= $headerOverlay ? 'header-nav__link--hero' : '' ?>">Coș (<?= cartItemsCount() ?>)</a>
       </nav>
     </div>
   </header>
