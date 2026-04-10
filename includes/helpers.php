@@ -1,0 +1,51 @@
+<?php
+declare(strict_types=1);
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+function e(string $value): string
+{
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}
+
+function slugify(string $text): string
+{
+    $text = mb_strtolower(trim($text), 'UTF-8');
+    $text = preg_replace('/[^a-z0-9\s-]/u', '', $text) ?? '';
+    $text = preg_replace('/[\s-]+/', '-', $text) ?? '';
+    return trim($text, '-');
+}
+
+function formatPrice(float $price): string
+{
+    return number_format($price, 2, ',', '.') . ' RON';
+}
+
+function cartItemsCount(): int
+{
+    return array_sum(array_map(static fn(array $item): int => (int) $item['qty'], $_SESSION['cart'] ?? []));
+}
+
+function currentUrlPath(): string
+{
+    $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+    return $path ?: '/';
+}
+
+function seoDefaults(): array
+{
+    return [
+        'title' => 'Alina Bradu - Magazin Rochii Traditionale',
+        'description' => 'Boutique premium cu rochii, bluze si fuste traditionale moldovenesti, lucrate cu atentie la detalii.',
+        'keywords' => 'rochii populare moldovenesti, rochie traditionala, bluza traditionala, fusta populara, costum popular, rochie mireasa traditionala',
+        'image' => 'https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png',
+        'type' => 'website',
+    ];
+}
+
+function mergeSeo(array $seo): array
+{
+    return array_merge(seoDefaults(), $seo);
+}
