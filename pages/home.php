@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
+$headerOverlay = true;
 $products = ProductModel::featured(8);
 $seo = [
     'title' => 'Acasă - Alina Bradu Boutique tradițional',
@@ -9,7 +10,7 @@ $seo = [
 require __DIR__ . '/../includes/header.php';
 ?>
 <section class="relative">
-  <img src="https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png" alt="Alina Bradu Collection" class="w-full h-[60vh] object-cover" fetchpriority="high">
+  <img src="https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png" alt="Alina Bradu Collection" class="w-full min-h-[60vh] h-[60vh] object-cover" fetchpriority="high">
   <div class="absolute inset-0 bg-black/35"></div>
   <div class="absolute inset-0 max-w-7xl mx-auto px-4 flex items-center">
     <div class="text-white max-w-xl">
