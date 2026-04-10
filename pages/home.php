@@ -4,7 +4,7 @@ require_once __DIR__ . '/../models/ProductModel.php';
 $headerOverlay = true;
 $products = ProductModel::featured(8);
 $seo = [
-    'title' => 'Acasă - Alina Bradu Boutique tradițional',
+    'title' => 'Alina Bradu - Creatie cu accent',
     'description' => 'Descoperă colecții autentice de inspirație moldovenească: rochii, bluze, fuste și home decor premium.',
 ];
 require __DIR__ . '/../includes/header.php';
