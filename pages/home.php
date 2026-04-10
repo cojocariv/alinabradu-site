@@ -12,7 +12,7 @@ require __DIR__ . '/../includes/header.php';
 <section class="relative overflow-hidden">
   <img src="https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png" alt="Alina Bradu Collection" class="w-full min-h-[65vh] h-[65vh] md:min-h-[72vh] md:h-[72vh] object-cover object-top" fetchpriority="high">
   <div class="absolute inset-0 bg-black/35"></div>
-  <div class="absolute inset-0 max-w-7xl mx-auto px-4 flex items-center">
+  <div class="absolute inset-0 max-w-7xl mx-auto px-4 flex items-end justify-start pb-12 md:pb-16 lg:pb-24 pt-24">
     <div class="text-white max-w-xl">
       <h1 class="font-serif text-4xl md:text-6xl leading-tight mb-4">Eleganță tradițională reinterpretată modern</h1>
       <a href="<?= e(url('/magazin')) ?>" class="inline-block bg-gold text-white px-6 py-3 rounded hover:opacity-90">Descoperă colecțiile</a>
