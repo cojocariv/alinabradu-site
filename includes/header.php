@@ -50,17 +50,17 @@ $orgSchema = [
 <body class="bg-cream text-zinc-800 font-sans">
   <header class="<?= $headerOverlay
     ? 'fixed top-0 left-0 right-0 z-50 bg-transparent border-b border-white/15'
-    : 'fixed top-0 left-0 right-0 z-50 bg-cream/90 backdrop-blur-md border-b border-gold/20' ?>">
+    : 'fixed top-0 left-0 right-0 z-50 bg-zinc-900/95 backdrop-blur-md border-b border-zinc-800 shadow-sm' ?>">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="<?= e(url('/')) ?>" class="flex items-center gap-3 <?= $headerOverlay ? 'drop-shadow-md' : '' ?>">
+      <a href="<?= e(url('/')) ?>" class="flex items-center gap-3 <?= $headerOverlay ? 'drop-shadow-md' : 'drop-shadow-sm' ?>">
         <img src="https://alinabradupozestorage.blob.core.windows.net/poze/image-2-1.png" alt="Alina Bradu" class="h-10 w-auto" loading="lazy">
       </a>
-      <nav class="hidden md:flex items-center gap-6 text-sm uppercase tracking-wide <?= $headerOverlay ? 'text-white' : 'text-zinc-800' ?>">
-        <a href="<?= e(url('/')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold' ?>">Acasă</a>
-        <a href="<?= e(url('/magazin')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold' ?>">Magazin</a>
-        <a href="<?= e(url('/despre-noi')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold' ?>">Despre noi</a>
-        <a href="<?= e(url('/contact')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold' ?>">Contact</a>
-        <a href="<?= e(url('/cos')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold' ?>">Coș (<?= cartItemsCount() ?>)</a>
+      <nav class="hidden md:flex items-center gap-6 text-sm uppercase tracking-wide <?= $headerOverlay ? 'text-white' : 'text-zinc-100' ?>">
+        <a href="<?= e(url('/')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold transition-colors' ?>">Acasă</a>
+        <a href="<?= e(url('/magazin')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold transition-colors' ?>">Magazin</a>
+        <a href="<?= e(url('/despre-noi')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold transition-colors' ?>">Despre noi</a>
+        <a href="<?= e(url('/contact')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold transition-colors' ?>">Contact</a>
+        <a href="<?= e(url('/cos')) ?>" class="<?= $headerOverlay ? 'hover:text-gold drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]' : 'hover:text-gold transition-colors' ?>">Coș (<?= cartItemsCount() ?>)</a>
       </nav>
     </div>
   </header>
