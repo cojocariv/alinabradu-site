@@ -9,8 +9,8 @@ $seo = [
 ];
 require __DIR__ . '/../includes/header.php';
 ?>
-<section class="relative">
-  <img src="https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png" alt="Alina Bradu Collection" class="w-full min-h-[60vh] h-[60vh] object-cover" fetchpriority="high">
+<section class="relative overflow-hidden">
+  <img src="https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png" alt="Alina Bradu Collection" class="w-full min-h-[65vh] h-[65vh] md:min-h-[72vh] md:h-[72vh] object-cover object-top" fetchpriority="high">
   <div class="absolute inset-0 bg-black/35"></div>
   <div class="absolute inset-0 max-w-7xl mx-auto px-4 flex items-center">
     <div class="text-white max-w-xl">
