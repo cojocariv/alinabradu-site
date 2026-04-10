@@ -59,14 +59,14 @@ $productSchema = [
     <p class="text-gold text-2xl font-semibold mb-4"><?= e(formatPrice((float) $product['price'])) ?></p>
     <p class="text-zinc-600 mb-6"><?= nl2br(e($product['description'])) ?></p>
     <form method="post" class="space-y-4">
-      <label class="block font-medium">Marime</label>
+      <label class="block font-medium">Mărime</label>
       <select name="size" required class="w-full border p-2 rounded">
-        <option value="">Selecteaza marimea</option>
+        <option value="">Selectează mărimea</option>
         <?php foreach (explode(',', (string) $product['size']) as $size): ?>
           <option value="<?= e(trim($size)) ?>"><?= e(trim($size)) ?></option>
         <?php endforeach; ?>
       </select>
-      <button class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700">Adauga in cos</button>
+      <button class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700">Adaugă în coș</button>
     </form>
   </div>
 </section>

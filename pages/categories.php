@@ -8,7 +8,7 @@ $products = ProductModel::byCategorySlug($category, $subcategory);
 
 $seo = [
     'title' => 'Categorie - Alina Bradu',
-    'description' => 'Exploreaza colectii pe categorii si subcategorii.',
+    'description' => 'Explorează colecții pe categorii și subcategorii.',
 ];
 require __DIR__ . '/../includes/header.php';
 ?>

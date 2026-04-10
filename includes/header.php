@@ -53,7 +53,7 @@ $orgSchema = [
         <img src="https://alinabradupozestorage.blob.core.windows.net/poze/image-2-1.png" alt="Alina Bradu" class="h-10 w-auto" loading="lazy">
       </a>
       <nav class="hidden md:flex items-center gap-6 text-sm uppercase tracking-wide">
-        <a href="<?= e(url('/')) ?>" class="hover:text-gold">Home</a>
+        <a href="<?= e(url('/')) ?>" class="hover:text-gold">Acasă</a>
         <a href="<?= e(url('/magazin')) ?>" class="hover:text-gold">Magazin</a>
         <a href="<?= e(url('/despre-noi')) ?>" class="hover:text-gold">Despre noi</a>
         <a href="<?= e(url('/contact')) ?>" class="hover:text-gold">Contact</a>

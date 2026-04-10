@@ -32,7 +32,7 @@ function getDbConnection(): PDO
         $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
     } catch (PDOException $e) {
         throw new RuntimeException(
-            'Conexiunea la baza de date a esuat. Verifica DB_HOST, DB_NAME, DB_USER, DB_PASS.',
+            'Conexiunea la bază de date a eșuat. Verifică DB_HOST, DB_NAME, DB_USER, DB_PASS.',
             0,
             $e
         );

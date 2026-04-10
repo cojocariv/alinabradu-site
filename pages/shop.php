@@ -2,8 +2,8 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
 
-$categories = ['Bluza', 'Fusta', 'Home decor', 'Rochie'];
-$subcategories = ['Colectia Dor', 'Colectia Mireasa', 'Colectia Mistery', 'Colectia Soare', 'Colectia Spicul'];
+$categories = ['Bluză', 'Fustă', 'Home decor', 'Rochie'];
+$subcategories = ['Colecția Dor', 'Colecția Mireasă', 'Colecția Mistery', 'Colecția Soare', 'Colecția Spicul'];
 $sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
 $filters = [
@@ -13,8 +13,8 @@ $filters = [
 ];
 $products = ProductModel::filter($filters);
 $seo = [
-    'title' => 'Magazin - Rochii si Bluze Traditionale',
-    'description' => 'Magazin online Alina Bradu: rochii traditionale, bluze si fuste premium cu motive etnice.',
+    'title' => 'Magazin - Rochii și bluze tradiționale',
+    'description' => 'Magazin online Alina Bradu: rochii tradiționale, bluze și fuste premium cu motive etnice.',
 ];
 require __DIR__ . '/../includes/header.php';
 ?>
@@ -34,12 +34,12 @@ require __DIR__ . '/../includes/header.php';
       <?php endforeach; ?>
     </select>
     <select name="size" class="border rounded p-2">
-      <option value="">Toate marimile</option>
+      <option value="">Toate mărimile</option>
       <?php foreach ($sizes as $size): ?>
         <option value="<?= e($size) ?>" <?= $filters['size'] === $size ? 'selected' : '' ?>><?= e($size) ?></option>
       <?php endforeach; ?>
     </select>
-    <button class="bg-zinc-900 text-white rounded px-4 py-2">Filtreaza</button>
+    <button class="bg-zinc-900 text-white rounded px-4 py-2">Filtrează</button>
   </form>
 
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

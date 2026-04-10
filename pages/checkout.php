@@ -23,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Numele este obligatoriu (minim 3 caractere).';
     }
     if (!preg_match('/^[0-9+\s-]{9,20}$/', $phone)) {
-        $errors[] = 'Numar de telefon invalid.';
+        $errors[] = 'Număr de telefon invalid.';
     }
     if ($address === '' || mb_strlen($address) < 10) {
-        $errors[] = 'Adresa trebuie sa aiba minim 10 caractere.';
+        $errors[] = 'Adresa trebuie să aibă minim 10 caractere.';
     }
 
     if (!$errors) {
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $total
         );
         unset($_SESSION['cart']);
-        $success = "Comanda #{$orderId} a fost inregistrata cu succes.";
+        $success = "Comanda #{$orderId} a fost înregistrată cu succes.";
     }
 }
 
@@ -58,8 +58,8 @@ require __DIR__ . '/../includes/header.php';
     <form method="post" class="space-y-4 bg-white p-6 rounded-lg">
       <input type="text" name="name" placeholder="Nume complet" required class="w-full border rounded p-3">
       <input type="text" name="phone" placeholder="Telefon" required class="w-full border rounded p-3">
-      <textarea name="address" placeholder="Adresa livrare" required class="w-full border rounded p-3 min-h-28"></textarea>
-      <p class="font-semibold">Total plata: <?= e(formatPrice($total)) ?></p>
+      <textarea name="address" placeholder="Adresă livrare" required class="w-full border rounded p-3 min-h-28"></textarea>
+      <p class="font-semibold">Total plată: <?= e(formatPrice($total)) ?></p>
       <button class="bg-zinc-900 text-white px-6 py-3 rounded">Trimite comanda</button>
     </form>
   <?php endif; ?>

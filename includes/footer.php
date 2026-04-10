@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8">
       <div>
         <h3 class="font-serif text-xl mb-3">Alina Bradu</h3>
-        <p class="text-sm text-zinc-400">Atelier boutique inspirat din portul traditional moldovenesc.</p>
+        <p class="text-sm text-zinc-400">Atelier boutique inspirat din portul tradițional moldovenesc.</p>
       </div>
       <div>
         <h4 class="font-semibold mb-2">Navigare</h4>

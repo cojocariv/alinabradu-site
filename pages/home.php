@@ -3,8 +3,8 @@ declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
 $products = ProductModel::featured(8);
 $seo = [
-    'title' => 'Acasa - Alina Bradu Boutique Traditional',
-    'description' => 'Descopera colectii autentice de inspiratie moldoveneasca: rochii, bluze, fuste si home decor premium.',
+    'title' => 'Acasă - Alina Bradu Boutique tradițional',
+    'description' => 'Descoperă colecții autentice de inspirație moldovenească: rochii, bluze, fuste și home decor premium.',
 ];
 require __DIR__ . '/../includes/header.php';
 ?>
@@ -13,8 +13,8 @@ require __DIR__ . '/../includes/header.php';
   <div class="absolute inset-0 bg-black/35"></div>
   <div class="absolute inset-0 max-w-7xl mx-auto px-4 flex items-center">
     <div class="text-white max-w-xl">
-      <h1 class="font-serif text-4xl md:text-6xl leading-tight mb-4">Eleganta traditionala reinterpretata modern</h1>
-      <a href="<?= e(url('/magazin')) ?>" class="inline-block bg-gold text-white px-6 py-3 rounded hover:opacity-90">Descopera colectiile</a>
+      <h1 class="font-serif text-4xl md:text-6xl leading-tight mb-4">Eleganță tradițională reinterpretată modern</h1>
+      <a href="<?= e(url('/magazin')) ?>" class="inline-block bg-gold text-white px-6 py-3 rounded hover:opacity-90">Descoperă colecțiile</a>
     </div>
   </div>
 </section>

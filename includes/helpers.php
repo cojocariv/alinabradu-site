@@ -70,9 +70,9 @@ function redirectTo(string $path): void
 function seoDefaults(): array
 {
     return [
-        'title' => 'Alina Bradu - Magazin Rochii Traditionale',
-        'description' => 'Boutique premium cu rochii, bluze si fuste traditionale moldovenesti, lucrate cu atentie la detalii.',
-        'keywords' => 'rochii populare moldovenesti, rochie traditionala, bluza traditionala, fusta populara, costum popular, rochie mireasa traditionala',
+        'title' => 'Alina Bradu - Magazin rochii tradiționale',
+        'description' => 'Boutique premium cu rochii, bluze și fuste tradiționale moldovenești, lucrate cu atenție la detalii.',
+        'keywords' => 'rochii populare moldovenești, rochie tradițională, bluză tradițională, fustă populară, costum popular, rochie mireasă tradițională',
         'image' => 'https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png',
         'type' => 'website',
     ];

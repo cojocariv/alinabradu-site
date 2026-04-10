@@ -2,7 +2,7 @@
 declare(strict_types=1);
 $seo = [
     'title' => 'Contact - Alina Bradu',
-    'description' => 'Ia legatura cu atelierul Alina Bradu pentru comenzi, colaborari sau informatii suplimentare.',
+    'description' => 'Ia legătura cu atelierul Alina Bradu pentru comenzi, colaborări sau informații suplimentare.',
 ];
 require __DIR__ . '/../includes/header.php';
 ?>
