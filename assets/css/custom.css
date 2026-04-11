@@ -71,58 +71,88 @@ body {
   box-shadow: 0 16px 30px rgba(0, 0, 0, .12);
 }
 
-/* Homepage — poveste + frunză decor */
-.home-story__leaf-wrap {
+/* Homepage — bloc unic, text rotativ, frunză la centru */
+.home-story__box {
+  width: 100%;
+}
+
+.home-story__leaf-center {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  z-index: 0;
 }
 
 .home-story__leaf {
-  width: min(92vw, 480px);
+  width: min(85vw, 420px);
   height: auto;
-  opacity: 0.22;
-  filter: sepia(0.15) saturate(0.85);
+  opacity: 0.2;
+  filter: sepia(0.12) saturate(0.88);
   animation: homeStoryLeafFloat 14s ease-in-out infinite;
   will-change: transform;
 }
 
-/* Fără JS: textul rămâne vizibil. Cu JS: intră la scroll. */
-html.js .home-story__observe {
+.home-story__slides {
+  position: relative;
+  min-height: min(42vh, 22rem);
+}
+
+@media (min-width: 768px) {
+  .home-story__slides {
+    min-height: min(38vh, 26rem);
+  }
+}
+
+.home-story__slide {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
   opacity: 0;
-  transform: translateY(2rem);
-  transition:
-    opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-html.js .home-story__observe.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-html.js .home-story .home-story__observe:nth-child(1) {
-  transition-delay: 0.05s;
-}
-
-html.js .home-story .home-story__observe:nth-child(2) {
-  transition-delay: 0.18s;
-}
-
-html.js .home-story .home-story__observe:nth-child(3) {
-  transition-delay: 0.31s;
-}
-
-html.js .home-story .home-story__observe:nth-child(4) {
-  transition-delay: 0.44s;
-}
-
-.home-story__quote {
-  color: #27272a;
+  transition: opacity 0.65s ease;
+  pointer-events: none;
   text-wrap: balance;
+}
+
+.home-story__slide.is-active {
+  opacity: 1;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.home-story__slide--quote {
+  color: #27272a;
+}
+
+.home-story__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: rgba(63, 63, 70, 0.25);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.home-story__dot:hover,
+.home-story__dot:focus-visible {
+  background: rgba(185, 150, 90, 0.65);
+  outline: none;
+}
+
+.home-story__dot.is-active {
+  background: #b9965a;
+  transform: scale(1.25);
+}
+
+.home-story__dots:empty {
+  display: none;
 }
 
 @keyframes homeStoryLeafFloat {
@@ -131,22 +161,16 @@ html.js .home-story .home-story__observe:nth-child(4) {
     transform: translateY(0) rotate(-3deg) scale(1);
   }
   33% {
-    transform: translateY(-12px) rotate(1deg) scale(1.03);
+    transform: translateY(-10px) rotate(1deg) scale(1.02);
   }
   66% {
-    transform: translateY(8px) rotate(-1.5deg) scale(0.98);
+    transform: translateY(6px) rotate(-1.5deg) scale(0.99);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .home-story__leaf {
     animation: none;
-    opacity: 0.18;
-  }
-
-  html.js .home-story__observe {
-    opacity: 1;
-    transform: none;
-    transition: none;
+    opacity: 0.16;
   }
 }

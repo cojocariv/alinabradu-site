@@ -23,25 +23,32 @@ require __DIR__ . '/../includes/header.php';
 <?php
 $storyLeaf = 'https://alinabradupozestorage.blob.core.windows.net/poze/leaf-shape-2-qjd2e8q1mruaag9ndk6bv7cqz5r9x69167979v98qg.png';
 ?>
-<section class="home-story relative py-16 md:py-24 overflow-hidden bg-cream/80" aria-label="Despre colecții și brand">
-  <div class="home-story__leaf-wrap pointer-events-none select-none" aria-hidden="true">
-    <img src="<?= e($storyLeaf) ?>" alt="" class="home-story__leaf" width="520" height="520" loading="lazy" decoding="async">
+<section
+  class="home-story relative min-h-[72vh] flex flex-col items-center justify-center py-16 md:py-20 overflow-hidden bg-cream/80"
+  aria-label="Despre colecții și brand"
+  data-story-interval="5000"
+>
+  <div class="home-story__box relative w-full max-w-3xl mx-auto px-6 md:px-8 flex items-center justify-center min-h-[min(52vh,28rem)]">
+    <div class="home-story__leaf-center pointer-events-none select-none" aria-hidden="true">
+      <img src="<?= e($storyLeaf) ?>" alt="" class="home-story__leaf" width="520" height="520" loading="lazy" decoding="async">
+    </div>
+    <div class="home-story__slides relative z-10 w-full text-center" aria-live="off">
+      <div class="home-story__slide font-serif text-lg md:text-xl text-zinc-800 leading-relaxed is-active" data-slide="0" aria-hidden="false">
+        Colecțiile noastre prezintă o gamă largă de ținute etno, de la bluze și fuste la cămăși, rochii și paltoane, toate create cu dragoste și atenție la detalii. Fiecare piesă de la Alina Bradu nu este doar o piesă de îmbrăcăminte, ci o întreagă poveste, care transformă fiecare moment într-o experiență de neuitat.
+      </div>
+      <div class="home-story__slide font-serif text-lg md:text-xl text-zinc-800 leading-relaxed" data-slide="1" aria-hidden="true">
+        Fiecare din colecțiile noastre este un amalgam dintre trecut și prezent, întruchipat în modele unice care reflectă rădăcinile și tradițiile noastre. Ne străduim să combinăm eleganța cu confortul, creând articole inspirate pentru orice sezon.
+      </div>
+      <div class="home-story__slide font-serif text-lg md:text-xl text-zinc-800 leading-relaxed" data-slide="2" aria-hidden="true">
+        <span class="font-medium text-zinc-900">„Alina Bradu”</span> — acolo unde tradiția se împletește cu contemporanul, iar arta devine modă! Suntem un brand național cu dragoste aparte pentru frumusețea și autenticitatea broderiei tradiționale, pe care o îmbinăm cu creativitatea în designul actual.
+      </div>
+      <div class="home-story__slide home-story__slide--quote font-serif text-xl md:text-2xl text-zinc-900 leading-snug not-italic" data-slide="3" aria-hidden="true">
+        Nu creăm doar haine, ci și povești care ne inspiră pe noi<br class="hidden sm:inline">
+        <span class="block sm:inline sm:mt-0 mt-2">cât și pe clienții noștri.</span>
+      </div>
+    </div>
   </div>
-  <div class="relative z-10 max-w-3xl mx-auto px-4 space-y-14 md:space-y-20">
-    <p class="home-story__observe font-serif text-lg md:text-xl text-zinc-800 leading-relaxed text-center">
-      Colecțiile noastre prezintă o gamă largă de ținute etno, de la bluze și fuste la cămăși, rochii și paltoane, toate create cu dragoste și atenție la detalii. Fiecare piesă de la Alina Bradu nu este doar o piesă de îmbrăcăminte, ci o întreagă poveste, care transformă fiecare moment într-o experiență de neuitat.
-    </p>
-    <p class="home-story__observe font-serif text-lg md:text-xl text-zinc-800 leading-relaxed text-center">
-      Fiecare din colecțiile noastre este un amalgam dintre trecut și prezent, întruchipat în modele unice care reflectă rădăcinile și tradițiile noastre. Ne străduim să combinăm eleganța cu confortul, creând articole inspirate pentru orice sezon.
-    </p>
-    <p class="home-story__observe font-serif text-lg md:text-xl text-zinc-800 leading-relaxed text-center">
-      <span class="font-medium text-zinc-900">„Alina Bradu”</span> — acolo unde tradiția se împletește cu contemporanul, iar arta devine modă! Suntem un brand național cu dragoste aparte pentru frumusețea și autenticitatea broderiei tradiționale, pe care o îmbinăm cu creativitatea în designul actual.
-    </p>
-    <blockquote class="home-story__observe home-story__quote font-serif text-xl md:text-2xl text-zinc-900 leading-snug text-center not-italic border-0 m-0 p-0">
-      Nu creăm doar haine, ci și povești care ne inspiră pe noi<br class="hidden sm:inline">
-      <span class="block sm:inline sm:mt-0 mt-2">cât și pe clienții noștri.</span>
-    </blockquote>
-  </div>
+  <div class="home-story__dots relative z-10 flex justify-center gap-2 mt-8" role="tablist" aria-label="Fragmente text"></div>
 </section>
 
 <section class="max-w-7xl mx-auto px-4 py-12">
