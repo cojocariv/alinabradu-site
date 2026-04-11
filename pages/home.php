@@ -24,15 +24,15 @@ require __DIR__ . '/../includes/header.php';
 $storyLeaf = 'https://alinabradupozestorage.blob.core.windows.net/poze/leaf-shape-2-qjd2e8q1mruaag9ndk6bv7cqz5r9x69167979v98qg.png';
 ?>
 <section
-  class="home-story relative flex flex-col items-center justify-center py-8 md:py-10 overflow-x-hidden bg-cream/80"
+  class="home-story relative flex flex-col items-center justify-center py-8 md:py-10 overflow-x-hidden bg-cream/80 select-none"
   aria-label="Despre colecții și brand"
   data-story-interval="5000"
 >
-  <div class="home-story__box relative w-full max-w-3xl mx-auto px-5 md:px-8 flex items-center justify-center">
+  <div class="home-story__box home-story__box--fixed relative w-full max-w-3xl mx-auto px-5 md:px-8 flex flex-col min-h-0 py-1">
     <div class="home-story__leaf-center pointer-events-none select-none" aria-hidden="true">
       <img src="<?= e($storyLeaf) ?>" alt="" class="home-story__leaf" width="520" height="520" loading="lazy" decoding="async">
     </div>
-    <div class="home-story__slides relative z-10 w-full text-center" aria-live="off">
+    <div class="home-story__slides relative z-10 w-full flex-1 min-h-0 text-center" aria-live="off">
       <div class="home-story__slide text-zinc-800 leading-snug is-active" data-slide="0" aria-hidden="false">
         Colecțiile noastre prezintă o gamă largă de ținute etno, de la bluze și fuste la cămăși, rochii și paltoane, toate create cu dragoste și atenție la detalii. Fiecare piesă de la Alina Bradu nu este doar o piesă de îmbrăcăminte, ci o întreagă poveste, care transformă fiecare moment într-o experiență de neuitat.
       </div>
@@ -48,7 +48,6 @@ $storyLeaf = 'https://alinabradupozestorage.blob.core.windows.net/poze/leaf-shap
       </div>
     </div>
   </div>
-  <div class="home-story__dots relative z-10 flex justify-center gap-2 mt-5" role="tablist" aria-label="Fragmente text"></div>
 </section>
 
 <section class="max-w-7xl mx-auto px-4 py-12">

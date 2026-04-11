@@ -72,8 +72,27 @@ body {
 }
 
 /* Homepage — bloc unic, text rotativ, frunză la centru */
+.home-story {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .home-story__box {
   width: 100%;
+}
+
+.home-story__box--fixed {
+  height: 20rem;
+  min-height: 20rem;
+  max-height: 20rem;
+}
+
+@media (min-width: 768px) {
+  .home-story__box--fixed {
+    height: 22rem;
+    min-height: 22rem;
+    max-height: 22rem;
+  }
 }
 
 .home-story__leaf-center {
@@ -86,18 +105,19 @@ body {
 }
 
 .home-story__leaf {
-  width: min(78vw, 340px);
+  width: min(90vw, 420px);
   height: auto;
-  opacity: 0.2;
-  filter: sepia(0.12) saturate(0.88);
+  opacity: 0.48;
+  filter: sepia(0.08) saturate(1);
   animation: homeStoryLeafFloat 14s ease-in-out infinite;
   will-change: transform;
 }
 
 .home-story__slides {
   position: relative;
-  min-height: 5rem;
-  transition: min-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
 }
 
 .home-story__slide {
@@ -106,8 +126,12 @@ body {
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
+  padding-left: 0.35rem;
+  padding-right: 0.35rem;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
   opacity: 0;
   transition: opacity 0.65s ease;
   pointer-events: none;
@@ -118,6 +142,7 @@ body {
   font-size: clamp(1.2rem, 3.8vw, 1.75rem);
   line-height: 1.45;
   letter-spacing: 0.01em;
+  scrollbar-width: thin;
 }
 
 .home-story__slide.is-active {
@@ -136,32 +161,6 @@ body {
   font-weight: 600;
 }
 
-.home-story__dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 9999px;
-  background: rgba(63, 63, 70, 0.25);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: transform 0.25s ease, background 0.25s ease;
-}
-
-.home-story__dot:hover,
-.home-story__dot:focus-visible {
-  background: rgba(185, 150, 90, 0.65);
-  outline: none;
-}
-
-.home-story__dot.is-active {
-  background: #b9965a;
-  transform: scale(1.25);
-}
-
-.home-story__dots:empty {
-  display: none;
-}
-
 @keyframes homeStoryLeafFloat {
   0%,
   100% {
@@ -178,6 +177,6 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .home-story__leaf {
     animation: none;
-    opacity: 0.16;
+    opacity: 0.4;
   }
 }
