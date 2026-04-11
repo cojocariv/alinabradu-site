@@ -6,9 +6,14 @@ require_once __DIR__ . '/../includes/helpers.php';
 
 class ProductModel
 {
+    private static function publicWhereInStock(): string
+    {
+        return ' AND in_stock = 1';
+    }
+
     public static function featured(int $limit = 8): array
     {
-        $sql = 'SELECT * FROM products ORDER BY id DESC LIMIT :limit';
+        $sql = 'SELECT * FROM products WHERE 1=1' . self::publicWhereInStock() . ' ORDER BY id DESC LIMIT :limit';
         $stmt = getDbConnection()->prepare($sql);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -18,7 +23,7 @@ class ProductModel
     /** Produse marcate pentru homepage (după migrare admin). */
     public static function featuredHome(int $limit = 12): array
     {
-        $sql = 'SELECT * FROM products WHERE featured_on_home = 1 ORDER BY home_sort ASC, id DESC LIMIT :limit';
+        $sql = 'SELECT * FROM products WHERE featured_on_home = 1' . self::publicWhereInStock() . ' ORDER BY home_sort ASC, id DESC LIMIT :limit';
         $stmt = getDbConnection()->prepare($sql);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -27,7 +32,7 @@ class ProductModel
 
     public static function filter(array $filters = []): array
     {
-        $sql = 'SELECT * FROM products WHERE 1=1';
+        $sql = 'SELECT * FROM products WHERE 1=1' . self::publicWhereInStock();
         $params = [];
 
         if (!empty($filters['category'])) {
@@ -54,7 +59,7 @@ class ProductModel
 
     public static function bySlug(string $slug): ?array
     {
-        $sql = 'SELECT * FROM products WHERE slug = :slug LIMIT 1';
+        $sql = 'SELECT * FROM products WHERE slug = :slug' . self::publicWhereInStock() . ' LIMIT 1';
         $stmt = getDbConnection()->prepare($sql);
         $stmt->bindValue(':slug', $slug);
         $stmt->execute();
@@ -64,7 +69,7 @@ class ProductModel
 
     public static function byCategorySlug(string $category, ?string $subcategory = null): array
     {
-        $sql = 'SELECT * FROM products WHERE category_slug = :category';
+        $sql = 'SELECT * FROM products WHERE category_slug = :category' . self::publicWhereInStock();
         $params = [':category' => $category];
 
         if ($subcategory) {
@@ -83,7 +88,7 @@ class ProductModel
 
     public static function similar(int $productId, string $category, int $limit = 4): array
     {
-        $sql = 'SELECT * FROM products WHERE category = :category AND id != :id ORDER BY id DESC LIMIT :limit';
+        $sql = 'SELECT * FROM products WHERE category = :category AND id != :id' . self::publicWhereInStock() . ' ORDER BY id DESC LIMIT :limit';
         $stmt = getDbConnection()->prepare($sql);
         $stmt->bindValue(':category', $category);
         $stmt->bindValue(':id', $productId, PDO::PARAM_INT);
@@ -145,8 +150,8 @@ class ProductModel
 
     public static function createProduct(array $data): int
     {
-        $sql = 'INSERT INTO products (name, slug, description, price, category, category_slug, subcategory, subcategory_slug, size, image, featured_on_home, home_sort)
-                VALUES (:name, :slug, :description, :price, :category, :category_slug, :subcategory, :subcategory_slug, :size, :image, :featured_on_home, :home_sort)';
+        $sql = 'INSERT INTO products (name, slug, description, price, category, category_slug, subcategory, subcategory_slug, size, image, featured_on_home, home_sort, in_stock)
+                VALUES (:name, :slug, :description, :price, :category, :category_slug, :subcategory, :subcategory_slug, :size, :image, :featured_on_home, :home_sort, :in_stock)';
         $stmt = getDbConnection()->prepare($sql);
         $stmt->execute([
             ':name' => $data['name'],
@@ -161,6 +166,7 @@ class ProductModel
             ':image' => $data['image'],
             ':featured_on_home' => $data['featured_on_home'] ?? 0,
             ':home_sort' => $data['home_sort'] ?? 0,
+            ':in_stock' => $data['in_stock'] ?? 1,
         ]);
         return (int) getDbConnection()->lastInsertId();
     }
@@ -169,7 +175,7 @@ class ProductModel
     {
         $sql = 'UPDATE products SET name = :name, slug = :slug, description = :description, price = :price,
                 category = :category, category_slug = :category_slug, subcategory = :subcategory, subcategory_slug = :subcategory_slug,
-                size = :size, featured_on_home = :featured_on_home, home_sort = :home_sort WHERE id = :id';
+                size = :size, featured_on_home = :featured_on_home, home_sort = :home_sort, in_stock = :in_stock WHERE id = :id';
         $stmt = getDbConnection()->prepare($sql);
         $stmt->execute([
             ':id' => $id,
@@ -184,6 +190,7 @@ class ProductModel
             ':size' => $data['size'],
             ':featured_on_home' => $data['featured_on_home'] ?? 0,
             ':home_sort' => $data['home_sort'] ?? 0,
+            ':in_stock' => $data['in_stock'] ?? 1,
         ]);
     }
 
@@ -220,5 +227,14 @@ class ProductModel
         $stmt = getDbConnection()->prepare($sql);
         $stmt->execute($params);
         return (int) $stmt->fetchColumn() > 0;
+    }
+
+    public static function setInStock(int $id, int $inStock): void
+    {
+        if ($id < 1) {
+            return;
+        }
+        $stmt = getDbConnection()->prepare('UPDATE products SET in_stock = ? WHERE id = ?');
+        $stmt->execute([$inStock ? 1 : 0, $id]);
     }
 }

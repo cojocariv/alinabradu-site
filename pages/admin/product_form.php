@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $urlsRaw = (string) ($_POST['image_urls'] ?? '');
     $featured = isset($_POST['featured_on_home']) ? 1 : 0;
     $homeSort = (int) ($_POST['home_sort'] ?? 0);
+    $inStock = isset($_POST['in_stock']) ? 1 : 0;
 
     $slug = $slugInput !== '' ? slugify($slugInput) : slugify($name);
     if ($slug === '') {
@@ -96,6 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'image' => $allImages[0],
             'featured_on_home' => $featured,
             'home_sort' => $homeSort,
+            'in_stock' => $inStock,
         ];
 
         if ($isNew) {
@@ -121,6 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'size' => $sizes,
             'featured_on_home' => $featured,
             'home_sort' => $homeSort,
+            'in_stock' => $inStock,
         ]);
         $imageUrlsText = $urlsRaw;
     }
@@ -206,6 +209,10 @@ if ($errors && isset($_POST['category_key']) && isset($CATEGORIES[$_POST['catego
       </div>
 
       <div class="border-t pt-4 flex flex-wrap gap-4 items-center">
+        <label class="inline-flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" name="in_stock" value="1" <?= ($isNew || (int) ($product['in_stock'] ?? 1) === 1) ? 'checked' : '' ?>>
+          <span>În stoc (produs vizibil pe site)</span>
+        </label>
         <label class="inline-flex items-center gap-2 cursor-pointer">
           <input type="checkbox" name="featured_on_home" value="1" <?= !empty($product['featured_on_home']) ? 'checked' : '' ?>>
           <span>Afișează în „Produse noi” pe pagina principală</span>

@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS products (
   image VARCHAR(500) NOT NULL,
   featured_on_home TINYINT(1) NOT NULL DEFAULT 0,
   home_sort INT NOT NULL DEFAULT 0,
+  in_stock TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1=afișat pe site, 0=ascuns',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

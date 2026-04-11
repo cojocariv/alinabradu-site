@@ -6,6 +6,14 @@ require_once __DIR__ . '/../../includes/admin_auth.php';
 adminRequireLogin();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['toggle_in_stock'], $_POST['product_id'])) {
+        $pid = (int) $_POST['product_id'];
+        if ($pid > 0) {
+            $inStock = isset($_POST['in_stock']) ? 1 : 0;
+            ProductModel::setInStock($pid, $inStock);
+        }
+        redirectTo('/admin/produse');
+    }
     if (isset($_POST['delete_id'])) {
         $id = (int) $_POST['delete_id'];
         if ($id > 0) {
@@ -107,17 +115,44 @@ $seo = ['title' => 'Produse - Admin'];
             <th class="p-3">Nume</th>
             <th class="p-3">Categorie</th>
             <th class="p-3">Preț</th>
+            <th class="p-3 whitespace-nowrap">În stoc</th>
             <th class="p-3">Homepage</th>
             <th class="p-3"></th>
           </tr>
         </thead>
         <tbody>
           <?php foreach ($products as $p): ?>
+            <?php
+            $thumbUrl = ProductModel::getPrimaryImageUrl($p);
+            $thumbUrlEsc = htmlspecialchars($thumbUrl, ENT_QUOTES, 'UTF-8');
+            $inStockRow = (int) ($p['in_stock'] ?? 1) === 1;
+            ?>
             <tr class="border-b border-zinc-100 hover:bg-zinc-50">
               <td class="p-3"><?= (int) $p['id'] ?></td>
-              <td class="p-3 font-medium"><?= e($p['name']) ?></td>
+              <td class="p-3">
+                <div class="flex items-center gap-3 min-w-0">
+                  <button type="button"
+                    class="shrink-0 rounded border border-zinc-200 overflow-hidden bg-zinc-50 hover:ring-2 hover:ring-gold/50 focus:outline-none focus:ring-2 focus:ring-gold"
+                    data-preview-url="<?= $thumbUrlEsc ?>"
+                    onclick="adminOpenImagePreview(this.getAttribute('data-preview-url'))"
+                    aria-label="Vezi imaginea mare pentru <?= e($p['name']) ?>">
+                    <img src="<?= e($thumbUrl) ?>" alt="" width="48" height="48" class="w-12 h-12 object-cover block" loading="lazy" decoding="async">
+                  </button>
+                  <span class="font-medium truncate"><?= e($p['name']) ?></span>
+                </div>
+              </td>
               <td class="p-3"><?= e($p['category']) ?></td>
               <td class="p-3"><?= e(formatPrice((float) $p['price'])) ?></td>
+              <td class="p-3 align-middle">
+                <form method="post" class="inline-flex items-center">
+                  <input type="hidden" name="toggle_in_stock" value="1">
+                  <input type="hidden" name="product_id" value="<?= (int) $p['id'] ?>">
+                  <label class="inline-flex items-center gap-2 cursor-pointer select-none text-sm">
+                    <input type="checkbox" name="in_stock" value="1" <?= $inStockRow ? 'checked' : '' ?> class="rounded border-zinc-300" onchange="this.form.submit()">
+                    <span class="text-zinc-600"><?= $inStockRow ? 'Da' : 'Nu' ?></span>
+                  </label>
+                </form>
+              </td>
               <td class="p-3"><?= !empty($p['featured_on_home']) ? 'Da' : '—' ?></td>
               <td class="p-3 text-right space-x-2">
                 <a href="<?= e(url('/admin/produse/' . (int) $p['id'])) ?>" class="text-gold hover:underline">Modifică</a>
@@ -135,5 +170,40 @@ $seo = ['title' => 'Produse - Admin'];
       <?php endif; ?>
     </div>
   </main>
+
+  <div id="admin-img-preview" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/75" role="dialog" aria-modal="true" aria-labelledby="admin-img-preview-title">
+    <button type="button" class="absolute inset-0 w-full h-full cursor-default border-0 bg-transparent" onclick="adminCloseImagePreview()" aria-label="Închide"></button>
+    <div class="relative z-10 max-w-[min(100%,56rem)] max-h-[90vh] flex flex-col items-center gap-3 pointer-events-none">
+      <p id="admin-img-preview-title" class="sr-only">Previzualizare imagine produs</p>
+      <img id="admin-img-preview-img" src="" alt="" class="max-h-[85vh] max-w-full object-contain rounded shadow-2xl pointer-events-auto bg-white">
+      <button type="button" onclick="adminCloseImagePreview()" class="pointer-events-auto text-sm text-white/90 hover:text-white underline">Închide</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var overlay = document.getElementById('admin-img-preview');
+      var imgEl = document.getElementById('admin-img-preview-img');
+      window.adminOpenImagePreview = function (url) {
+        if (!url || !overlay || !imgEl) return;
+        imgEl.src = url;
+        imgEl.alt = '';
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      };
+      window.adminCloseImagePreview = function () {
+        if (!overlay || !imgEl) return;
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        imgEl.removeAttribute('src');
+        document.body.style.overflow = '';
+      };
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay && !overlay.classList.contains('hidden')) {
+          adminCloseImagePreview();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
