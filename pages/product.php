@@ -11,9 +11,11 @@ if (!$product) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $size = $_POST['size'] ?? '';
+    $qtyAdd = max(1, min(99, (int) ($_POST['quantity'] ?? 1)));
     $validSizes = array_map('trim', explode(',', (string) $product['size']));
     if (in_array($size, $validSizes, true)) {
         $key = $product['id'] . ':' . $size;
+        $prev = (int) ($_SESSION['cart'][$key]['qty'] ?? 0);
         $_SESSION['cart'][$key] = [
             'id' => (int) $product['id'],
             'name' => $product['name'],
@@ -21,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'price' => (float) $product['price'],
             'image' => $product['image'],
             'selected_size' => $size,
-            'qty' => (($_SESSION['cart'][$key]['qty'] ?? 0) + 1),
+            'qty' => $prev + $qtyAdd,
         ];
         redirectTo('/cos');
     }
@@ -66,7 +68,20 @@ $productSchema = [
           <option value="<?= e(trim($size)) ?>"><?= e(trim($size)) ?></option>
         <?php endforeach; ?>
       </select>
-      <button class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700">Adaugă în coș</button>
+      <div>
+        <label class="block font-medium mb-1" for="product-qty">Cantitate</label>
+        <input
+          id="product-qty"
+          type="number"
+          name="quantity"
+          min="1"
+          max="99"
+          value="1"
+          required
+          class="w-full max-w-[8rem] border p-2 rounded"
+        >
+      </div>
+      <button type="submit" class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700">Adaugă în coș</button>
     </form>
   </div>
 </section>
