@@ -1,4 +1,9 @@
   </main>
+  <?php
+  if (!defined('SITE_EMAIL')) {
+      require_once __DIR__ . '/../config/contact.php';
+  }
+  ?>
   <footer class="bg-zinc-900 text-zinc-200 mt-12">
     <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8">
       <div>
@@ -15,8 +20,8 @@
       </div>
       <div>
         <h4 class="font-semibold mb-2">Contact</h4>
-        <p class="text-sm text-zinc-300">Telefon: +40 700 000 000</p>
-        <p class="text-sm text-zinc-300">Email: contact@alinabradu.com</p>
+        <p class="text-sm text-zinc-300">Telefon: <a href="tel:<?= e(SITE_PHONE_TEL) ?>" class="hover:text-gold"><?= e(SITE_PHONE_DISPLAY) ?></a></p>
+        <p class="text-sm text-zinc-300">Email: <a href="mailto:<?= e(SITE_EMAIL) ?>" class="hover:text-gold"><?= e(SITE_EMAIL) ?></a></p>
       </div>
     </div>
   </footer>
