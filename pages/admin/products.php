@@ -115,7 +115,7 @@ $seo = ['title' => 'Produse - Admin'];
             <th class="p-3">Nume</th>
             <th class="p-3">Categorie</th>
             <th class="p-3">Preț</th>
-            <th class="p-3 whitespace-nowrap">În stoc</th>
+            <th class="p-3 whitespace-nowrap">Vizibil pe site</th>
             <th class="p-3">Homepage</th>
             <th class="p-3"></th>
           </tr>

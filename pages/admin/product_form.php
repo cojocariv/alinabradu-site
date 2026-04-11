@@ -211,7 +211,7 @@ if ($errors && isset($_POST['category_key']) && isset($CATEGORIES[$_POST['catego
       <div class="border-t pt-4 flex flex-wrap gap-4 items-center">
         <label class="inline-flex items-center gap-2 cursor-pointer">
           <input type="checkbox" name="in_stock" value="1" <?= ($isNew || (int) ($product['in_stock'] ?? 1) === 1) ? 'checked' : '' ?>>
-          <span>Vizibil pe site (produs vizibil pe site)</span>
+          <span>În stoc (produs vizibil pe site)</span>
         </label>
         <label class="inline-flex items-center gap-2 cursor-pointer">
           <input type="checkbox" name="featured_on_home" value="1" <?= !empty($product['featured_on_home']) ? 'checked' : '' ?>>
