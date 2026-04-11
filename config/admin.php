@@ -6,5 +6,5 @@ declare(strict_types=1);
  * Generează hash nou: php -r "echo password_hash('parola_ta', PASSWORD_DEFAULT);"
  */
 if (!defined('ADMIN_PASSWORD_HASH')) {
-    define('ADMIN_PASSWORD_HASH', '$2y$10$5.4X9gRFXsPfZF52U8VpBODqBvA41lqA3brX0rA5mSyooaysVpABm');
+    define('ADMIN_PASSWORD_HASH', '$2y$10$o/2F60mEqlX/g3hOQtr.vOkG2vM3hA6z1j6V8yJG.t4/zG2yfit7u');
 }
