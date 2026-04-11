@@ -17,6 +17,13 @@ if (!$product) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ((int) ($product['in_stock'] ?? 1) !== 1) {
+        redirectTo('/contact?' . http_build_query([
+            'produs' => $product['slug'],
+            'marime' => trim((string) ($_POST['marime'] ?? $_POST['size'] ?? '')),
+            'cantitate' => max(1, min(99, (int) ($_POST['cantitate'] ?? $_POST['quantity'] ?? 1))),
+        ]));
+    }
     $size = $_POST['size'] ?? '';
     $qtyAdd = max(1, min(99, (int) ($_POST['quantity'] ?? 1)));
     $validSizes = array_map('trim', explode(',', (string) $product['size']));
@@ -85,6 +92,7 @@ $productSchema = [
       <p class="mt-1 mb-4 text-sm font-medium text-zinc-500">La comanda</p>
     <?php endif; ?>
     <p class="text-zinc-600 mb-6"><?= nl2br(e($product['description'])) ?></p>
+    <?php if ($inStockProduct): ?>
     <form method="post" class="space-y-4">
       <label class="block font-medium">Mărime</label>
       <select name="size" required class="w-full border p-2 rounded">
@@ -106,8 +114,27 @@ $productSchema = [
           class="w-full max-w-[8rem] border p-2 rounded"
         >
       </div>
-      <button type="submit" class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700"><?= $inStockProduct ? 'Adaugă în coș' : 'Adaugă în coș (la comandă)' ?></button>
+      <button type="submit" class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700">Adaugă în coș</button>
     </form>
+    <?php else: ?>
+    <form action="<?= e(url('/contact')) ?>" method="get" class="space-y-4">
+      <input type="hidden" name="produs" value="<?= e($product['slug']) ?>">
+      <label class="block font-medium" for="com-marime">Mărime dorită</label>
+      <select id="com-marime" name="marime" required class="w-full border p-2 rounded">
+        <option value="">Selectează mărimea</option>
+        <?php foreach (explode(',', (string) $product['size']) as $size): ?>
+          <?php $sz = trim($size); ?>
+          <option value="<?= e($sz) ?>"><?= e($sz) ?></option>
+        <?php endforeach; ?>
+      </select>
+      <div>
+        <label class="block font-medium mb-1" for="com-qty">Cantitate</label>
+        <input id="com-qty" type="number" name="cantitate" min="1" max="99" value="1" required class="w-full max-w-[8rem] border p-2 rounded">
+      </div>
+      <p class="text-sm text-zinc-500">Produs la comandă — vei fi redirecționat către formularul de contact pentru a finaliza cererea.</p>
+      <button type="submit" class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700">Adaugă în coș</button>
+    </form>
+    <?php endif; ?>
   </div>
 </section>
 <section class="max-w-7xl mx-auto px-4 pb-12">

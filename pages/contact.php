@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../config/contact.php';
+require_once __DIR__ . '/../models/ProductModel.php';
 
 $errors = [];
 $success = false;
@@ -13,6 +14,22 @@ $defaults = [
     'order_number' => '',
     'message' => '',
 ];
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    $qsProd = trim((string) ($_GET['produs'] ?? ''));
+    if ($qsProd !== '') {
+        $pinf = ProductModel::bySlug($qsProd);
+        if ($pinf) {
+            $mar = trim((string) ($_GET['marime'] ?? ''));
+            $cant = max(1, min(99, (int) ($_GET['cantitate'] ?? 1)));
+            $defaults['message'] = "Bună ziua,\n\nDoresc să comand produsul «{$pinf['name']}»";
+            if ($mar !== '') {
+                $defaults['message'] .= ", mărimea: {$mar}";
+            }
+            $defaults['message'] .= ", cantitate: {$cant}.\n\n";
+        }
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $defaults['name'] = trim((string) ($_POST['name'] ?? ''));

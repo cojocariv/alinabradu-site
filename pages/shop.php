@@ -60,8 +60,6 @@ require __DIR__ . '/../includes/header.php';
           <p class="mt-2 text-gold font-semibold"><?= e(formatPrice((float) $product['price'])) ?></p>
           <?php if ($inStock): ?>
             <p class="mt-1 text-sm font-medium text-gold">În stoc</p>
-          <?php else: ?>
-            <p class="mt-1 text-sm font-medium text-zinc-500">La comanda</p>
             <?php if ($firstSize !== ''): ?>
               <form method="post" action="<?= e(url('/produs/' . $product['slug'])) ?>" class="mt-3">
                 <input type="hidden" name="size" value="<?= e($firstSize) ?>">
@@ -69,6 +67,9 @@ require __DIR__ . '/../includes/header.php';
                 <button type="submit" class="w-full sm:w-auto bg-zinc-900 text-white text-sm px-4 py-2 rounded hover:bg-zinc-800">Adaugă în coș</button>
               </form>
             <?php endif; ?>
+          <?php else: ?>
+            <p class="mt-1 text-sm font-medium text-zinc-500">La comanda</p>
+            <a href="<?= e(url('/contact?' . http_build_query(['produs' => $product['slug']]))) ?>" class="mt-3 inline-block w-full sm:w-auto bg-zinc-900 text-white text-sm px-4 py-2 rounded hover:bg-zinc-800 text-center no-underline">Adaugă în coș</a>
           <?php endif; ?>
           <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="inline-block mt-3 text-sm underline">Vezi produs</a>
         </div>
