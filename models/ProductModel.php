@@ -32,7 +32,7 @@ class ProductModel
 
     public static function filter(array $filters = []): array
     {
-        $sql = 'SELECT * FROM products WHERE 1=1' . self::publicWhereInStock();
+        $sql = 'SELECT * FROM products WHERE 1=1';
         $params = [];
 
         if (!empty($filters['category'])) {
@@ -59,7 +59,7 @@ class ProductModel
 
     public static function bySlug(string $slug): ?array
     {
-        $sql = 'SELECT * FROM products WHERE slug = :slug' . self::publicWhereInStock() . ' LIMIT 1';
+        $sql = 'SELECT * FROM products WHERE slug = :slug LIMIT 1';
         $stmt = getDbConnection()->prepare($sql);
         $stmt->bindValue(':slug', $slug);
         $stmt->execute();
@@ -69,7 +69,7 @@ class ProductModel
 
     public static function byCategorySlug(string $category, ?string $subcategory = null): array
     {
-        $sql = 'SELECT * FROM products WHERE category_slug = :category' . self::publicWhereInStock();
+        $sql = 'SELECT * FROM products WHERE category_slug = :category';
         $params = [':category' => $category];
 
         if ($subcategory) {

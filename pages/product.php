@@ -44,6 +44,8 @@ $seo = [
     'image' => $productImages[0] ?? $product['image'],
 ];
 require __DIR__ . '/../includes/header.php';
+$inStockProduct = (int) ($product['in_stock'] ?? 1) === 1;
+$offerAvailability = $inStockProduct ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder';
 $productSchema = [
     '@context' => 'https://schema.org',
     '@type' => 'Product',
@@ -54,7 +56,7 @@ $productSchema = [
         '@type' => 'Offer',
         'priceCurrency' => 'MDL',
         'price' => (float) $product['price'],
-        'availability' => 'https://schema.org/InStock',
+        'availability' => $offerAvailability,
     ],
 ];
 ?>
@@ -76,7 +78,12 @@ $productSchema = [
   </div>
   <div>
     <h1 class="font-serif text-4xl mb-3"><?= e($product['name']) ?></h1>
-    <p class="text-gold text-2xl font-semibold mb-4"><?= e(formatPrice((float) $product['price'])) ?></p>
+    <p class="text-gold text-2xl font-semibold"><?= e(formatPrice((float) $product['price'])) ?></p>
+    <?php if ($inStockProduct): ?>
+      <p class="mt-1 mb-4 text-sm font-medium text-gold">În stoc</p>
+    <?php else: ?>
+      <p class="mt-1 mb-4 text-sm font-medium text-zinc-500">La comanda</p>
+    <?php endif; ?>
     <p class="text-zinc-600 mb-6"><?= nl2br(e($product['description'])) ?></p>
     <form method="post" class="space-y-4">
       <label class="block font-medium">Mărime</label>
@@ -99,7 +106,7 @@ $productSchema = [
           class="w-full max-w-[8rem] border p-2 rounded"
         >
       </div>
-      <button type="submit" class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700">Adaugă în coș</button>
+      <button type="submit" class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700"><?= $inStockProduct ? 'Adaugă în coș' : 'Adaugă în coș (la comandă)' ?></button>
     </form>
   </div>
 </section>

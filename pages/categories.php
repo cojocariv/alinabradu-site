@@ -16,13 +16,33 @@ require __DIR__ . '/../includes/header.php';
   <h1 class="font-serif text-4xl mb-6">Categorie</h1>
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <?php foreach ($products as $product): ?>
+      <?php
+      $imgUrl = ProductModel::getPrimaryImageUrl($product);
+      $inStock = (int) ($product['in_stock'] ?? 1) === 1;
+      $sizesList = array_filter(array_map('trim', explode(',', (string) $product['size'])));
+      $firstSize = $sizesList[0] ?? '';
+      ?>
       <article class="bg-white rounded-lg overflow-hidden shadow-sm card-hover">
         <a href="<?= e(url('/produs/' . $product['slug'])) ?>">
-          <img src="<?= e($product['image']) ?>" alt="<?= e($product['name']) ?>" class="h-72 w-full object-cover" loading="lazy">
+          <img src="<?= e($imgUrl) ?>" alt="<?= e($product['name']) ?>" class="h-72 w-full object-cover" loading="lazy">
         </a>
         <div class="p-4">
           <h2 class="font-serif text-xl"><?= e($product['name']) ?></h2>
-          <p class="text-gold font-semibold"><?= e(formatPrice((float) $product['price'])) ?></p>
+          <p class="text-sm text-zinc-500"><?= e($product['category']) ?><?= $product['subcategory'] ? ' — ' . e($product['subcategory']) : '' ?></p>
+          <p class="mt-2 text-gold font-semibold"><?= e(formatPrice((float) $product['price'])) ?></p>
+          <?php if ($inStock): ?>
+            <p class="mt-1 text-sm font-medium text-gold">În stoc</p>
+          <?php else: ?>
+            <p class="mt-1 text-sm font-medium text-zinc-500">La comanda</p>
+            <?php if ($firstSize !== ''): ?>
+              <form method="post" action="<?= e(url('/produs/' . $product['slug'])) ?>" class="mt-3">
+                <input type="hidden" name="size" value="<?= e($firstSize) ?>">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="w-full sm:w-auto bg-zinc-900 text-white text-sm px-4 py-2 rounded hover:bg-zinc-800">Adaugă în coș</button>
+              </form>
+            <?php endif; ?>
+          <?php endif; ?>
+          <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="inline-block mt-3 text-sm underline">Vezi produs</a>
         </div>
       </article>
     <?php endforeach; ?>

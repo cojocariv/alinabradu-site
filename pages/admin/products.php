@@ -113,9 +113,9 @@ $seo = ['title' => 'Produse - Admin'];
           <tr class="text-left text-zinc-600">
             <th class="p-3">ID</th>
             <th class="p-3">Nume</th>
+            <th class="p-3 whitespace-nowrap">În stoc</th>
             <th class="p-3">Categorie</th>
             <th class="p-3">Preț</th>
-            <th class="p-3 whitespace-nowrap">Vizibil pe site</th>
             <th class="p-3">Homepage</th>
             <th class="p-3"></th>
           </tr>
@@ -141,8 +141,6 @@ $seo = ['title' => 'Produse - Admin'];
                   <span class="font-medium truncate"><?= e($p['name']) ?></span>
                 </div>
               </td>
-              <td class="p-3"><?= e($p['category']) ?></td>
-              <td class="p-3"><?= e(formatPrice((float) $p['price'])) ?></td>
               <td class="p-3 align-middle">
                 <form method="post" class="inline-flex items-center">
                   <input type="hidden" name="toggle_in_stock" value="1">
@@ -153,6 +151,8 @@ $seo = ['title' => 'Produse - Admin'];
                   </label>
                 </form>
               </td>
+              <td class="p-3"><?= e($p['category']) ?></td>
+              <td class="p-3"><?= e(formatPrice((float) $p['price'])) ?></td>
               <td class="p-3"><?= !empty($p['featured_on_home']) ? 'Da' : '—' ?></td>
               <td class="p-3 text-right space-x-2">
                 <a href="<?= e(url('/admin/produse/' . (int) $p['id'])) ?>" class="text-gold hover:underline">Modifică</a>
