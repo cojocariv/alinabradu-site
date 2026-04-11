@@ -3,6 +3,13 @@ declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
 $slug = $routeParams['slug'] ?? '';
 $product = ProductModel::bySlug($slug);
+$productImages = [];
+if ($product) {
+    $productImages = ProductModel::getImageUrls((int) $product['id']);
+    if (empty($productImages)) {
+        $productImages = [(string) $product['image']];
+    }
+}
 if (!$product) {
     http_response_code(404);
     require __DIR__ . '/404.php';
@@ -21,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'name' => $product['name'],
             'slug' => $product['slug'],
             'price' => (float) $product['price'],
-            'image' => $product['image'],
+            'image' => ProductModel::getPrimaryImageUrl($product),
             'selected_size' => $size,
             'qty' => $prev + $qtyAdd,
         ];
@@ -34,7 +41,7 @@ $seo = [
     'title' => $product['name'] . ' - Alina Bradu',
     'description' => mb_substr(strip_tags((string) $product['description']), 0, 150),
     'type' => 'product',
-    'image' => $product['image'],
+    'image' => $productImages[0] ?? $product['image'],
 ];
 require __DIR__ . '/../includes/header.php';
 $productSchema = [
@@ -42,7 +49,7 @@ $productSchema = [
     '@type' => 'Product',
     'name' => $product['name'],
     'description' => $product['description'],
-    'image' => [$product['image']],
+    'image' => $productImages,
     'offers' => [
         '@type' => 'Offer',
         'priceCurrency' => 'MDL',
@@ -54,7 +61,18 @@ $productSchema = [
 <script type="application/ld+json"><?= json_encode($productSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?></script>
 <section class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-2 gap-10">
   <div>
-    <img src="<?= e($product['image']) ?>" alt="<?= e($product['name']) ?>" class="w-full rounded-lg object-cover" loading="eager">
+    <div class="space-y-3">
+      <img id="product-main-img" src="<?= e($productImages[0]) ?>" alt="<?= e($product['name']) ?>" class="w-full rounded-lg object-cover aspect-[3/4] max-h-[min(80vh,560px)]" loading="eager">
+      <?php if (count($productImages) > 1): ?>
+        <div class="flex flex-wrap gap-2 justify-center">
+          <?php foreach ($productImages as $i => $imgUrl): ?>
+            <button type="button" class="product-thumb border-2 rounded overflow-hidden w-16 h-16 object-cover shrink-0 <?= $i === 0 ? 'border-gold' : 'border-transparent opacity-80 hover:opacity-100' ?>" data-src="<?= e($imgUrl) ?>" aria-label="Imagine <?= $i + 1 ?>">
+              <img src="<?= e($imgUrl) ?>" alt="" class="w-full h-full object-cover">
+            </button>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+    </div>
   </div>
   <div>
     <h1 class="font-serif text-4xl mb-3"><?= e($product['name']) ?></h1>
@@ -99,4 +117,24 @@ $productSchema = [
     <?php endforeach; ?>
   </div>
 </section>
+<?php if (count($productImages) > 1): ?>
+<script>
+(function () {
+  var main = document.getElementById('product-main-img');
+  if (!main) return;
+  document.querySelectorAll('.product-thumb').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var src = btn.getAttribute('data-src');
+      if (src) main.src = src;
+      document.querySelectorAll('.product-thumb').forEach(function (b) {
+        var active = b === btn;
+        b.classList.toggle('border-gold', active);
+        b.classList.toggle('border-transparent', !active);
+        b.classList.toggle('opacity-80', !active);
+      });
+    });
+  });
+})();
+</script>
+<?php endif; ?>
 <?php require __DIR__ . '/../includes/footer.php'; ?>

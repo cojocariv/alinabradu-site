@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/includes/helpers.php';
 require_once __DIR__ . '/models/ProductModel.php';
+require_once __DIR__ . '/includes/admin_auth.php';
 
 set_exception_handler(static function (Throwable $e): void {
     http_response_code(500);
@@ -36,6 +37,32 @@ set_exception_handler(static function (Throwable $e): void {
 
 $path = routePath();
 $routeParams = [];
+
+if ($path === 'admin' || $path === 'admin/') {
+    require __DIR__ . '/pages/admin/index.php';
+    exit;
+}
+if ($path === 'admin/logout') {
+    require __DIR__ . '/pages/admin/logout.php';
+    exit;
+}
+if ($path === 'admin/produse') {
+    adminRequireLogin();
+    require __DIR__ . '/pages/admin/products.php';
+    exit;
+}
+if ($path === 'admin/produse/nou') {
+    adminRequireLogin();
+    $routeParams['id'] = null;
+    require __DIR__ . '/pages/admin/product_form.php';
+    exit;
+}
+if (preg_match('#^admin/produse/(\d+)$#', $path, $adm)) {
+    adminRequireLogin();
+    $routeParams['id'] = (int) $adm[1];
+    require __DIR__ . '/pages/admin/product_form.php';
+    exit;
+}
 
 if ($path === 'sitemap.xml') {
     header('Content-Type: application/xml; charset=utf-8');

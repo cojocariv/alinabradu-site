@@ -2,7 +2,10 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
 $headerOverlay = true;
-$products = ProductModel::featured(8);
+$products = ProductModel::featuredHome(12);
+if (count($products) === 0) {
+    $products = ProductModel::featured(8);
+}
 $seo = [
     'title' => 'Alina Bradu - Creație cu accent',
     'description' => 'Descoperă colecții autentice de inspirație moldovenească: rochii, bluze, fuste și home decor premium.',
@@ -56,7 +59,7 @@ $storyLeaf = 'https://alinabradupozestorage.blob.core.windows.net/poze/leaf-shap
     <?php foreach ($products as $product): ?>
       <article class="bg-white rounded-lg overflow-hidden shadow-sm card-hover">
         <a href="<?= e(url('/produs/' . $product['slug'])) ?>">
-          <img src="<?= e($product['image']) ?>" alt="<?= e($product['name']) ?>" class="w-full h-72 object-cover" loading="lazy">
+          <img src="<?= e(ProductModel::getPrimaryImageUrl($product)) ?>" alt="<?= e($product['name']) ?>" class="w-full h-72 object-cover" loading="lazy">
         </a>
         <div class="p-4">
           <h3 class="font-serif text-lg"><?= e($product['name']) ?></h3>

@@ -19,7 +19,18 @@ CREATE TABLE IF NOT EXISTS products (
   subcategory_slug VARCHAR(120) NULL,
   size VARCHAR(50) NOT NULL COMMENT 'Comma separated sizes',
   image VARCHAR(500) NOT NULL,
+  featured_on_home TINYINT(1) NOT NULL DEFAULT 0,
+  home_sort INT NOT NULL DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS product_images (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  product_id INT NOT NULL,
+  image_url VARCHAR(800) NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0,
+  FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+  KEY idx_product_sort (product_id, sort_order)
 );
 
 CREATE TABLE IF NOT EXISTS orders (
@@ -55,3 +66,7 @@ INSERT INTO products (name, slug, description, price, category, category_slug, s
 ('Fustă Atelier Gold', 'fusta-atelier-gold', 'Fustă feminină cu accente aurii și croi modern.', 560.00, 'Fustă', 'fuste', NULL, NULL, 'XS,S,M,L,XL', 'https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png'),
 ('Rochie Colecția Mireasă', 'rochie-colectia-mireasa', 'Rochie mireasă tradițională reinterpretată pentru evenimente speciale.', 1890.00, 'Rochie', 'rochii', 'Colecția Mireasă', 'colectia-mireasa', 'XS,S,M,L,XL', 'https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png')
 ON DUPLICATE KEY UPDATE name = VALUES(name);
+
+INSERT INTO product_images (product_id, image_url, sort_order)
+SELECT p.id, p.image, 0 FROM products p
+WHERE NOT EXISTS (SELECT 1 FROM product_images pi WHERE pi.product_id = p.id);
