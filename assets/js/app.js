@@ -13,9 +13,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const slides = Array.from(storyRoot.querySelectorAll('.home-story__slide'));
+  const slidesWrap = storyRoot.querySelector('.home-story__slides');
   const dotsContainer = storyRoot.querySelector('.home-story__dots');
-  if (!slides.length || !dotsContainer) {
+  if (!slides.length || !dotsContainer || !slidesWrap) {
     return;
+  }
+
+  function syncStoryHeight() {
+    const active = slidesWrap.querySelector('.home-story__slide.is-active');
+    if (!active) {
+      return;
+    }
+    const h = active.offsetHeight;
+    slidesWrap.style.minHeight = `${Math.max(Math.ceil(h), 64)}px`;
   }
 
   const intervalMs = Math.max(3000, parseInt(storyRoot.dataset.storyInterval || '5000', 10) || 5000);
@@ -36,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const active = j === n;
       btn.classList.toggle('is-active', active);
       btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    requestAnimationFrame(() => {
+      syncStoryHeight();
     });
   }
 
@@ -83,8 +96,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     slides[0].classList.add('is-active');
     slides[0].setAttribute('aria-hidden', 'false');
+    requestAnimationFrame(() => syncStoryHeight());
     return;
   }
+
+  const onFontsReady = () => {
+    syncStoryHeight();
+  };
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(onFontsReady);
+  } else {
+    window.setTimeout(onFontsReady, 100);
+  }
+
+  let resizeT = null;
+  window.addEventListener('resize', () => {
+    if (resizeT) {
+      clearTimeout(resizeT);
+    }
+    resizeT = window.setTimeout(syncStoryHeight, 120);
+  });
 
   restartTimer();
 
