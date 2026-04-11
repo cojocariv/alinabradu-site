@@ -27,7 +27,7 @@ require __DIR__ . '/../includes/header.php';
 $storyLeaf = 'https://alinabradupozestorage.blob.core.windows.net/poze/leaf-shape-2-qjd2e8q1mruaag9ndk6bv7cqz5r9x69167979v98qg.png';
 ?>
 <section
-  class="home-story relative flex flex-col items-center justify-center py-3 md:py-5 overflow-x-hidden bg-cream/80 select-none"
+  class="home-story relative flex flex-col items-center justify-center py-4 md:py-6 overflow-x-hidden bg-cream/80 select-none"
   aria-label="Despre colecții și brand"
   data-story-interval="5000"
 >
