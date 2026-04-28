@@ -23,8 +23,10 @@ require __DIR__ . '/../includes/header.php';
       $firstSize = $sizesList[0] ?? '';
       ?>
       <article class="bg-white rounded-lg overflow-hidden shadow-sm card-hover">
-        <a href="<?= e(url('/produs/' . $product['slug'])) ?>">
-          <img src="<?= e($imgUrl) ?>" alt="<?= e($product['name']) ?>" class="h-72 w-full object-cover" loading="lazy">
+        <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="block bg-white">
+          <div class="h-72 bg-white p-3 flex items-center justify-center">
+            <img src="<?= e($imgUrl) ?>" alt="<?= e($product['name']) ?>" class="w-full h-full object-contain" loading="lazy">
+          </div>
         </a>
         <div class="p-4">
           <h2 class="font-serif text-xl"><?= e($product['name']) ?></h2>
