@@ -46,14 +46,19 @@ require __DIR__ . '/../includes/header.php';
     <?php foreach ($products as $product): ?>
       <?php
       $imgUrl = ProductModel::getPrimaryImageUrl($product);
+      $galleryUrls = ProductModel::getImageUrls((int) $product['id']);
+      $hoverImgUrl = $galleryUrls[1] ?? null;
       $inStock = (int) ($product['in_stock'] ?? 1) === 1;
       $sizesList = array_filter(array_map('trim', explode(',', (string) $product['size'])));
       $firstSize = $sizesList[0] ?? '';
       ?>
       <article class="bg-[#fffaf2] rounded-lg overflow-hidden shadow-sm border border-[#eadfc9] card-hover">
         <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="block bg-[#fffaf2]">
-          <div class="h-80 bg-[#fff6ea] p-3 flex items-center justify-center">
-            <img src="<?= e($imgUrl) ?>" alt="<?= e($product['name']) ?>" class="w-full h-full object-contain" loading="lazy">
+          <div class="product-card-media h-80 bg-[#fff6ea] p-3 flex items-center justify-center">
+            <img src="<?= e($imgUrl) ?>" alt="<?= e($product['name']) ?>" class="product-card-media__img product-card-media__img--primary w-full h-full object-contain" loading="lazy">
+            <?php if ($hoverImgUrl): ?>
+              <img src="<?= e($hoverImgUrl) ?>" alt="" class="product-card-media__img product-card-media__img--hover w-full h-full object-contain" loading="lazy" aria-hidden="true">
+            <?php endif; ?>
           </div>
         </a>
         <div class="p-4">

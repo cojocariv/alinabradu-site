@@ -71,6 +71,37 @@ body {
   box-shadow: 0 16px 30px rgba(0, 0, 0, .12);
 }
 
+.product-card-media {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-card-media__img {
+  position: absolute;
+  inset: 0.75rem;
+  width: calc(100% - 1.5rem);
+  height: calc(100% - 1.5rem);
+  transition: opacity .35s ease, transform .35s ease;
+}
+
+.product-card-media__img--primary {
+  opacity: 1;
+}
+
+.product-card-media__img--hover {
+  opacity: 0;
+}
+
+.card-hover:hover .product-card-media__img--primary {
+  opacity: 0;
+  transform: scale(1.01);
+}
+
+.card-hover:hover .product-card-media__img--hover {
+  opacity: 1;
+  transform: scale(1.01);
+}
+
 /* Homepage — bloc unic, text rotativ, frunză la centru */
 .home-story {
   -webkit-user-select: none;
