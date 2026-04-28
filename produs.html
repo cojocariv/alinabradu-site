@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Azure Container Explorer</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .file-list { margin-top: 20px; border: 1px solid #ddd; padding: 10px; border-radius: 5px; }
+        .file-item { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+        .file-item:last-child { border-bottom: none; }
+        .file-meta { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
+        .file-thumb { width: 56px; height: 56px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; background: #f5f5f5; flex-shrink: 0; }
+        .file-name { word-break: break-all; }
+        .file-actions { display: flex; gap: 10px; flex-shrink: 0; }
+        a { color: #0078d4; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h2>Conținut Container: <span id="containerName">Alinabradu</span></h2>
+    <div id="status">Se încarcă fișierele...</div>
+    
+    <div class="file-list" id="fileList">
+        <!-- Fișierele vor apărea aici -->
+    </div>
+
+    <script>
+        // 1. INSerează aici "Blob SAS URL" complet generat în Azure Portal
+        const sasUrl = "https://alinabradupozestorage.blob.core.windows.net/poze?sp=racwdl&st=2026-04-28T08:39:31Z&se=2030-04-28T16:54:31Z&sv=2025-11-05&sr=c&sig=d0AXmmbogXdEMlu2%2B0l9vYNYkUp2XoepL%2F3jBcl%2FYYk%3D";
+
+      async function listFiles() {
+    try {
+        const listUrl = `${sasUrl}&restype=container&comp=list`;
+        const response = await fetch(listUrl);
+        if (!response.ok) throw new Error(`Eroare: ${response.statusText}`);
+
+        const text = await response.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(text, "application/xml");
+        const blobs = xml.querySelectorAll("Blob");
+
+        const listContainer = document.getElementById('fileList');
+        listContainer.innerHTML = '';
+
+        const baseUrl = sasUrl.split('?')[0];
+        const token = sasUrl.split('?')[1];
+
+        blobs.forEach(blob => {
+            const name = blob.querySelector("Name").textContent;
+            const fileUrl = `${baseUrl}/${name}?${token}`;
+
+            const div = document.createElement('div');
+            div.className = 'file-item';
+            div.innerHTML = `
+                <div class="file-meta">
+                    <img src="${fileUrl}" alt="${name}" class="file-thumb" loading="lazy">
+                    <span class="file-name">${name}</span>
+                </div>
+                <div class="file-actions">
+                    <button onclick="copyToClipboard('${fileUrl}', this)" style="cursor:pointer; padding: 5px 10px;">Copiaza URL</button>
+                    <a href="${fileUrl}" target="_blank" style="padding: 5px 10px; background: #0078d4; color: white; border-radius: 3px; text-decoration: none;">Vezi</a>
+                </div>
+            `;
+            listContainer.appendChild(div);
+        });
+
+        document.getElementById('status').innerText = `Am găsit ${blobs.length} fișiere:`;
+    } catch (error) {
+        document.getElementById('status').innerHTML = `<span style="color:red">Eroare: ${error.message}</span>`;
+    }
+}
+
+// Funcția care face magia copierii
+function copyToClipboard(text, button) {
+    navigator.clipboard.writeText(text).then(() => {
+        const originalText = button.innerText;
+        button.innerText = "Copiat! ✅";
+        button.style.background = "#d4edda";
+        
+        setTimeout(() => {
+            button.innerText = originalText;
+            button.style.background = "";
+        }, 2000);
+    }).catch(err => {
+        alert("Eroare la copiere: " + err);
+    });
+}
+
+listFiles();
+    </script>
+</body>
+</html>

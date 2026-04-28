@@ -71,12 +71,14 @@ $productSchema = [
 <section class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-2 gap-10">
   <div>
     <div class="space-y-3">
-      <img id="product-main-img" src="<?= e($productImages[0]) ?>" alt="<?= e($product['name']) ?>" class="w-full rounded-lg object-cover aspect-[3/4] max-h-[min(80vh,560px)]" loading="eager">
+      <div class="rounded-lg bg-white/70 border border-zinc-200 p-3">
+        <img id="product-main-img" src="<?= e($productImages[0]) ?>" alt="<?= e($product['name']) ?>" class="w-full rounded-lg object-contain max-h-[min(80vh,680px)]" loading="eager">
+      </div>
       <?php if (count($productImages) > 1): ?>
         <div class="flex flex-wrap gap-2 justify-center">
           <?php foreach ($productImages as $i => $imgUrl): ?>
-            <button type="button" class="product-thumb border-2 rounded overflow-hidden w-16 h-16 object-cover shrink-0 <?= $i === 0 ? 'border-gold' : 'border-transparent opacity-80 hover:opacity-100' ?>" data-src="<?= e($imgUrl) ?>" aria-label="Imagine <?= $i + 1 ?>">
-              <img src="<?= e($imgUrl) ?>" alt="" class="w-full h-full object-cover">
+            <button type="button" class="product-thumb border-2 rounded overflow-hidden w-20 h-20 bg-white shrink-0 <?= $i === 0 ? 'border-gold' : 'border-transparent opacity-80 hover:opacity-100' ?>" data-src="<?= e($imgUrl) ?>" aria-label="Imagine <?= $i + 1 ?>">
+              <img src="<?= e($imgUrl) ?>" alt="" class="w-full h-full object-contain p-1 bg-white">
             </button>
           <?php endforeach; ?>
         </div>
