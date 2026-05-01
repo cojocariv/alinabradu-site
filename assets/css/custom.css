@@ -211,3 +211,56 @@ body {
     opacity: 0.4;
   }
 }
+
+/* About page: 3D animated gallery */
+.about-carousel.scene,
+.about-carousel .a3d {
+  display: grid;
+}
+
+.about-carousel.scene {
+  overflow: hidden;
+  min-height: 26rem;
+  perspective: 35em;
+  mask: linear-gradient(90deg, #0000, #000 16% 84%, #0000);
+}
+
+.about-carousel .a3d {
+  place-self: center;
+  transform-style: preserve-3d;
+  animation: about-ry 36s linear infinite;
+}
+
+@keyframes about-ry {
+  to {
+    transform: rotateY(1turn);
+  }
+}
+
+.about-carousel .card {
+  --w: min(15.5rem, 62vw);
+  --ba: calc(1turn / var(--n));
+  grid-area: 1 / 1;
+  width: var(--w);
+  aspect-ratio: 7 / 10;
+  object-fit: cover;
+  border-radius: 1rem;
+  border: 1px solid #eadfc9;
+  box-shadow: 0 14px 26px rgba(0, 0, 0, 0.12);
+  backface-visibility: hidden;
+  transform:
+    rotateY(calc(var(--i) * var(--ba)))
+    translateZ(calc(-1 * (.5 * var(--w) + .5rem) / tan(.5 * var(--ba))));
+}
+
+@media (max-width: 1023px) {
+  .about-carousel.scene {
+    min-height: 22rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-carousel .a3d {
+    animation-duration: 120s;
+  }
+}

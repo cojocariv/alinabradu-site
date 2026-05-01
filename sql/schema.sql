@@ -34,6 +34,14 @@ CREATE TABLE IF NOT EXISTS product_images (
   KEY idx_product_sort (product_id, sort_order)
 );
 
+CREATE TABLE IF NOT EXISTS about_gallery_images (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  image_url VARCHAR(800) NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS orders (
   id INT AUTO_INCREMENT PRIMARY KEY,
   full_name VARCHAR(200) NOT NULL,
@@ -71,3 +79,11 @@ ON DUPLICATE KEY UPDATE name = VALUES(name);
 INSERT INTO product_images (product_id, image_url, sort_order)
 SELECT p.id, p.image, 0 FROM products p
 WHERE NOT EXISTS (SELECT 1 FROM product_images pi WHERE pi.product_id = p.id);
+
+INSERT INTO about_gallery_images (image_url, sort_order, is_active)
+SELECT * FROM (
+  SELECT 'https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png' AS image_url, 0 AS sort_order, 1 AS is_active
+  UNION ALL SELECT 'https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-11-1-400x500.png', 1, 1
+  UNION ALL SELECT 'https://alinabradupozestorage.blob.core.windows.net/poze/image-2-1.png', 2, 1
+) seed
+WHERE NOT EXISTS (SELECT 1 FROM about_gallery_images);

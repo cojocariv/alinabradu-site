@@ -57,6 +57,7 @@ $seo = ['title' => 'Produse - Admin'];
     <nav class="flex gap-4 text-sm">
       <a href="<?= e(url('/admin/produse')) ?>" class="text-gold">Produse</a>
       <a href="<?= e(url('/admin/produse/nou')) ?>" class="hover:underline">Produs nou</a>
+      <a href="<?= e(url('/admin/despre')) ?>" class="hover:underline">Despre noi</a>
       <a href="<?= e(url('/')) ?>" class="hover:underline">Site</a>
       <a href="<?= e(url('/admin/logout')) ?>" class="hover:underline">Ieșire</a>
     </nav>

@@ -57,6 +57,11 @@ if ($path === 'admin/produse/nou') {
     require __DIR__ . '/pages/admin/product_form.php';
     exit;
 }
+if ($path === 'admin/despre') {
+    adminRequireLogin();
+    require __DIR__ . '/pages/admin/about_gallery.php';
+    exit;
+}
 if (preg_match('#^admin/produse/(\d+)$#', $path, $adm)) {
     adminRequireLogin();
     $routeParams['id'] = (int) $adm[1];
