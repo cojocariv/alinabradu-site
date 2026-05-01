@@ -57,9 +57,11 @@ $storyLeaf = 'https://alinabradupozestorage.blob.core.windows.net/poze/leaf-shap
   <h2 class="font-serif text-3xl mb-6">Produse noi</h2>
   <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
     <?php foreach ($products as $product): ?>
-      <article class="bg-white rounded-lg overflow-hidden shadow-sm card-hover">
-        <a href="<?= e(url('/produs/' . $product['slug'])) ?>">
-          <img src="<?= e(ProductModel::getPrimaryImageUrl($product)) ?>" alt="<?= e($product['name']) ?>" class="w-full h-72 object-cover" loading="lazy">
+      <article class="bg-[#fffaf2] rounded-lg overflow-hidden shadow-sm border border-[#eadfc9] card-hover">
+        <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="block bg-[#fffaf2]">
+          <div class="h-72 bg-[#fff6ea] p-3 flex items-center justify-center">
+            <img src="<?= e(ProductModel::getPrimaryImageUrl($product)) ?>" alt="<?= e($product['name']) ?>" class="w-full h-full object-contain" loading="lazy">
+          </div>
         </a>
         <div class="p-4">
           <h3 class="font-serif text-lg"><?= e($product['name']) ?></h3>
