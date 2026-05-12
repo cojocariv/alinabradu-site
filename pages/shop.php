@@ -1,8 +1,12 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
+require_once __DIR__ . '/../models/CategoryModel.php';
 
-$categories = ['Bluză', 'Fustă', 'Home decor', 'Rochie'];
+$categories = array_column(CategoryModel::all(), 'name');
+if ($categories === []) {
+    $categories = ['Bluză', 'Fustă', 'Home decor', 'Rochie'];
+}
 $subcategories = ['Colecția Dor', 'Colecția Mireasă', 'Colecția Mistery', 'Colecția Soare', 'Colecția Spicul'];
 $sizes = ['XS', 'S', 'M', 'L', 'XL'];
 

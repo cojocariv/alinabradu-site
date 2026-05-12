@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../../models/ProductModel.php';
+require_once __DIR__ . '/../../models/CategoryModel.php';
 require_once __DIR__ . '/../../includes/admin_auth.php';
 require_once __DIR__ . '/../../includes/admin_upload.php';
 
@@ -9,12 +10,20 @@ adminRequireLogin();
 $editId = isset($routeParams['id']) ? (int) $routeParams['id'] : null;
 $isNew = $editId === null || $editId < 1;
 
-$CATEGORIES = [
+$CATEGORIES_LEGACY = [
     'bluze' => ['name' => 'Bluză', 'slug' => 'bluze'],
     'fuste' => ['name' => 'Fustă', 'slug' => 'fuste'],
     'home-decor' => ['name' => 'Home decor', 'slug' => 'home-decor'],
     'rochii' => ['name' => 'Rochie', 'slug' => 'rochii'],
 ];
+
+$CATEGORIES = [];
+foreach (CategoryModel::all() as $row) {
+    $CATEGORIES[$row['slug']] = ['name' => $row['name'], 'slug' => $row['slug']];
+}
+if ($CATEGORIES === []) {
+    $CATEGORIES = $CATEGORIES_LEGACY;
+}
 
 $errors = [];
 $product = null;
@@ -40,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $priceRaw = str_replace(',', '.', trim((string) ($_POST['price'] ?? '0')));
     $price = (float) $priceRaw;
     $catKey = (string) ($_POST['category_key'] ?? '');
+    $newCategoryName = trim((string) ($_POST['new_category_name'] ?? ''));
     $subName = trim((string) ($_POST['subcategory'] ?? ''));
     $sizes = preg_replace('/\s+/', '', trim((string) ($_POST['sizes'] ?? '')));
     $urlsRaw = (string) ($_POST['image_urls'] ?? '');
@@ -60,8 +70,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($price <= 0) {
         $errors[] = 'Prețul trebuie să fie pozitiv.';
     }
-    if (!isset($CATEGORIES[$catKey])) {
-        $errors[] = 'Selectează categoria.';
+    $catForProduct = null;
+    if ($newCategoryName !== '') {
+        if (mb_strlen($newCategoryName) < 2) {
+            $errors[] = 'Numele categoriei noi este prea scurt.';
+        }
+        $newCatSlug = slugify($newCategoryName);
+        if (!$errors && $newCatSlug === '') {
+            $errors[] = 'Nu s-a putut genera URL-ul categoriei din nume.';
+        }
+        if (!$errors && CategoryModel::findBySlug($newCatSlug)) {
+            $errors[] = 'Există deja o categorie cu același URL (slug).';
+        }
+        if (!$errors) {
+            $catForProduct = ['name' => $newCategoryName, 'slug' => $newCatSlug];
+        }
+    } else {
+        if (!isset($CATEGORIES[$catKey])) {
+            $errors[] = 'Selectează categoria sau completează o categorie nouă.';
+        } else {
+            $catForProduct = $CATEGORIES[$catKey];
+        }
     }
     if ($sizes === '') {
         $errors[] = 'Completează mărimile (ex: XS,S,M,L,XL).';
@@ -80,8 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = 'Adaugă cel puțin o imagine (URL sau fișier).';
     }
 
-    if (!$errors) {
-        $cat = $CATEGORIES[$catKey];
+    if (!$errors && $catForProduct) {
+        if ($newCategoryName !== '') {
+            CategoryModel::create($catForProduct['name'], $catForProduct['slug']);
+            $CATEGORIES[$catForProduct['slug']] = $catForProduct;
+        }
+        $cat = $catForProduct;
         $subSlug = $subName !== '' ? slugify($subName) : null;
 
         $row = [
@@ -117,8 +150,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'slug' => $slug,
             'description' => $description,
             'price' => $price,
-            'category' => $CATEGORIES[$catKey]['name'] ?? '',
-            'category_slug' => $CATEGORIES[$catKey]['slug'] ?? '',
+            'category' => $catForProduct !== null ? $catForProduct['name'] : ($CATEGORIES[$catKey]['name'] ?? ''),
+            'category_slug' => $catForProduct !== null ? $catForProduct['slug'] : ($CATEGORIES[$catKey]['slug'] ?? ''),
             'subcategory' => $subName,
             'size' => $sizes,
             'featured_on_home' => $featured,
@@ -140,6 +173,11 @@ if ($product) {
 }
 if ($errors && isset($_POST['category_key']) && isset($CATEGORIES[$_POST['category_key']])) {
     $currentCatKey = (string) $_POST['category_key'];
+}
+
+$newCategoryInput = '';
+if ($errors && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+    $newCategoryInput = trim((string) ($_POST['new_category_name'] ?? ''));
 }
 ?><!doctype html>
 <html lang="ro">
@@ -185,11 +223,17 @@ if ($errors && isset($_POST['category_key']) && isset($CATEGORIES[$_POST['catego
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Categorie *</label>
-        <select name="category_key" required class="w-full border rounded px-3 py-2">
+        <p class="text-xs text-zinc-500 mb-2">Alege din listă sau lasă lista și creează o categorie nouă mai jos.</p>
+        <select name="category_key" id="category_key" class="w-full border rounded px-3 py-2">
           <?php foreach ($CATEGORIES as $key => $c): ?>
             <option value="<?= e($key) ?>" <?= ($currentCatKey === $key) ? 'selected' : '' ?>><?= e($c['name']) ?></option>
           <?php endforeach; ?>
         </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Categorie nouă</label>
+        <input type="text" name="new_category_name" value="<?= e($newCategoryInput) ?>" placeholder="Ex: Accesorii — lasă gol dacă ai ales categoria de mai sus" class="w-full border rounded px-3 py-2" autocomplete="off">
+        <p class="text-xs text-zinc-500 mt-1">Dacă completezi, se salvează categoria în magazin și produsul este legat de ea (nu mai este folosită selecția de deasupra).</p>
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Subcategorie (opțional, ex. Colecția Dor)</label>
