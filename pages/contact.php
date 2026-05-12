@@ -86,6 +86,7 @@ $seo = [
     'title' => 'Contact - Alina Bradu',
     'description' => 'Contactează atelierul Alina Bradu: email, telefon, adresă în Chișinău, program. Trimite-ne un mesaj din formular.',
 ];
+$contactPagePhoto = 'https://alinabradupozestorage.blob.core.windows.net/poze/photo_2026-05-12_17-15-59.jpg';
 require __DIR__ . '/../includes/header.php';
 ?>
 <section class="max-w-6xl mx-auto px-4 py-12">
@@ -133,6 +134,29 @@ require __DIR__ . '/../includes/header.php';
     </div>
 
     <div class="space-y-8">
+      <figure class="rounded-xl overflow-hidden border border-zinc-200 bg-zinc-100 shadow-sm">
+        <img
+          src="<?= e($contactPagePhoto) ?>"
+          alt="Adrese magazine Alina Bradu: CC UNIC etaj 1, CC GEMENI etaj 2, CC ZORILE etaj 2; showroom str. Ștefan cel Mare 126; Brașov, str. Republicii 1."
+          class="w-full h-auto object-cover max-h-[min(85vh,52rem)] object-center"
+          width="900"
+          height="1200"
+          loading="lazy"
+          decoding="async"
+        >
+      </figure>
+
+      <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm">
+        <h2 class="font-serif text-lg text-wine mb-3">Adrese magazine</h2>
+        <ul class="space-y-2 text-sm text-zinc-700 list-disc pl-5 marker:text-gold">
+          <li>CC UNIC, etajul 1, 3</li>
+          <li>CC GEMENI, etajul 2</li>
+          <li>CC ZORILE, etajul 2</li>
+          <li>Showroom „Alina Bradu”, str. Ștefan cel Mare 126</li>
+          <li>or. Brașov, str. Republicii 1</li>
+        </ul>
+      </div>
+
       <div>
         <h2 class="font-serif text-2xl text-zinc-900 mb-4">Informații contact</h2>
         <ul class="space-y-2 text-zinc-700">

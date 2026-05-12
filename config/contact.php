@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /** Email pentru mesaje de pe site și antet From (dacă serverul permite). */
 if (!defined('SITE_EMAIL')) {
-    define('SITE_EMAIL', 'info@alinabradu.md');
+    define('SITE_EMAIL', 'alinabradu.office@gmail.com');
 }
 
 if (!defined('SITE_PHONE_DISPLAY')) {
