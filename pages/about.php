@@ -20,7 +20,7 @@ require __DIR__ . '/../includes/header.php';
 ?>
 <div
   class="about-page-bg min-h-[calc(100dvh-5rem)] bg-cover bg-center bg-no-repeat pb-16"
-  style="background-image: linear-gradient(to bottom, rgba(255,248,238,0.94), rgba(255,248,238,0.88)), url('<?= e($aboutPageBgUrl) ?>');"
+  style="background-image: linear-gradient(to bottom, rgba(255,248,238,0.84), rgba(255,248,238,0.68)), url('<?= e($aboutPageBgUrl) ?>');"
 >
 <section class="max-w-6xl mx-auto px-4 py-12">
   <h1 class="font-serif text-4xl mb-6 drop-shadow-sm">Despre noi</h1>
