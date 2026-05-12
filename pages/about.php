@@ -30,7 +30,7 @@ require __DIR__ . '/../includes/header.php';
       Fiecare piesă este creată cu atenție la detalii, broderii autentice și croieli contemporane.
     </p>
 
-    <div class="about-carousel scene">
+    <div class="about-carousel scene mt-12 lg:mt-24">
       <div class="a3d" style="--n: <?= (int) count($gallery) ?>;">
         <?php foreach ($gallery as $i => $imgUrl): ?>
           <img
