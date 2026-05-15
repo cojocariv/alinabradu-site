@@ -11,8 +11,8 @@ return [
         'name' => 'CC UNIC',
         'detail' => 'etajul 1, 3',
         'address' => 'Centrul Comercial UNIC, bd. Moscova 14/1, Chișinău',
-        'lat' => 47.03856,
-        'lng' => 28.88942,
+        'lat' => 47.01703033346893, 
+        'lng' => 28.84578076429667,
         'city' => 'Chișinău',
     ],
     [
