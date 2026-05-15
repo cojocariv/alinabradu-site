@@ -20,8 +20,8 @@ return [
         'name' => 'CC GEMENI',
         'detail' => 'etajul 2',
         'address' => 'Bulevardul Ștefan cel Mare și Sfînt 136, MD-2012, Chișinău, Moldova',
-        'lat' => 47.0268,
-        'lng' => 28.8389,
+        'lat' => 47.023902941567925, 
+        'lng' => 28.834454354344327,
         'city' => 'Chișinău',
     ],
     [
@@ -29,8 +29,8 @@ return [
         'name' => 'CC ZORILE',
         'detail' => 'etajul 2',
         'address' => 'Strada Calea Ieşilor 8, MD-2069, Chișinău, Moldova',
-        'lat' => 47.0178,
-        'lng' => 28.8620,
+        'lat' => 47.0389294652111, 
+        'lng' => 28.805162162739926,
         'city' => 'Chișinău',
     ],
     [
@@ -38,8 +38,8 @@ return [
         'name' => 'Showroom „Alina Bradu”',
         'detail' => 'str. Ștefan cel Mare 126',
         'address' => 'Stefan cel Mare St 126, Chișinău, Moldova',
-        'lat' => 47.0253,
-        'lng' => 28.8340,
+        'lat' => 47.02099355504562, 
+        'lng' => 28.838650623079722,
         'city' => 'Chișinău',
     ],
     [
@@ -47,8 +47,8 @@ return [
         'name' => 'Magazin Brașov',
         'detail' => 'str. Republicii 1',
         'address' => 'str. Republicii 1, Brașov, România',
-        'lat' => 45.6480,
-        'lng' => 25.6010,
+        'lat' => 45.64249430915888, 
+        'lng' => 25.59020566355732,
         'city' => 'Brașov',
     ],
 ];
