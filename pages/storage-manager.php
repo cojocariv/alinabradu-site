@@ -185,6 +185,11 @@ declare(strict_types=1);
             min-width: 6rem;
         }
         .bulk-bar__count.has-selection { color: var(--ink); }
+        .resolution-panel { margin-bottom: 1.25rem; }
+        .resolution-panel__title { font-size: 1rem; margin: 0 0 0.35rem; font-weight: 600; }
+        .resolution-panel__desc { margin: 0 0 0.5rem; font-size: 0.85rem; color: var(--ink-soft); }
+        .resolution-panel__count { margin: 0 0 0.75rem; font-size: 0.9rem; font-weight: 600; }
+        .resolution-panel__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .filters { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-size: 0.85rem; }
         .filters input { width: auto; margin: 0; }
         .hint {
@@ -224,9 +229,20 @@ declare(strict_types=1);
 
     <div id="status">Se încarcă fișierele…</div>
 
+
+    <div class="panel resolution-panel">
+        <h2 class="resolution-panel__title">Curățare variante redimensionate</h2>
+        <p class="resolution-panel__desc">Șterge fișierele al căror nume conține sufixul de rezoluție WordPress (ex. <code>AB-284-570x728.jpg</code>).</p>
+        <p class="resolution-panel__count" id="resolutionCount">Se calculează…</p>
+        <div class="resolution-panel__actions">
+            <button type="button" class="btn btn--ghost btn--sm" id="btnSelectResolution" disabled>Selectează toate cu rezoluție</button>
+            <button type="button" class="btn btn--danger btn--sm" id="btnDeleteAllResolution" disabled>Șterge toate cu rezoluție în nume</button>
+        </div>
+    </div>
     <div class="filters">
         <label><input type="checkbox" id="imagesOnly" checked> Doar imagini</label>
         <label><input type="checkbox" id="sortNewest"> Sortare descrescătoare (nume)</label>
+        <label><input type="checkbox" id="resolutionOnly"> Doar cu rezoluție în nume</label>
     </div>
 
 
@@ -257,6 +273,32 @@ declare(strict_types=1);
         })();
 
         const IMAGE_RE = /\.(jpe?g|png|gif|webp|avif|bmp|svg)$/i;
+        /** Sufix -{lățime}x{înălțime} înainte de extensie (ex. AB-284-570x728.jpg) */
+        const RESOLUTION_SUFFIX_RE = /-\d{1,5}x\d{1,5}\.[a-z0-9]{2,5}$/i;
+
+        function hasResolutionInName(blobPath) {
+            const base = blobPath.split("/").pop() || blobPath;
+            return RESOLUTION_SUFFIX_RE.test(base);
+        }
+
+        function getAllResolutionBlobs() {
+            return allBlobs.filter(hasResolutionInName);
+        }
+
+        function updateResolutionPanel() {
+            const elCount = document.getElementById("resolutionCount");
+            const btnSelect = document.getElementById("btnSelectResolution");
+            const btnDelete = document.getElementById("btnDeleteAllResolution");
+            if (!elCount) return;
+            const matches = getAllResolutionBlobs();
+            const n = matches.length;
+            elCount.textContent = n === 0
+                ? "Niciun fișier cu sufix de rezoluție în nume."
+                : n + (n === 1 ? " fișier găsit" : " fișiere găsite") + " cu sufix -LxH (ex. -570x728.jpg).";
+            const disabled = n === 0 || busy;
+            if (btnSelect) btnSelect.disabled = disabled;
+            if (btnDelete) btnDelete.disabled = disabled;
+        }
         const MAX_FILE_BYTES = 15 * 1024 * 1024;
 
         let allBlobs = [];
@@ -371,6 +413,9 @@ declare(strict_types=1);
             if (document.getElementById("imagesOnly").checked) {
                 list = list.filter((n) => IMAGE_RE.test(n));
             }
+            if (document.getElementById("resolutionOnly")?.checked) {
+                list = list.filter(hasResolutionInName);
+            }
             if (document.getElementById("sortNewest").checked) {
                 list.sort((a, b) => b.localeCompare(a));
             } else {
@@ -435,6 +480,7 @@ declare(strict_types=1);
                 pruneSelection();
                 renderList();
                 updateBulkBar();
+                updateResolutionPanel();
                 const shown = getFilteredBlobs().length;
                 setStatus("Total în container: " + allBlobs.length + " · Afișate: " + shown, "ok");
             } catch (e) {
@@ -545,20 +591,27 @@ declare(strict_types=1);
 
         document.getElementById("btnDeleteSelected").addEventListener("click", () => deleteSelected());
 
+        document.getElementById("btnSelectResolution").addEventListener("click", () => {
+            if (busy) return;
+            getAllResolutionBlobs().forEach((name) => selectedBlobs.add(name));
+            renderList();
+            updateBulkBar();
+            setStatus("Selectate " + selectedBlobs.size + " fișiere cu rezoluție în nume.", "ok");
+        });
+
+        document.getElementById("btnDeleteAllResolution").addEventListener("click", () => deleteAllResolutionVariants());
+
         document.getElementById("fileList").addEventListener("change", (e) => {
             if (!e.target.classList.contains("file-card__select") || busy) return;
             const card = e.target.closest(".file-card");
             if (card) setCardSelected(card, e.target.checked);
         });
 
-        async function deleteSelected() {
-            const names = [...selectedBlobs];
-            if (!names.length || busy) return;
-            if (!confirm("Ștergi definitiv " + names.length + " fișiere din container?\n\nAcțiunea nu poate fi anulată.")) {
-                return;
-            }
+        async function deleteBlobsByNames(names) {
+            if (!names.length || busy) return { ok: 0, fail: 0 };
             busy = true;
             updateBulkBar();
+            updateResolutionPanel();
             let ok = 0;
             let fail = 0;
             const failed = [];
@@ -579,6 +632,7 @@ declare(strict_types=1);
             pruneSelection();
             renderList();
             updateBulkBar();
+            updateResolutionPanel();
             if (fail === 0) {
                 setStatus("Șterse cu succes: " + ok + " fișier(e).", "ok");
             } else {
@@ -586,6 +640,30 @@ declare(strict_types=1);
             }
             busy = false;
             updateBulkBar();
+            updateResolutionPanel();
+            return { ok, fail };
+        }
+
+        async function deleteSelected() {
+            const names = [...selectedBlobs];
+            if (!names.length) return;
+            if (!confirm("Ștergi definitiv " + names.length + " fișiere din container?\n\nAcțiunea nu poate fi anulată.")) {
+                return;
+            }
+            await deleteBlobsByNames(names);
+        }
+
+        async function deleteAllResolutionVariants() {
+            const names = getAllResolutionBlobs();
+            if (!names.length || busy) return;
+            const preview = names.slice(0, 5).join("\n") + (names.length > 5 ? "\n… și încă " + (names.length - 5) + "" : "");
+            if (!confirm(
+                "Ștergi definitiv " + names.length + " fișiere cu sufix de rezoluție în nume?\n\n" +
+                "Exemple:\n" + preview + "\n\nAcțiunea nu poate fi anulată."
+            )) {
+                return;
+            }
+            await deleteBlobsByNames(names);
         }
 
         document.getElementById("btnRefresh").addEventListener("click", refreshList);
@@ -598,6 +676,12 @@ declare(strict_types=1);
         document.getElementById("sortNewest").addEventListener("change", () => {
             renderList();
             updateBulkBar();
+        });
+        document.getElementById("resolutionOnly").addEventListener("change", () => {
+            renderList();
+            updateBulkBar();
+            const shown = getFilteredBlobs().length;
+            setStatus("Afișate: " + shown + " din " + allBlobs.length, "ok");
         });
 
         document.getElementById("fileInput").addEventListener("change", (e) => {
@@ -657,6 +741,7 @@ declare(strict_types=1);
         });
 
         updateBulkBar();
+        updateResolutionPanel();
         refreshList();
     </script>
 </body>
