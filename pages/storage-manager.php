@@ -243,6 +243,7 @@ declare(strict_types=1);
         <label><input type="checkbox" id="imagesOnly" checked> Doar imagini</label>
         <label><input type="checkbox" id="sortNewest"> Sortare descrescătoare (nume)</label>
         <label><input type="checkbox" id="resolutionOnly"> Doar cu rezoluție în nume</label>
+        <label><input type="checkbox" id="noResolutionOnly"> Fără rezoluție în nume</label>
     </div>
 
 
@@ -415,6 +416,8 @@ declare(strict_types=1);
             }
             if (document.getElementById("resolutionOnly")?.checked) {
                 list = list.filter(hasResolutionInName);
+            } else if (document.getElementById("noResolutionOnly")?.checked) {
+                list = list.filter((n) => !hasResolutionInName(n));
             }
             if (document.getElementById("sortNewest").checked) {
                 list.sort((a, b) => b.localeCompare(a));
@@ -677,12 +680,23 @@ declare(strict_types=1);
             renderList();
             updateBulkBar();
         });
-        document.getElementById("resolutionOnly").addEventListener("change", () => {
+        function applyResolutionFilters(changedId) {
+            const withRes = document.getElementById("resolutionOnly");
+            const withoutRes = document.getElementById("noResolutionOnly");
+            if (changedId === "resolutionOnly" && withRes.checked) {
+                withoutRes.checked = false;
+            }
+            if (changedId === "noResolutionOnly" && withoutRes.checked) {
+                withRes.checked = false;
+            }
             renderList();
             updateBulkBar();
             const shown = getFilteredBlobs().length;
             setStatus("Afișate: " + shown + " din " + allBlobs.length, "ok");
-        });
+        }
+
+        document.getElementById("resolutionOnly").addEventListener("change", () => applyResolutionFilters("resolutionOnly"));
+        document.getElementById("noResolutionOnly").addEventListener("change", () => applyResolutionFilters("noResolutionOnly"));
 
         document.getElementById("fileInput").addEventListener("change", (e) => {
             uploadFiles([...e.target.files]);
