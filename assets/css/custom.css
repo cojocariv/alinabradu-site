@@ -801,6 +801,98 @@ body {
   gap: 0.75rem;
 }
 
+/* —— Contact page map —— */
+.contact-map-section {
+  margin-top: -0.01px;
+}
+
+.site-main--padded .contact-map-section {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  width: 100vw;
+  max-width: 100vw;
+}
+
+.contact-map {
+  position: relative;
+  width: 100%;
+  min-height: min(52vh, 28rem);
+  background: var(--ink);
+}
+
+.contact-map__embed,
+.contact-map__canvas {
+  display: block;
+  width: 100%;
+  height: min(52vh, 28rem);
+  min-height: 280px;
+  border: 0;
+}
+
+.contact-map__canvas {
+  min-height: min(52vh, 28rem);
+}
+
+.contact-map__panel {
+  position: absolute;
+  z-index: 2;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  max-width: calc(100% - 1.5rem);
+  padding: 0.35rem;
+  background: rgba(26, 20, 16, 0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(201, 169, 110, 0.35);
+}
+
+.contact-map__chip {
+  appearance: none;
+  border: 1px solid rgba(201, 169, 110, 0.35);
+  background: transparent;
+  color: var(--cream);
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.65rem;
+  cursor: pointer;
+  transition:
+    background 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out),
+    color 0.25s var(--ease-out);
+  white-space: nowrap;
+}
+
+.contact-map__chip:hover,
+.contact-map__chip.is-active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+
+.contact-map__infowin {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--ink);
+  padding: 0.15rem 0;
+}
+
+.contact-map__infowin a {
+  color: var(--gold-dark);
+  font-weight: 500;
+}
+
+.contact-page .font-serif {
+  font-family: var(--font-serif);
+}
+
 /* —— Footer —— */
 .site-footer {
   background: var(--ink);

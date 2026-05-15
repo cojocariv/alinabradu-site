@@ -86,10 +86,47 @@ $seo = [
     'title' => 'Contact - Alina Bradu',
     'description' => 'Contactează atelierul Alina Bradu: email, telefon, adresă în Chișinău, program. Trimite-ne un mesaj din formular.',
 ];
+$stores = require __DIR__ . '/../config/stores.php';
+require_once __DIR__ . '/../config/google_maps.php';
+$storesJson = json_encode($stores, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP);
 $contactPagePhoto = 'https://alinabradupozestorage.blob.core.windows.net/poze/photo_2026-05-12_17-15-59.jpg';
 require __DIR__ . '/../includes/header.php';
 ?>
-<section class="max-w-6xl mx-auto px-4 py-12">
+
+<section class="contact-map-section" aria-label="Hartă — locații magazine">
+  <div
+    id="contact-stores-map"
+    class="contact-map"
+    data-stores='<?= $storesJson ?>'
+    data-api-key="<?= e(GOOGLE_MAPS_API_KEY) ?>"
+  >
+    <div class="contact-map__panel" role="tablist" aria-label="Selectează magazinul pe hartă">
+      <button type="button" class="contact-map__chip is-active" data-store-id="">
+        Toate (Chișinău)
+      </button>
+      <?php foreach ($stores as $store): ?>
+      <button
+        type="button"
+        class="contact-map__chip"
+        data-store-id="<?= e($store['id']) ?>"
+        role="tab"
+      >
+        <?= e($store['name']) ?>
+      </button>
+      <?php endforeach; ?>
+    </div>
+    <iframe
+      class="contact-map__embed"
+      title="Hartă Google — magazine Alina Bradu"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      allowfullscreen
+      src="https://maps.google.com/maps?q=47.028,28.86&amp;hl=ro&amp;z=12&amp;output=embed"
+    ></iframe>
+  </div>
+</section>
+
+<section class="contact-page max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-12">
   <h1 class="font-serif text-4xl mb-2">Contact</h1>
   <p class="text-zinc-600 mb-10 max-w-2xl">Suntem aici pentru comenzi, întrebări despre produse sau suport. Completează formularul sau folosește datele de mai jos.</p>
 
@@ -205,4 +242,5 @@ require __DIR__ . '/../includes/header.php';
     </div>
   </div>
 </section>
+<script src="<?= e(url('/assets/js/contact-map.js')) ?>" defer></script>
 <?php require __DIR__ . '/../includes/footer.php'; ?>
