@@ -1,8 +1,13 @@
+<?php
+declare(strict_types=1);
+/** @var string $sasUrl */
+?>
 <!DOCTYPE html>
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>Gestionare poze — Azure Storage</title>
     <style>
         :root {
@@ -149,6 +154,9 @@
 </head>
 <body>
 
+    <p class="topbar" style="display:flex;justify-content:flex-end;margin:0 0 1rem">
+        <a href="<?= e(url('/produs.php?logout=1')) ?>" class="btn btn--ghost btn--sm">Deconectare</a>
+    </p>
     <h1>Container: <span id="containerName">poze</span></h1>
     <p class="subtitle">Încarcă și șterge imagini direct în Azure Blob Storage (cont <strong>alinabradupozestorage</strong>).</p>
 
@@ -181,12 +189,12 @@
     <p class="hint">
         Dacă încărcarea sau ștergerea eșuează, verifică în Azure Portal → Storage → CORS: originea
         <code>https://new.alinabradu.com</code> trebuie să aibă permisiuni GET, PUT, DELETE, HEAD, OPTIONS.
-        SAS-ul din acest fișier trebuie să includă permisiunile <code>racwdl</code> (read, add, create, write, delete, list).
+        SAS-ul din <code>config/azure_storage.php</code> trebuie să includă permisiunile <code>racwdl</code> (read, add, create, write, delete, list).
     </p>
 
     <script>
         // SAS la nivel de container (permisiuni: racwdl)
-        const sasUrl = "https://alinabradupozestorage.blob.core.windows.net/poze?sp=racwdl&st=2026-04-28T08:39:31Z&se=2030-04-28T16:54:31Z&sv=2025-11-05&sr=c&sig=d0AXmmbogXdEMlu2%2B0l9vYNYkUp2XoepL%2F3jBcl%2FYYk%3D";
+        const sasUrl = <?= json_encode($sasUrl, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
 
         const [baseUrl, sasToken] = (() => {
             const q = sasUrl.indexOf("?");
