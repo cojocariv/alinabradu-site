@@ -1,4 +1,11 @@
-(function () {
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const p = path.join(path.dirname(fileURLToPath(import.meta.url)), '../assets/js/contact-map.js');
+const el = 'd' + 'iv';
+
+const js = `(function () {
 	"use strict";
 
 	const root = document.getElementById("contact-stores-map");
@@ -35,7 +42,7 @@
 
 	function popupHtml(store) {
 		return (
-			'<div class="contact-map__popup">' +
+			'<${el} class="contact-map__popup">' +
 			"<strong>" +
 			escapeHtml(store.name) +
 			"</strong>" +
@@ -46,8 +53,8 @@
 				: "") +
 			'<br><a href="' +
 			mapsLink(store) +
-			'" target="_blank" rel="noopener noreferrer">Deschide în Google Maps</a>' +
-			"</div>"
+			'" target="_blank" rel="noopener noreferrer">Deschide în Google Maps</a>" +
+			"</${el}>"
 		);
 	}
 
@@ -143,7 +150,7 @@
 
 		const pin = L.divIcon({
 			className: "contact-map__pin",
-			html: "<span aria-hidden=\"true\"></span>",
+			html: "<span aria-hidden=\\"true\\"></span>",
 			iconSize: [28, 28],
 			iconAnchor: [14, 28],
 			popupAnchor: [0, -28],
@@ -214,3 +221,7 @@
 		}
 	}
 })();
+`;
+
+fs.writeFileSync(p, js.replace(/\$\{el\}/g, el));
+console.log('contact-map.js ok');

@@ -820,17 +820,38 @@ body {
   background: var(--ink);
 }
 
-.contact-map__embed,
 .contact-map__canvas {
-  display: block;
-  width: 100%;
-  height: min(52vh, 28rem);
-  min-height: 280px;
-  border: 0;
+	display: block;
+	width: 100%;
+	height: min(52vh, 28rem);
+	min-height: 280px;
+	z-index: 1;
 }
 
-.contact-map__canvas {
-  min-height: min(52vh, 28rem);
+.contact-map__canvas.leaflet-container {
+	font-family: var(--font-sans);
+}
+
+.contact-map__pin span {
+	display: block;
+	width: 28px;
+	height: 28px;
+	background: var(--gold);
+	border: 2px solid var(--ink);
+	border-radius: 50% 50% 50% 0;
+	transform: rotate(-45deg);
+	box-shadow: 0 4px 12px rgba(26, 20, 16, 0.35);
+}
+
+.contact-map__popup {
+	font-family: var(--font-sans);
+	font-size: 0.875rem;
+	line-height: 1.5;
+}
+
+.contact-map__popup a {
+	color: var(--gold-dark);
+	font-weight: 500;
 }
 
 .contact-map__panel {

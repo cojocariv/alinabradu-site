@@ -93,11 +93,13 @@ $contactPagePhoto = 'https://alinabradupozestorage.blob.core.windows.net/poze/ph
 require __DIR__ . '/../includes/header.php';
 ?>
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script type="application/json" id="contact-stores-data"><?= $storesJson ?></script>
 <section class="contact-map-section" aria-label="Hartă — locații magazine">
   <div
     id="contact-stores-map"
     class="contact-map"
-    data-stores='<?= $storesJson ?>'
     data-api-key="<?= e(GOOGLE_MAPS_API_KEY) ?>"
   >
     <div class="contact-map__panel" role="tablist" aria-label="Selectează magazinul pe hartă">
@@ -115,14 +117,7 @@ require __DIR__ . '/../includes/header.php';
       </button>
       <?php endforeach; ?>
     </div>
-    <iframe
-      class="contact-map__embed"
-      title="Hartă Google — magazine Alina Bradu"
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-      allowfullscreen
-      src="https://maps.google.com/maps?q=47.028,28.86&amp;hl=ro&amp;z=12&amp;output=embed"
-    ></iframe>
+    <div class="contact-map__canvas" role="img" aria-label="Hartă cu locațiile magazinelor"></div>
   </div>
 </section>
 
@@ -242,5 +237,5 @@ require __DIR__ . '/../includes/header.php';
     </div>
   </div>
 </section>
-<script src="<?= e(url('/assets/js/contact-map.js')) ?>" defer></script>
+<script src="<?= e(url('/assets/js/contact-map.js')) ?>?v=3" defer></script>
 <?php require __DIR__ . '/../includes/footer.php'; ?>
