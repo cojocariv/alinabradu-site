@@ -2,93 +2,472 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <title>Azure Container Explorer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionare poze — Azure Storage</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-        .file-list { margin-top: 20px; border: 1px solid #ddd; padding: 10px; border-radius: 5px; }
-        .file-item { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-        .file-item:last-child { border-bottom: none; }
-        .file-meta { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
-        .file-thumb { width: 56px; height: 56px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; background: #f5f5f5; flex-shrink: 0; }
-        .file-name { word-break: break-all; }
-        .file-actions { display: flex; gap: 10px; flex-shrink: 0; }
-        a { color: #0078d4; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .error { color: red; font-weight: bold; }
+        :root {
+            --cream: #fbf6ee;
+            --gold: #c9a96e;
+            --ink: #1a1410;
+            --ink-soft: #3d342c;
+            --danger: #9b2c2c;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: "Segoe UI", system-ui, sans-serif;
+            margin: 0;
+            padding: 24px;
+            line-height: 1.5;
+            background: var(--cream);
+            color: var(--ink);
+        }
+        h1 { font-size: 1.5rem; font-weight: 600; margin: 0 0 0.25rem; }
+        .subtitle { color: var(--ink-soft); font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .panel {
+            background: #fff;
+            border: 1px solid rgba(201, 169, 110, 0.45);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: flex-end;
+            margin-bottom: 1rem;
+        }
+        label { display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); margin-bottom: 0.35rem; }
+        input[type="text"] {
+            width: 100%;
+            min-width: 200px;
+            padding: 0.5rem 0.65rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .field { flex: 1; min-width: 180px; }
+        .btn {
+            appearance: none;
+            border: 1px solid var(--ink);
+            background: var(--ink);
+            color: var(--cream);
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .btn:hover:not(:disabled) { background: var(--ink-soft); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn--gold { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+        .btn--gold:hover:not(:disabled) { filter: brightness(0.95); }
+        .btn--ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+        .btn--danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+        .btn--sm { padding: 0.35rem 0.65rem; font-size: 0.7rem; }
+        .dropzone {
+            border: 2px dashed rgba(201, 169, 110, 0.8);
+            border-radius: 8px;
+            padding: 2rem 1rem;
+            text-align: center;
+            background: rgba(251, 246, 238, 0.6);
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .dropzone.is-dragover {
+            border-color: var(--gold);
+            background: rgba(201, 169, 110, 0.12);
+        }
+        .dropzone input { display: none; }
+        .dropzone p { margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--ink-soft); }
+        #status {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            min-height: 1.25rem;
+        }
+        #status.is-error { color: var(--danger); font-weight: 600; }
+        #status.is-ok { color: #2d6a4f; }
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .file-card {
+            border: 1px solid rgba(201, 169, 110, 0.35);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+        .file-card__thumb-wrap {
+            aspect-ratio: 1;
+            background: #f5f0e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .file-card__thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .file-card__placeholder {
+            font-size: 0.75rem;
+            color: var(--ink-soft);
+            padding: 1rem;
+            text-align: center;
+        }
+        .file-card__body { padding: 0.75rem; flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+        .file-card__name {
+            font-size: 0.8rem;
+            word-break: break-all;
+            color: var(--ink);
+            font-family: ui-monospace, monospace;
+        }
+        .file-card__actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: auto;
+        }
+        .filters { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-size: 0.85rem; }
+        .filters input { width: auto; margin: 0; }
+        .hint {
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        code { font-size: 0.85em; background: #f5f0e8; padding: 0.1em 0.35em; border-radius: 3px; }
     </style>
 </head>
 <body>
 
-    <h2>Conținut Container: <span id="containerName">Alinabradu</span></h2>
-    <div id="status">Se încarcă fișierele...</div>
-    
-    <div class="file-list" id="fileList">
-        <!-- Fișierele vor apărea aici -->
+    <h1>Container: <span id="containerName">poze</span></h1>
+    <p class="subtitle">Încarcă și șterge imagini direct în Azure Blob Storage (cont <strong>alinabradupozestorage</strong>).</p>
+
+    <div class="panel">
+        <div class="toolbar">
+            <div class="field">
+                <label for="uploadPrefix">Subfolder la încărcare (opțional)</label>
+                <input type="text" id="uploadPrefix" placeholder="ex: 2026/produse/" autocomplete="off">
+                <p style="margin:0.35rem 0 0;font-size:0.75rem;color:var(--ink-soft)">Fără slash la început; se adaugă înaintea numelui fișierului.</p>
+            </div>
+            <button type="button" class="btn btn--ghost" id="btnRefresh">Reîncarcă lista</button>
+        </div>
+
+        <label class="dropzone" id="dropzone" for="fileInput">
+            <strong>Adaugă poze</strong> — trage aici sau click pentru a selecta
+            <p>JPG, PNG, WebP, GIF, AVIF (max. recomandat 15 MB / fișier)</p>
+            <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif,image/avif,image/bmp" multiple>
+        </label>
     </div>
 
+    <div id="status">Se încarcă fișierele…</div>
+
+    <div class="filters">
+        <label><input type="checkbox" id="imagesOnly" checked> Doar imagini</label>
+        <label><input type="checkbox" id="sortNewest"> Sortare descrescătoare (nume)</label>
+    </div>
+
+    <div class="file-list" id="fileList" aria-live="polite"></div>
+
+    <p class="hint">
+        Dacă încărcarea sau ștergerea eșuează, verifică în Azure Portal → Storage → CORS: originea
+        <code>https://new.alinabradu.com</code> trebuie să aibă permisiuni GET, PUT, DELETE, HEAD, OPTIONS.
+        SAS-ul din acest fișier trebuie să includă permisiunile <code>racwdl</code> (read, add, create, write, delete, list).
+    </p>
+
     <script>
-        // 1. INSerează aici "Blob SAS URL" complet generat în Azure Portal
+        // SAS la nivel de container (permisiuni: racwdl)
         const sasUrl = "https://alinabradupozestorage.blob.core.windows.net/poze?sp=racwdl&st=2026-04-28T08:39:31Z&se=2030-04-28T16:54:31Z&sv=2025-11-05&sr=c&sig=d0AXmmbogXdEMlu2%2B0l9vYNYkUp2XoepL%2F3jBcl%2FYYk%3D";
 
-      async function listFiles() {
-    try {
-        const listUrl = `${sasUrl}&restype=container&comp=list`;
-        const response = await fetch(listUrl);
-        if (!response.ok) throw new Error(`Eroare: ${response.statusText}`);
+        const [baseUrl, sasToken] = (() => {
+            const q = sasUrl.indexOf("?");
+            return [sasUrl.slice(0, q), sasUrl.slice(q + 1)];
+        })();
 
-        const text = await response.text();
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(text, "application/xml");
-        const blobs = xml.querySelectorAll("Blob");
+        const IMAGE_RE = /\.(jpe?g|png|gif|webp|avif|bmp|svg)$/i;
+        const MAX_FILE_BYTES = 15 * 1024 * 1024;
 
-        const listContainer = document.getElementById('fileList');
-        listContainer.innerHTML = '';
+        let allBlobs = [];
+        let busy = false;
 
-        const baseUrl = sasUrl.split('?')[0];
-        const token = sasUrl.split('?')[1];
+        function blobPublicUrl(name) {
+            const path = name.split("/").map(encodeURIComponent).join("/");
+            return baseUrl + "/" + path + "?" + sasToken;
+        }
 
-        blobs.forEach(blob => {
-            const name = blob.querySelector("Name").textContent;
-            const fileUrl = `${baseUrl}/${name}?${token}`;
+        function normalizePrefix(raw) {
+            let p = (raw || "").trim().replace(/^\/+/, "");
+            if (p && !p.endsWith("/")) p += "/";
+            return p;
+        }
 
-            const div = document.createElement('div');
-            div.className = 'file-item';
-            div.innerHTML = `
-                <div class="file-meta">
-                    <img src="${fileUrl}" alt="${name}" class="file-thumb" loading="lazy">
-                    <span class="file-name">${name}</span>
-                </div>
-                <div class="file-actions">
-                    <button onclick="copyToClipboard('${fileUrl}', this)" style="cursor:pointer; padding: 5px 10px;">Copiaza URL</button>
-                    <a href="${fileUrl}" target="_blank" style="padding: 5px 10px; background: #0078d4; color: white; border-radius: 3px; text-decoration: none;">Vezi</a>
-                </div>
-            `;
-            listContainer.appendChild(div);
+        function buildBlobName(file, prefix) {
+            const base = file.name.replace(/\\/g, "/").split("/").pop();
+            const safe = base.replace(/[^\w.\- ()ăâîșțĂÂÎȘȚ]/gi, "-").replace(/-+/g, "-");
+            return prefix + (safe || "imagine-" + Date.now() + ".jpg");
+        }
+
+        function setStatus(msg, type) {
+            const el = document.getElementById("status");
+            el.textContent = msg;
+            el.className = type === "error" ? "is-error" : type === "ok" ? "is-ok" : "";
+        }
+
+        function escapeHtml(s) {
+            return String(s)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+
+        async function listAllBlobs() {
+            const blobs = [];
+            let marker = "";
+
+            for (;;) {
+                let url = baseUrl + "?" + sasToken + "&restype=container&comp=list&maxresults=5000";
+                if (marker) url += "&marker=" + encodeURIComponent(marker);
+
+                const response = await fetch(url);
+                if (!response.ok) {
+                    const t = await response.text();
+                    throw new Error("Listare: " + response.status + " " + (t || response.statusText));
+                }
+
+                const text = await response.text();
+                const xml = new DOMParser().parseFromString(text, "application/xml");
+                const err = xml.querySelector("Error Code");
+                if (err) throw new Error(xml.querySelector("Message")?.textContent || err.textContent);
+
+                xml.querySelectorAll("Blob > Name").forEach((n) => {
+                    const name = n.textContent;
+                    if (name && !name.endsWith("/")) blobs.push(name);
+                });
+
+                const next = xml.querySelector("NextMarker")?.textContent;
+                if (!next) break;
+                marker = next;
+            }
+
+            return blobs;
+        }
+
+        function getFilteredBlobs() {
+            let list = [...allBlobs];
+            if (document.getElementById("imagesOnly").checked) {
+                list = list.filter((n) => IMAGE_RE.test(n));
+            }
+            if (document.getElementById("sortNewest").checked) {
+                list.sort((a, b) => b.localeCompare(a));
+            } else {
+                list.sort((a, b) => a.localeCompare(b));
+            }
+            return list;
+        }
+
+        function renderList() {
+            const list = getFilteredBlobs();
+            const root = document.getElementById("fileList");
+            root.innerHTML = "";
+
+            if (!list.length) {
+                root.innerHTML = '<p style="grid-column:1/-1;color:var(--ink-soft)">Niciun fișier de afișat.</p>';
+                return;
+            }
+
+            list.forEach((name) => {
+                const url = blobPublicUrl(name);
+                const isImg = IMAGE_RE.test(name);
+                const card = document.createElement("article");
+                card.className = "file-card";
+                card.dataset.blob = name;
+
+                card.innerHTML =
+                    '<div class="file-card__thumb-wrap">' +
+                    (isImg
+                        ? '<img class="file-card__thumb" src="' + escapeHtml(url) + '" alt="" loading="lazy">'
+                        : '<span class="file-card__placeholder">Fișier non-imagine</span>') +
+                    "</div>" +
+                    '<div class="file-card__body">' +
+                    '<div class="file-card__name">' + escapeHtml(name) + "</div>" +
+                    '<div class="file-card__actions">' +
+                    '<button type="button" class="btn btn--sm btn--ghost" data-action="copy">Copiază URL</button>' +
+                    '<a class="btn btn--sm btn--gold" href="' + escapeHtml(url) + '" target="_blank" rel="noopener">Vezi</a>' +
+                    '<button type="button" class="btn btn--sm btn--danger" data-action="delete">Șterge</button>' +
+                    "</div>" +
+                    "</div>";
+
+                root.appendChild(card);
+            });
+        }
+
+        async function refreshList() {
+            if (busy) return;
+            busy = true;
+            setStatus("Se încarcă lista…");
+            document.getElementById("btnRefresh").disabled = true;
+
+            try {
+                allBlobs = await listAllBlobs();
+                renderList();
+                const shown = getFilteredBlobs().length;
+                setStatus("Total în container: " + allBlobs.length + " · Afișate: " + shown, "ok");
+            } catch (e) {
+                setStatus(e.message, "error");
+            } finally {
+                busy = false;
+                document.getElementById("btnRefresh").disabled = false;
+            }
+        }
+
+        async function uploadBlob(file, blobName) {
+            if (file.size > MAX_FILE_BYTES) {
+                throw new Error(file.name + ": fișier prea mare (max " + (MAX_FILE_BYTES / 1024 / 1024) + " MB)");
+            }
+
+            const url = blobPublicUrl(blobName);
+            const res = await fetch(url, {
+                method: "PUT",
+                headers: {
+                    "x-ms-blob-type": "BlockBlob",
+                    "Content-Type": file.type || "application/octet-stream",
+                },
+                body: file,
+            });
+
+            if (!res.ok) {
+                const t = await res.text();
+                throw new Error("Încărcare " + blobName + ": " + res.status + " " + (t || res.statusText));
+            }
+        }
+
+        async function deleteBlob(name) {
+            const res = await fetch(blobPublicUrl(name), { method: "DELETE" });
+            if (!res.ok && res.status !== 404) {
+                const t = await res.text();
+                throw new Error("Ștergere: " + res.status + " " + (t || res.statusText));
+            }
+        }
+
+        async function uploadFiles(fileList) {
+            if (!fileList.length) return;
+            if (busy) return;
+
+            const prefix = normalizePrefix(document.getElementById("uploadPrefix").value);
+            busy = true;
+            document.getElementById("fileInput").disabled = true;
+
+            let ok = 0;
+            let fail = 0;
+
+            for (const file of fileList) {
+                const blobName = buildBlobName(file, prefix);
+                setStatus("Încarc " + blobName + "…");
+                try {
+                    await uploadBlob(file, blobName);
+                    ok++;
+                } catch (e) {
+                    fail++;
+                    console.error(e);
+                    setStatus(e.message, "error");
+                }
+            }
+
+            await refreshList();
+            if (fail === 0) {
+                setStatus("Încărcat cu succes: " + ok + " fișier(e).", "ok");
+            } else {
+                setStatus("Încărcate: " + ok + ", eșuate: " + fail + ".", fail > 0 && ok === 0 ? "error" : "ok");
+            }
+
+            busy = false;
+            document.getElementById("fileInput").disabled = false;
+            document.getElementById("fileInput").value = "";
+        }
+
+        async function copyUrl(url, btn) {
+            try {
+                await navigator.clipboard.writeText(url);
+                const prev = btn.textContent;
+                btn.textContent = "Copiat!";
+                setTimeout(() => { btn.textContent = prev; }, 2000);
+            } catch (e) {
+                alert("Nu s-a putut copia: " + e.message);
+            }
+        }
+
+        document.getElementById("btnRefresh").addEventListener("click", refreshList);
+        document.getElementById("imagesOnly").addEventListener("change", () => {
+            renderList();
+            const shown = getFilteredBlobs().length;
+            setStatus("Afișate: " + shown + " din " + allBlobs.length, "ok");
+        });
+        document.getElementById("sortNewest").addEventListener("change", renderList);
+
+        document.getElementById("fileInput").addEventListener("change", (e) => {
+            uploadFiles([...e.target.files]);
         });
 
-        document.getElementById('status').innerText = `Am găsit ${blobs.length} fișiere:`;
-    } catch (error) {
-        document.getElementById('status').innerHTML = `<span style="color:red">Eroare: ${error.message}</span>`;
-    }
-}
+        const dropzone = document.getElementById("dropzone");
+        ["dragenter", "dragover"].forEach((ev) => {
+            dropzone.addEventListener(ev, (e) => {
+                e.preventDefault();
+                dropzone.classList.add("is-dragover");
+            });
+        });
+        ["dragleave", "drop"].forEach((ev) => {
+            dropzone.addEventListener(ev, (e) => {
+                e.preventDefault();
+                dropzone.classList.remove("is-dragover");
+            });
+        });
+        dropzone.addEventListener("drop", (e) => {
+            const files = [...e.dataTransfer.files].filter((f) => f.type.startsWith("image/") || IMAGE_RE.test(f.name));
+            uploadFiles(files);
+        });
 
-// Funcția care face magia copierii
-function copyToClipboard(text, button) {
-    navigator.clipboard.writeText(text).then(() => {
-        const originalText = button.innerText;
-        button.innerText = "Copiat! ✅";
-        button.style.background = "#d4edda";
-        
-        setTimeout(() => {
-            button.innerText = originalText;
-            button.style.background = "";
-        }, 2000);
-    }).catch(err => {
-        alert("Eroare la copiere: " + err);
-    });
-}
+        document.getElementById("fileList").addEventListener("click", async (e) => {
+            const btn = e.target.closest("button[data-action]");
+            if (!btn || busy) return;
 
-listFiles();
+            const card = btn.closest(".file-card");
+            const name = card?.dataset.blob;
+            if (!name) return;
+
+            if (btn.dataset.action === "copy") {
+                copyUrl(blobPublicUrl(name), btn);
+                return;
+            }
+
+            if (btn.dataset.action === "delete") {
+                if (!confirm('Ștergi definitiv din container?\n\n' + name)) return;
+                busy = true;
+                btn.disabled = true;
+                setStatus("Șterg " + name + "…");
+                try {
+                    await deleteBlob(name);
+                    allBlobs = allBlobs.filter((b) => b !== name);
+                    renderList();
+                    setStatus("Șters: " + name, "ok");
+                } catch (err) {
+                    setStatus(err.message, "error");
+                } finally {
+                    busy = false;
+                }
+            }
+        });
+
+        refreshList();
     </script>
 </body>
 </html>
