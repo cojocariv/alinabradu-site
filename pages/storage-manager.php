@@ -140,6 +140,51 @@ declare(strict_types=1);
             gap: 0.4rem;
             margin-top: auto;
         }
+        .file-card.is-selected {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px rgba(201, 169, 110, 0.45);
+        }
+        .file-card__thumb-wrap { position: relative; }
+        .file-card__select-wrap {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.75rem;
+            height: 1.75rem;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 4px;
+            border: 1px solid rgba(201, 169, 110, 0.5);
+            cursor: pointer;
+        }
+        .file-card__select-wrap input {
+            width: 1rem;
+            height: 1rem;
+            margin: 0;
+            cursor: pointer;
+            accent-color: var(--gold);
+        }
+        .bulk-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem 1rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            background: #fff;
+            border: 1px solid rgba(201, 169, 110, 0.45);
+            border-radius: 8px;
+        }
+        .bulk-bar__count {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+            min-width: 6rem;
+        }
+        .bulk-bar__count.has-selection { color: var(--ink); }
         .filters { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-size: 0.85rem; }
         .filters input { width: auto; margin: 0; }
         .hint {
@@ -184,6 +229,16 @@ declare(strict_types=1);
         <label><input type="checkbox" id="sortNewest"> Sortare descrescătoare (nume)</label>
     </div>
 
+
+    <div class="bulk-bar" id="bulkBar">
+        <label class="bulk-bar__select-all">
+            <input type="checkbox" id="selectAllVisible" title="Selectează toate fișierele afișate">
+            Selectează toate afișate
+        </label>
+        <span class="bulk-bar__count" id="selectionCount">0 selectate</span>
+        <button type="button" class="btn btn--danger btn--sm" id="btnDeleteSelected" disabled>Șterge selectate</button>
+        <button type="button" class="btn btn--ghost btn--sm" id="btnClearSelection" disabled>Anulează selecția</button>
+    </div>
     <div class="file-list" id="fileList" aria-live="polite"></div>
 
     <p class="hint">
@@ -206,6 +261,47 @@ declare(strict_types=1);
 
         let allBlobs = [];
         let busy = false;
+
+        const selectedBlobs = new Set();
+
+        function pruneSelection() {
+            const existing = new Set(allBlobs);
+            for (const name of selectedBlobs) {
+                if (!existing.has(name)) selectedBlobs.delete(name);
+            }
+        }
+
+        function updateBulkBar() {
+            const n = selectedBlobs.size;
+            const countEl = document.getElementById("selectionCount");
+            const delBtn = document.getElementById("btnDeleteSelected");
+            const clearBtn = document.getElementById("btnClearSelection");
+            const selectAll = document.getElementById("selectAllVisible");
+            if (!countEl) return;
+            countEl.textContent = n + (n === 1 ? " selectat" : " selectate");
+            countEl.classList.toggle("has-selection", n > 0);
+            delBtn.disabled = n === 0 || busy;
+            clearBtn.disabled = n === 0 || busy;
+            const visible = getFilteredBlobs();
+            const selectedVisible = visible.filter((name) => selectedBlobs.has(name)).length;
+            selectAll.checked = visible.length > 0 && selectedVisible === visible.length;
+            selectAll.indeterminate = selectedVisible > 0 && selectedVisible < visible.length;
+        }
+
+        function setCardSelected(card, on) {
+            const name = card.dataset.blob;
+            if (!name) return;
+            if (on) {
+                selectedBlobs.add(name);
+                card.classList.add("is-selected");
+            } else {
+                selectedBlobs.delete(name);
+                card.classList.remove("is-selected");
+            }
+            const cb = card.querySelector(".file-card__select");
+            if (cb) cb.checked = on;
+            updateBulkBar();
+        }
 
         function blobPublicUrl(name) {
             const path = name.split("/").map(encodeURIComponent).join("/");
@@ -290,6 +386,7 @@ declare(strict_types=1);
 
             if (!list.length) {
                 root.innerHTML = '<p style="grid-column:1/-1;color:var(--ink-soft)">Niciun fișier de afișat.</p>';
+                updateBulkBar();
                 return;
             }
 
@@ -300,8 +397,16 @@ declare(strict_types=1);
                 card.className = "file-card";
                 card.dataset.blob = name;
 
+                const isSelected = selectedBlobs.has(name);
+                if (isSelected) card.classList.add("is-selected");
+
                 card.innerHTML =
                     '<div class="file-card__thumb-wrap">' +
+                    '<label class="file-card__select-wrap" title="Selectează pentru ștergere">' +
+                    '<input type="checkbox" class="file-card__select" data-action="select"' +
+                    (isSelected ? " checked" : "") +
+                    ">" +
+                    "</label>" +
                     (isImg
                         ? '<img class="file-card__thumb" src="' + escapeHtml(url) + '" alt="" loading="lazy">'
                         : '<span class="file-card__placeholder">Fișier non-imagine</span>') +
@@ -327,7 +432,9 @@ declare(strict_types=1);
 
             try {
                 allBlobs = await listAllBlobs();
+                pruneSelection();
                 renderList();
+                updateBulkBar();
                 const shown = getFilteredBlobs().length;
                 setStatus("Total în container: " + allBlobs.length + " · Afișate: " + shown, "ok");
             } catch (e) {
@@ -414,13 +521,84 @@ declare(strict_types=1);
             }
         }
 
+
+        document.getElementById("selectAllVisible").addEventListener("change", (e) => {
+            if (busy) {
+                e.target.checked = false;
+                return;
+            }
+            const visible = getFilteredBlobs();
+            if (e.target.checked) {
+                visible.forEach((name) => selectedBlobs.add(name));
+            } else {
+                visible.forEach((name) => selectedBlobs.delete(name));
+            }
+            renderList();
+            updateBulkBar();
+        });
+
+        document.getElementById("btnClearSelection").addEventListener("click", () => {
+            selectedBlobs.clear();
+            renderList();
+            updateBulkBar();
+        });
+
+        document.getElementById("btnDeleteSelected").addEventListener("click", () => deleteSelected());
+
+        document.getElementById("fileList").addEventListener("change", (e) => {
+            if (!e.target.classList.contains("file-card__select") || busy) return;
+            const card = e.target.closest(".file-card");
+            if (card) setCardSelected(card, e.target.checked);
+        });
+
+        async function deleteSelected() {
+            const names = [...selectedBlobs];
+            if (!names.length || busy) return;
+            if (!confirm("Ștergi definitiv " + names.length + " fișiere din container?\n\nAcțiunea nu poate fi anulată.")) {
+                return;
+            }
+            busy = true;
+            updateBulkBar();
+            let ok = 0;
+            let fail = 0;
+            const failed = [];
+            for (let i = 0; i < names.length; i++) {
+                const name = names[i];
+                setStatus("Șterg " + (i + 1) + "/" + names.length + ": " + name + "…");
+                try {
+                    await deleteBlob(name);
+                    selectedBlobs.delete(name);
+                    ok++;
+                } catch (err) {
+                    fail++;
+                    failed.push(name);
+                    console.error(err);
+                }
+            }
+            allBlobs = allBlobs.filter((b) => !names.includes(b) || failed.includes(b));
+            pruneSelection();
+            renderList();
+            updateBulkBar();
+            if (fail === 0) {
+                setStatus("Șterse cu succes: " + ok + " fișier(e).", "ok");
+            } else {
+                setStatus("Șterse: " + ok + ", eșuate: " + fail + ".", ok > 0 ? "ok" : "error");
+            }
+            busy = false;
+            updateBulkBar();
+        }
+
         document.getElementById("btnRefresh").addEventListener("click", refreshList);
         document.getElementById("imagesOnly").addEventListener("change", () => {
             renderList();
+            updateBulkBar();
             const shown = getFilteredBlobs().length;
             setStatus("Afișate: " + shown + " din " + allBlobs.length, "ok");
         });
-        document.getElementById("sortNewest").addEventListener("change", renderList);
+        document.getElementById("sortNewest").addEventListener("change", () => {
+            renderList();
+            updateBulkBar();
+        });
 
         document.getElementById("fileInput").addEventListener("change", (e) => {
             uploadFiles([...e.target.files]);
@@ -445,6 +623,7 @@ declare(strict_types=1);
         });
 
         document.getElementById("fileList").addEventListener("click", async (e) => {
+            if (e.target.closest(".file-card__select-wrap")) return;
             const btn = e.target.closest("button[data-action]");
             if (!btn || busy) return;
 
@@ -464,8 +643,10 @@ declare(strict_types=1);
                 setStatus("Șterg " + name + "…");
                 try {
                     await deleteBlob(name);
+                    selectedBlobs.delete(name);
                     allBlobs = allBlobs.filter((b) => b !== name);
                     renderList();
+                    updateBulkBar();
                     setStatus("Șters: " + name, "ok");
                 } catch (err) {
                     setStatus(err.message, "error");
@@ -475,6 +656,7 @@ declare(strict_types=1);
             }
         });
 
+        updateBulkBar();
         refreshList();
     </script>
 </body>
