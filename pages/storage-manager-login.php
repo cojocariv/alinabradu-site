@@ -63,7 +63,7 @@ $loginError = $loginError ?? null;
 <body>
   <div class="card">
     <h1>Gestionare poze Azure</h1>
-    <p>Acces restricționat. Introdu parola setată în <code>config/storage_manager.php</code>.</p>
+    <p>Acces restricționat</code>.</p>
     <?php if ($loginError): ?>
       <p class="error"><?= e($loginError) ?></p>
     <?php endif; ?>
