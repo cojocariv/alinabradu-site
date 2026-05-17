@@ -3,3 +3,4 @@ uploads/products/*
 !uploads/products/.gitkeep
 uploads/about/*
 !uploads/about/.gitkeep
+config/storage_manager.php
