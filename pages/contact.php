@@ -66,18 +66,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $body .= 'Nr. comandă: ' . ($defaults['order_number'] !== '' ? $defaults['order_number'] : '—') . "\n\n";
         $body .= "Mesaj:\n" . $defaults['message'] . "\n";
 
+        $fromHeader = 'Alina Bradu <' . CONTACT_MAIL_FROM . '>';
         $headers = [
             'MIME-Version: 1.0',
             'Content-Type: text/plain; charset=UTF-8',
-            'From: ' . SITE_EMAIL,
+            'From: ' . $fromHeader,
             'Reply-To: ' . $defaults['email'],
         ];
-        $sent = @mail(SITE_EMAIL, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\r\n", $headers));
+        $sent = @mail(CONTACT_FORM_TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\r\n", $headers));
         if ($sent) {
             $success = true;
             $defaults = ['name' => '', 'email' => '', 'phone' => '', 'order_number' => '', 'message' => ''];
         } else {
-            $errors[] = 'Trimiterea a eșuat momentan. Te rugăm să ne scrii direct la ' . SITE_EMAIL . ' sau să ne suni la ' . SITE_PHONE_DISPLAY . '.';
+            $errors[] = 'Trimiterea a eșuat momentan. Te rugăm să ne scrii direct la ' . CONTACT_FORM_TO . ' sau să ne suni la ' . SITE_PHONE_DISPLAY . '.';
         }
     }
 }

@@ -1,9 +1,22 @@
 <?php
 declare(strict_types=1);
 
-/** Email pentru mesaje de pe site și antet From (dacă serverul permite). */
+/** Email afișat pe site (footer, contact, homepage). */
 if (!defined('SITE_EMAIL')) {
-    define('SITE_EMAIL', 'alinabradu.office@gmail.com');
+    $envPublic = getenv('SITE_EMAIL');
+    define('SITE_EMAIL', is_string($envPublic) && $envPublic !== '' ? $envPublic : 'admin@alinabradu.com');
+}
+
+/** Destinație pentru mesajele din formularul de contact. */
+if (!defined('CONTACT_FORM_TO')) {
+    $envTo = getenv('CONTACT_FORM_TO');
+    define('CONTACT_FORM_TO', is_string($envTo) && $envTo !== '' ? $envTo : 'admin@alinabradu.com');
+}
+
+/** Antet From la trimitere (dacă serverul permite); Reply-To rămâne emailul vizitatorului. */
+if (!defined('CONTACT_MAIL_FROM')) {
+    $envFrom = getenv('CONTACT_MAIL_FROM');
+    define('CONTACT_MAIL_FROM', is_string($envFrom) && $envFrom !== '' ? $envFrom : 'noreply@alinabradu.com');
 }
 
 if (!defined('SITE_PHONE_DISPLAY')) {
