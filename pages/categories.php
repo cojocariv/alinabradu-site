@@ -34,7 +34,7 @@ require __DIR__ . '/../includes/header.php';
           </div>
         </a>
         <div class="p-4">
-          <h2 class="product-title"><?= e($product['name']) ?></h2>
+          <h2 class="product-title font-sans font-normal"><?= e($product['name']) ?></h2>
           <p class="text-sm text-zinc-500"><?= e($product['category']) ?><?= $product['subcategory'] ? ' — ' . e($product['subcategory']) : '' ?></p>
           <p class="mt-2 text-gold font-semibold"><?= e(formatPrice((float) $product['price'])) ?></p>
           <?php if ($inStock): ?>

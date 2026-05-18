@@ -35,7 +35,7 @@ require __DIR__ . '/../includes/header.php';
           <div class="bg-white rounded p-4 flex gap-4 items-center">
             <img src="<?= e($item['image']) ?>" alt="<?= e($item['name']) ?>" class="w-24 h-24 object-cover rounded" loading="lazy">
             <div class="flex-1">
-              <p class="product-title text-lg"><?= e($item['name']) ?></p>
+              <p class="product-title font-sans font-normal text-lg"><?= e($item['name']) ?></p>
               <p class="text-sm text-zinc-500">Mărime: <?= e($item['selected_size']) ?></p>
               <p class="text-gold font-semibold"><?= e(formatPrice((float) $item['price'])) ?></p>
             </div>
