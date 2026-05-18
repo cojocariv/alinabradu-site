@@ -7,3 +7,4 @@ config/storage_manager.php
 config/mail.local.php
 logs/*
 !logs/.gitkeep
+config/*
