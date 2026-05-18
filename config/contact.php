@@ -16,7 +16,7 @@ if (!defined('CONTACT_FORM_TO')) {
 /** Antet From la trimitere (dacă serverul permite); Reply-To rămâne emailul vizitatorului. */
 if (!defined('CONTACT_MAIL_FROM')) {
     $envFrom = getenv('CONTACT_MAIL_FROM');
-    define('CONTACT_MAIL_FROM', is_string($envFrom) && $envFrom !== '' ? $envFrom : 'admin@alinabradu.com');
+    define('CONTACT_MAIL_FROM', is_string($envFrom) && $envFrom !== '' ? $envFrom : 'noreply@alinabradu.com');
 }
 
 if (!defined('SITE_PHONE_DISPLAY')) {

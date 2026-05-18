@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../config/contact.php';
+require_once __DIR__ . '/../includes/send_mail.php';
 require_once __DIR__ . '/../models/ProductModel.php';
 
 $errors = [];
@@ -66,14 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $body .= 'Nr. comandă: ' . ($defaults['order_number'] !== '' ? $defaults['order_number'] : '—') . "\n\n";
         $body .= "Mesaj:\n" . $defaults['message'] . "\n";
 
-        $fromHeader = 'Alina Bradu <' . CONTACT_MAIL_FROM . '>';
-        $headers = [
-            'MIME-Version: 1.0',
-            'Content-Type: text/plain; charset=UTF-8',
-            'From: ' . $fromHeader,
-            'Reply-To: ' . $defaults['email'],
-        ];
-        $sent = @mail(CONTACT_FORM_TO, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, implode("\r\n", $headers));
+        $sent = sendSiteMail(CONTACT_FORM_TO, $subject, $body, $defaults['email']);
         if ($sent) {
             $success = true;
             $defaults = ['name' => '', 'email' => '', 'phone' => '', 'order_number' => '', 'message' => ''];
