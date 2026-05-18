@@ -15,7 +15,25 @@ $filters = [
     'subcategory' => $_GET['subcategory'] ?? '',
     'size' => $_GET['size'] ?? '',
 ];
-$products = ProductModel::filter($filters);
+$shopPerPage = 9;
+$shopPage = max(1, (int) ($_GET['page'] ?? 1));
+$allProducts = ProductModel::filter($filters);
+$totalProducts = count($allProducts);
+$visibleCount = min($totalProducts, $shopPage * $shopPerPage);
+$products = array_slice($allProducts, 0, $visibleCount);
+$hasMoreProducts = $visibleCount < $totalProducts;
+$shopNextPage = $shopPage + 1;
+
+$shopPageUrl = static function (int $page) use ($filters): string {
+    $params = array_filter([
+        'category' => $filters['category'],
+        'subcategory' => $filters['subcategory'],
+        'size' => $filters['size'],
+        'page' => $page > 1 ? (string) $page : '',
+    ], static fn ($v) => $v !== '');
+    $query = $params !== [] ? '?' . http_build_query($params) : '';
+    return url('/magazin' . $query);
+};
 $seo = [
     'title' => 'Magazin - Rochii și bluze tradiționale',
     'description' => 'Magazin online Alina Bradu: rochii tradiționale, bluze și fuste premium cu motive etnice.',
@@ -46,6 +64,10 @@ require __DIR__ . '/../includes/header.php';
     </select>
     <button class="bg-ink text-cream text-xs uppercase tracking-boutique font-medium px-5 py-2.5 hover:bg-ink-soft transition-colors">Filtrează</button>
   </form>
+
+  <?php if ($totalProducts > 0): ?>
+    <p class="text-sm text-ink-muted mb-6">Afișate <?= (int) $visibleCount ?> din <?= (int) $totalProducts ?> produse</p>
+  <?php endif; ?>
 
   <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <?php foreach ($products as $product): ?>
@@ -88,5 +110,13 @@ require __DIR__ . '/../includes/header.php';
       </article>
     <?php endforeach; ?>
   </div>
+
+  <?php if ($hasMoreProducts): ?>
+    <div class="mt-12 text-center">
+      <a href="<?= e($shopPageUrl($shopNextPage)) ?>" class="btn btn--outline">Arată mai multe</a>
+    </div>
+  <?php elseif ($totalProducts === 0): ?>
+    <p class="mt-10 text-center text-ink-muted">Niciun produs nu corespunde filtrelor selectate.</p>
+  <?php endif; ?>
 </section>
 <?php require __DIR__ . '/../includes/footer.php'; ?>
