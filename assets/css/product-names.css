@@ -1,11 +1,17 @@
-/* Încărcat ultimul — denumiri produse: Jost Regular */
+/* Ultimul fișier CSS — toate denumirile de produse: Jost Regular */
 .product-name,
 .product-title,
+.home-products__name,
+h1.home-products__name,
+h2.home-products__name,
+h3.home-products__name,
+p.home-products__name,
 h1.product-title,
 h2.product-title,
 h3.product-title,
-p.product-name,
-p.product-title {
+p.product-title,
+article.card-hover .p-4 > h2,
+article.bg-white .p-4 > h2 {
   font-family: 'Jost', system-ui, sans-serif !important;
   font-weight: 400 !important;
   font-style: normal !important;
@@ -21,17 +27,18 @@ h1.product-title--page {
 }
 
 .product-name,
-.product-title {
+.product-title,
+.home-products__name,
+article.card-hover .p-4 > h2,
+article.bg-white .p-4 > h2 {
   font-size: 1.125rem;
   line-height: 1.35;
 }
 
-.home-products__name.product-name,
-.home-products__name.product-title {
+.home-products__name {
   margin-bottom: 0.25rem;
 }
 
-.home-products__card--featured .product-name,
-.home-products__card--featured .product-title {
+.home-products__card--featured .home-products__name {
   font-size: clamp(1.2rem, 2.5vw, 1.5rem) !important;
 }

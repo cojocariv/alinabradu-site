@@ -35,7 +35,7 @@
       </p>
     </div>
   </footer>
-  <link rel="stylesheet" href="<?= e(url('/assets/css/product-names.css')) ?>?v=1">
+  <link rel="stylesheet" href="<?= e(url('/assets/css/product-names.css')) ?>?v=2">
   <script src="<?= e(url('/assets/js/app.js')) ?>"></script>
 </body>
 </html>
