@@ -43,26 +43,25 @@ require __DIR__ . '/../includes/header.php';
 <section class="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-12">
   <p class="text-[0.65rem] uppercase tracking-boutique text-gold font-medium mb-2">Colecții</p>
   <h1 class="font-serif text-4xl md:text-5xl text-ink mb-8 font-medium tracking-tight">Magazin</h1>
-  <form class="grid md:grid-cols-4 gap-3 bg-white/80 border border-gold/30 p-4 md:p-5 mb-8">
-    <select name="category" class="border rounded p-2">
+  <form id="shopFilters" method="get" action="<?= e(url('/magazin')) ?>" class="grid md:grid-cols-3 gap-3 bg-white/80 border border-gold/30 p-4 md:p-5 mb-8">
+    <select name="category" class="border rounded p-2" aria-label="Categorie">
       <option value="">Toate categoriile</option>
       <?php foreach ($categories as $cat): ?>
         <option value="<?= e($cat) ?>" <?= $filters['category'] === $cat ? 'selected' : '' ?>><?= e($cat) ?></option>
       <?php endforeach; ?>
     </select>
-    <select name="subcategory" class="border rounded p-2">
+    <select name="subcategory" class="border rounded p-2" aria-label="Subcategorie">
       <option value="">Toate subcategoriile</option>
       <?php foreach ($subcategories as $sub): ?>
         <option value="<?= e($sub) ?>" <?= $filters['subcategory'] === $sub ? 'selected' : '' ?>><?= e($sub) ?></option>
       <?php endforeach; ?>
     </select>
-    <select name="size" class="border rounded p-2">
+    <select name="size" class="border rounded p-2" aria-label="Mărime">
       <option value="">Toate mărimile</option>
       <?php foreach ($sizes as $size): ?>
         <option value="<?= e($size) ?>" <?= $filters['size'] === $size ? 'selected' : '' ?>><?= e($size) ?></option>
       <?php endforeach; ?>
     </select>
-    <button class="bg-ink text-cream text-xs uppercase tracking-boutique font-medium px-5 py-2.5 hover:bg-ink-soft transition-colors">Filtrează</button>
   </form>
 
   <?php if ($totalProducts > 0): ?>
@@ -119,4 +118,19 @@ require __DIR__ . '/../includes/header.php';
     <p class="mt-10 text-center text-ink-muted">Niciun produs nu corespunde filtrelor selectate.</p>
   <?php endif; ?>
 </section>
+<script>
+  (function () {
+    const form = document.getElementById("shopFilters");
+    if (!form) return;
+    form.querySelectorAll("select").forEach(function (select) {
+      select.addEventListener("change", function () {
+        if (typeof form.requestSubmit === "function") {
+          form.requestSubmit();
+        } else {
+          form.submit();
+        }
+      });
+    });
+  })();
+</script>
 <?php require __DIR__ . '/../includes/footer.php'; ?>
