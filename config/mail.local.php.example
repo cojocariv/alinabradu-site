@@ -1,0 +1,16 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * Copiază ca config/mail.local.php și completează (nu comite parola în Git).
+ * Plesk: Mail → admin@alinabradu.com → folosește parola mailboxului.
+ */
+return [
+    'use_smtp' => true,
+    'host' => 'mail.alinabradu.com',
+    'port' => 465,
+    'user' => 'admin@alinabradu.com',
+    'pass' => 'PAROLA_MAILBOX_AICI',
+    'encryption' => 'ssl',
+    'try_localhost' => true,
+];

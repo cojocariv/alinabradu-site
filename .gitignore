@@ -4,3 +4,6 @@ uploads/products/*
 uploads/about/*
 !uploads/about/.gitkeep
 config/storage_manager.php
+config/mail.local.php
+logs/*
+!logs/.gitkeep
