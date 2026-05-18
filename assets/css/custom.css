@@ -583,16 +583,11 @@ body {
 }
 
 .home-products__name {
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: var(--ink);
-  line-height: 1.25;
   margin-bottom: 0.25rem;
 }
 
 .home-products__card--featured .home-products__name {
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
 }
 
 .home-products__cat {
@@ -966,6 +961,26 @@ body {
 .card-hover:hover {
   transform: translateY(-4px);
   box-shadow: 0 16px 32px rgba(26, 20, 16, 0.1);
+}
+
+/* —— Product names (magazin, produs, coș) —— */
+.product-title {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  font-synthesis: none;
+}
+
+.product-title--page {
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.75rem;
 }
 
 .product-card-media {
