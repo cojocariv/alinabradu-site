@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $body .= 'Nr. comandă: ' . ($defaults['order_number'] !== '' ? $defaults['order_number'] : '—') . "\n\n";
         $body .= "Mesaj:\n" . $defaults['message'] . "\n";
 
-        $sent = sendSiteMail(CONTACT_FORM_TO_EMAIL, $subject, $body, $defaults['email']);
+        $sent = sendContactFormMail($subject, $body, $defaults['email']);
         if ($sent) {
             $success = true;
             $defaults = ['name' => '', 'email' => '', 'phone' => '', 'order_number' => '', 'message' => ''];

@@ -46,9 +46,9 @@ header('Content-Type: text/html; charset=UTF-8');
 <body>
   <h1>Diagnostic trimitere email (formular contact)</h1>
   <p class="note">
-    Dacă mesajul de eroare de pe site încă arată <code>alinabradu.office@gmail.com</code>,
-    <strong>codul vechi este încă pe server</strong> — urcă fișierele noi din Git/FTP.
-    <a href="?key=<?= htmlspecialchars($provided, ENT_QUOTES, 'UTF-8') ?>&send=1">Rulează și test de trimitere</a>
+    Trimitere: <strong><?= htmlspecialchars(CONTACT_FORM_FROM_EMAIL, ENT_QUOTES, 'UTF-8') ?></strong>
+    → <strong><?= htmlspecialchars(CONTACT_FORM_TO_EMAIL, ENT_QUOTES, 'UTF-8') ?></strong>.
+    <a href="?key=<?= htmlspecialchars($provided, ENT_QUOTES, 'UTF-8') ?>&send=1">Test trimitere</a>
   </p>
   <table>
     <thead>
