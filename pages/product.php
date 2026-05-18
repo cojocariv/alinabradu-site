@@ -86,7 +86,7 @@ $productSchema = [
     </div>
   </div>
   <div>
-    <h1 class="product-title product-title--page font-sans font-normal"><?= e($product['name']) ?></h1>
+    <h1 class="product-title product-title--page"><?= e($product['name']) ?></h1>
     <p class="text-gold text-2xl font-semibold"><?= e(formatPrice((float) $product['price'])) ?></p>
     <?php if ($inStockProduct): ?>
       <p class="mt-1 mb-4 text-sm font-medium text-gold">În stoc</p>
@@ -146,7 +146,7 @@ $productSchema = [
       <a href="<?= e(url('/produs/' . $item['slug'])) ?>" class="bg-white rounded shadow-sm overflow-hidden card-hover">
         <img src="<?= e($item['image']) ?>" alt="<?= e($item['name']) ?>" class="h-56 w-full object-cover" loading="lazy">
         <div class="p-3">
-          <p class="product-title font-sans font-normal"><?= e($item['name']) ?></p>
+          <p class="product-name"><?= e($item['name']) ?></p>
           <p class="text-gold font-semibold"><?= e(formatPrice((float) $item['price'])) ?></p>
         </div>
       </a>

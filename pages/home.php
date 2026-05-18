@@ -82,7 +82,7 @@ require __DIR__ . '/../includes/header.php';
         </a>
         <div class="home-products__body">
           <span class="home-products__badge">Piesă evidențiată</span>
-          <h3 class="home-products__name product-title font-sans font-normal"><?= e($featuredProduct['name']) ?></h3>
+          <p class="home-products__name product-name"><?= e($featuredProduct['name']) ?></p>
           <p class="home-products__cat"><?= e($featuredProduct['category']) ?></p>
           <p class="home-products__price"><?= e(formatPrice((float) $featuredProduct['price'])) ?></p>
         </div>
@@ -94,7 +94,7 @@ require __DIR__ . '/../includes/header.php';
           <img src="<?= e(ProductModel::getPrimaryImageUrl($product)) ?>" alt="<?= e($product['name']) ?>" class="home-products__img" loading="lazy">
         </a>
         <div class="home-products__body">
-          <h3 class="home-products__name product-title font-sans font-normal"><?= e($product['name']) ?></h3>
+          <p class="home-products__name product-name"><?= e($product['name']) ?></p>
           <p class="home-products__cat"><?= e($product['category']) ?></p>
           <p class="home-products__price"><?= e(formatPrice((float) $product['price'])) ?></p>
         </div>
