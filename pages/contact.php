@@ -134,6 +134,7 @@ require __DIR__ . '/../includes/header.php';
             </ul>
           </div>
         <?php endif; ?>
+        <!-- formular contact v2025: contact@ → admin@alinabradu.com -->
         <form method="post" class="space-y-4" novalidate>
           <div>
             <label for="contact-name" class="block text-sm font-medium text-zinc-700 mb-1">Nume <span class="text-red-600">*</span></label>

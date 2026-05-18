@@ -6,7 +6,7 @@ require_once __DIR__ . '/mail.php';
 /** Email afișat pe site (footer, contact, homepage). */
 if (!defined('SITE_EMAIL')) {
     $envPublic = getenv('SITE_EMAIL');
-    define('SITE_EMAIL', is_string($envPublic) && $envPublic !== '' ? $envPublic : CONTACT_FORM_TO_EMAIL);
+    define('SITE_EMAIL', is_string($envPublic) && $envPublic !== '' ? $envPublic : 'admin@alinabradu.com');
 }
 
 if (!defined('SITE_PHONE_DISPLAY')) {
