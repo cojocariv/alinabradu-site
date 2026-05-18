@@ -67,12 +67,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $body .= 'Nr. comandă: ' . ($defaults['order_number'] !== '' ? $defaults['order_number'] : '—') . "\n\n";
         $body .= "Mesaj:\n" . $defaults['message'] . "\n";
 
-        $sent = sendSiteMail(CONTACT_FORM_TO, $subject, $body, $defaults['email']);
+        $sent = sendSiteMail(CONTACT_FORM_TO_EMAIL, $subject, $body, $defaults['email']);
         if ($sent) {
             $success = true;
             $defaults = ['name' => '', 'email' => '', 'phone' => '', 'order_number' => '', 'message' => ''];
         } else {
-            $errors[] = 'Trimiterea a eșuat momentan. Te rugăm să ne scrii direct la ' . CONTACT_FORM_TO . ' sau să ne suni la ' . SITE_PHONE_DISPLAY . '.';
+            $errors[] = 'Trimiterea a eșuat momentan. Te rugăm să ne scrii direct la ' . CONTACT_FORM_TO_EMAIL . ' sau să ne suni la ' . SITE_PHONE_DISPLAY . '.';
         }
     }
 }

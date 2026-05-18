@@ -2,15 +2,19 @@
 declare(strict_types=1);
 
 /**
- * Copiază ca config/mail.local.php și completează (nu comite parola în Git).
- * Plesk: Mail → admin@alinabradu.com → folosește parola mailboxului.
+ * Copiază ca config/mail.local.php pe server (sau setează variabilele în Plesk → PHP).
+ * Nu comite mail.local.php în Git.
+ *
+ * Variabile de mediu recomandate pe Plesk:
+ *   SMTP_PASSWORD=parola_mailbox_contact
+ *   (opțional) SMTP_HOST, SMTP_PORT, SMTP_USERNAME, SMTP_ENCRYPTION
  */
-return [
-    'use_smtp' => true,
-    'host' => 'mail.alinabradu.com',
-    'port' => 465,
-    'user' => 'admin@alinabradu.com',
-    'pass' => 'PAROLA_MAILBOX_AICI',
-    'encryption' => 'ssl',
-    'try_localhost' => true,
-];
+
+if (!defined('SMTP_PASSWORD')) {
+    define('SMTP_PASSWORD', 'PAROLA_MAILBOX_contact@alinabradu.com');
+}
+
+// Opțional — override față de valorile implicite din config/mail.php:
+// define('SMTP_HOST', 'alinabradu.com');
+// define('SMTP_PORT', 465);
+// define('SMTP_ENCRYPTION', 'ssl');

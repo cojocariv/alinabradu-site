@@ -69,6 +69,11 @@ if (preg_match('#^admin/produse/(\d+)$#', $path, $adm)) {
     exit;
 }
 
+if ($path === 'mail-diagnose') {
+    require __DIR__ . '/pages/mail-diagnose.php';
+    exit;
+}
+
 if ($path === 'sitemap.xml') {
     header('Content-Type: application/xml; charset=utf-8');
     $host = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
