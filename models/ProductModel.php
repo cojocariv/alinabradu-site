@@ -30,6 +30,25 @@ class ProductModel
         return $stmt->fetchAll();
     }
 
+    /** @return array<string, int> nume categorie => număr produse */
+    public static function countByCategory(): array
+    {
+        $sql = "SELECT category AS name, COUNT(*) AS cnt FROM products
+                WHERE category IS NOT NULL AND TRIM(category) <> ''
+                GROUP BY category";
+        $stmt = getDbConnection()->query($sql);
+        $counts = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $counts[(string) $row['name']] = (int) $row['cnt'];
+        }
+        return $counts;
+    }
+
+    public static function countAll(): int
+    {
+        return (int) getDbConnection()->query('SELECT COUNT(*) FROM products')->fetchColumn();
+    }
+
     public static function filter(array $filters = []): array
     {
         $sql = 'SELECT * FROM products WHERE 1=1';

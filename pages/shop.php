@@ -7,6 +7,8 @@ $categories = array_column(CategoryModel::all(), 'name');
 if ($categories === []) {
     $categories = ['Bluză', 'Fustă', 'Home decor', 'Rochie'];
 }
+$categoryCounts = ProductModel::countByCategory();
+$totalCatalogProducts = ProductModel::countAll();
 $subcategories = ['Colecția Dor', 'Colecția Mireasă', 'Colecția Mistery', 'Colecția Soare', 'Colecția Spicul'];
 $sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
@@ -45,9 +47,10 @@ require __DIR__ . '/../includes/header.php';
   <h1 class="font-serif text-4xl md:text-5xl text-ink mb-8 font-medium tracking-tight">Magazin</h1>
   <form id="shopFilters" method="get" action="<?= e(url('/magazin')) ?>" class="grid md:grid-cols-3 gap-3 bg-white/80 border border-gold/30 p-4 md:p-5 mb-8">
     <select name="category" class="border rounded p-2" aria-label="Categorie">
-      <option value="">Toate categoriile</option>
+      <option value="">Toate categoriile (<?= (int) $totalCatalogProducts ?>)</option>
       <?php foreach ($categories as $cat): ?>
-        <option value="<?= e($cat) ?>" <?= $filters['category'] === $cat ? 'selected' : '' ?>><?= e($cat) ?></option>
+        <?php $catCount = $categoryCounts[$cat] ?? 0; ?>
+        <option value="<?= e($cat) ?>" <?= $filters['category'] === $cat ? 'selected' : '' ?>><?= e($cat) ?> (<?= (int) $catCount ?>)</option>
       <?php endforeach; ?>
     </select>
     <select name="subcategory" class="border rounded p-2" aria-label="Subcategorie">
