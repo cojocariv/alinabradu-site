@@ -3,11 +3,15 @@ declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
 require_once __DIR__ . '/../models/CategoryModel.php';
 
-$categories = array_column(CategoryModel::all(), 'name');
-if ($categories === []) {
-    $categories = ['Bluză', 'Fustă', 'Home decor', 'Rochie'];
+$categoryRows = CategoryModel::all();
+if ($categoryRows === []) {
+    $categoryRows = [
+        ['name' => 'Bluză', 'slug' => 'bluze'],
+        ['name' => 'Fustă', 'slug' => 'fuste'],
+        ['name' => 'Home decor', 'slug' => 'home-decor'],
+        ['name' => 'Rochie', 'slug' => 'rochii'],
+    ];
 }
-$categoryCounts = ProductModel::countByCategory();
 $totalCatalogProducts = ProductModel::countAll();
 $subcategories = ['Colecția Dor', 'Colecția Mireasă', 'Colecția Mistery', 'Colecția Soare', 'Colecția Spicul'];
 $sizes = ['XS', 'S', 'M', 'L', 'XL'];
@@ -48,9 +52,14 @@ require __DIR__ . '/../includes/header.php';
   <form id="shopFilters" method="get" action="<?= e(url('/magazin')) ?>" class="grid md:grid-cols-3 gap-3 bg-white/80 border border-gold/30 p-4 md:p-5 mb-8">
     <select name="category" class="border rounded p-2" aria-label="Categorie">
       <option value="">Toate categoriile (<?= (int) $totalCatalogProducts ?>)</option>
-      <?php foreach ($categories as $cat): ?>
-        <?php $catCount = $categoryCounts[$cat] ?? 0; ?>
-        <option value="<?= e($cat) ?>" <?= $filters['category'] === $cat ? 'selected' : '' ?>><?= e($cat) ?> (<?= (int) $catCount ?>)</option>
+      <?php foreach ($categoryRows as $cat): ?>
+        <?php
+        $catName = (string) $cat['name'];
+        $catSlug = (string) $cat['slug'];
+        $catCount = ProductModel::countInCategory($catName, $catSlug);
+        $isSelected = $filters['category'] === $catSlug || $filters['category'] === $catName;
+        ?>
+        <option value="<?= e($catSlug) ?>" <?= $isSelected ? 'selected' : '' ?>><?= e($catName) ?> (<?= (int) $catCount ?>)</option>
       <?php endforeach; ?>
     </select>
     <select name="subcategory" class="border rounded p-2" aria-label="Subcategorie">
