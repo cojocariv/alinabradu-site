@@ -1,29 +1,42 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
-require_once __DIR__ . '/../models/CategoryModel.php';
 
-$categoryRows = CategoryModel::all();
-if ($categoryRows === []) {
-    $categoryRows = [
-        ['name' => 'Bluză', 'slug' => 'bluze'],
-        ['name' => 'Fustă', 'slug' => 'fuste'],
-        ['name' => 'Home decor', 'slug' => 'home-decor'],
-        ['name' => 'Rochie', 'slug' => 'rochii'],
+$shopCategoryOptions = [];
+$totalCatalogProducts = 0;
+$shopLoadError = null;
+
+try {
+    $shopCategoryOptions = ProductModel::shopCategoryOptions();
+    $totalCatalogProducts = ProductModel::countAll();
+} catch (Throwable $e) {
+    $shopLoadError = $e->getMessage();
+    $shopCategoryOptions = [
+        ['name' => 'Bluză', 'slug' => 'bluze', 'count' => 0],
+        ['name' => 'Fustă', 'slug' => 'fuste', 'count' => 0],
+        ['name' => 'Home decor', 'slug' => 'home-decor', 'count' => 0],
+        ['name' => 'Rochie', 'slug' => 'rochii', 'count' => 0],
     ];
 }
-$totalCatalogProducts = ProductModel::countAll();
+
 $subcategories = ['Colecția Dor', 'Colecția Mireasă', 'Colecția Mistery', 'Colecția Soare', 'Colecția Spicul'];
 $sizes = ['XS', 'S', 'M', 'L', 'XL'];
 
 $filters = [
-    'category' => $_GET['category'] ?? '',
-    'subcategory' => $_GET['subcategory'] ?? '',
-    'size' => $_GET['size'] ?? '',
+    'category' => trim((string) ($_GET['category'] ?? '')),
+    'subcategory' => trim((string) ($_GET['subcategory'] ?? '')),
+    'size' => trim((string) ($_GET['size'] ?? '')),
 ];
 $shopPerPage = 9;
 $shopPage = max(1, (int) ($_GET['page'] ?? 1));
-$allProducts = ProductModel::filter($filters);
+
+$allProducts = [];
+try {
+    $allProducts = ProductModel::filter($filters);
+} catch (Throwable $e) {
+    $shopLoadError = $shopLoadError ?? $e->getMessage();
+}
+
 $totalProducts = count($allProducts);
 $visibleCount = min($totalProducts, $shopPage * $shopPerPage);
 $products = array_slice($allProducts, 0, $visibleCount);
@@ -49,17 +62,22 @@ require __DIR__ . '/../includes/header.php';
 <section class="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-12">
   <p class="text-[0.65rem] uppercase tracking-boutique text-gold font-medium mb-2">Colecții</p>
   <h1 class="font-serif text-4xl md:text-5xl text-ink mb-8 font-medium tracking-tight">Magazin</h1>
+
+  <?php if ($shopLoadError !== null): ?>
+    <p class="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">Listă temporar indisponibilă (<?= e($shopLoadError) ?>). Încearcă reîncărcarea paginii.</p>
+  <?php endif; ?>
+
   <form id="shopFilters" method="get" action="<?= e(url('/magazin')) ?>" class="grid md:grid-cols-3 gap-3 bg-white/80 border border-gold/30 p-4 md:p-5 mb-8">
     <select name="category" class="border rounded p-2" aria-label="Categorie">
       <option value="">Toate categoriile (<?= (int) $totalCatalogProducts ?>)</option>
-      <?php foreach ($categoryRows as $cat): ?>
+      <?php foreach ($shopCategoryOptions as $cat): ?>
         <?php
         $catName = (string) $cat['name'];
         $catSlug = (string) $cat['slug'];
-        $catCount = ProductModel::countInCategory($catName, $catSlug);
+        $catCount = (int) $cat['count'];
         $isSelected = $filters['category'] === $catSlug || $filters['category'] === $catName;
         ?>
-        <option value="<?= e($catSlug) ?>" <?= $isSelected ? 'selected' : '' ?>><?= e($catName) ?> (<?= (int) $catCount ?>)</option>
+        <option value="<?= e($catSlug) ?>" <?= $isSelected ? 'selected' : '' ?>><?= e($catName) ?> (<?= $catCount ?>)</option>
       <?php endforeach; ?>
     </select>
     <select name="subcategory" class="border rounded p-2" aria-label="Subcategorie">

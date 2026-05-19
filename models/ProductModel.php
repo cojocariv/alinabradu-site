@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/CategoryModel.php';
 
 class ProductModel
 {
@@ -35,10 +36,14 @@ class ProductModel
         $stmt = getDbConnection()->prepare(
             'SELECT COUNT(*) FROM products
              WHERE category_slug = :slug
-                OR category = :name
-                OR TRIM(category) = TRIM(:name)'
+                OR category = :cat_name
+                OR TRIM(category) = TRIM(:cat_name_trim)'
         );
-        $stmt->execute([':slug' => $slug, ':name' => $name]);
+        $stmt->execute([
+            ':slug' => $slug,
+            ':cat_name' => $name,
+            ':cat_name_trim' => $name,
+        ]);
         return (int) $stmt->fetchColumn();
     }
 
@@ -47,14 +52,77 @@ class ProductModel
         return (int) getDbConnection()->query('SELECT COUNT(*) FROM products')->fetchColumn();
     }
 
+    /**
+     * Categorii pentru magazin cu număr produse (un singur query, fără erori în șablon).
+     *
+     * @return list<array{name:string,slug:string,count:int}>
+     */
+    public static function shopCategoryOptions(): array
+    {
+        $rows = CategoryModel::all();
+        if ($rows === []) {
+            $rows = [
+                ['name' => 'Bluză', 'slug' => 'bluze'],
+                ['name' => 'Fustă', 'slug' => 'fuste'],
+                ['name' => 'Home decor', 'slug' => 'home-decor'],
+                ['name' => 'Rochie', 'slug' => 'rochii'],
+            ];
+        }
+
+        $countsBySlug = [];
+        $stmt = getDbConnection()->query(
+            "SELECT category_slug AS slug, MAX(category) AS name, COUNT(*) AS cnt
+             FROM products
+             WHERE category_slug IS NOT NULL AND TRIM(category_slug) <> ''
+             GROUP BY category_slug"
+        );
+        foreach ($stmt->fetchAll() as $row) {
+            $countsBySlug[(string) $row['slug']] = (int) $row['cnt'];
+        }
+
+        $options = [];
+        $seenSlugs = [];
+        foreach ($rows as $cat) {
+            $name = (string) ($cat['name'] ?? '');
+            $slug = (string) ($cat['slug'] ?? '');
+            if ($slug === '') {
+                continue;
+            }
+            $count = $countsBySlug[$slug] ?? 0;
+            if ($count === 0 && $name !== '') {
+                $count = self::countInCategory($name, $slug);
+            }
+            $options[] = ['name' => $name, 'slug' => $slug, 'count' => $count];
+            $seenSlugs[$slug] = true;
+        }
+
+        foreach ($countsBySlug as $slug => $count) {
+            if (isset($seenSlugs[$slug])) {
+                continue;
+            }
+            $nameStmt = getDbConnection()->prepare(
+                'SELECT category FROM products WHERE category_slug = :slug AND TRIM(category) <> "" LIMIT 1'
+            );
+            $nameStmt->execute([':slug' => $slug]);
+            $name = (string) ($nameStmt->fetchColumn() ?: $slug);
+            $options[] = ['name' => $name, 'slug' => $slug, 'count' => $count];
+        }
+
+        usort($options, static fn (array $a, array $b): int => strcasecmp($a['name'], $b['name']));
+
+        return $options;
+    }
+
     public static function filter(array $filters = []): array
     {
         $sql = 'SELECT * FROM products WHERE 1=1';
         $params = [];
 
         if (!empty($filters['category'])) {
-            $sql .= ' AND (category_slug = :category OR category = :category)';
-            $params[':category'] = $filters['category'];
+            $cat = $filters['category'];
+            $sql .= ' AND (category_slug = :filter_cat_slug OR category = :filter_cat_name)';
+            $params[':filter_cat_slug'] = $cat;
+            $params[':filter_cat_name'] = $cat;
         }
         if (!empty($filters['subcategory'])) {
             $sql .= ' AND subcategory = :subcategory';
