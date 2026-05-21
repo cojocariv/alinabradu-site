@@ -122,16 +122,16 @@ require __DIR__ . '/../includes/header.php';
           <span class="home-about__stat-label">ani de meșteșug</span>
         </li>
         <li class="home-about__stat">
-          <span class="home-about__stat-value">8</span>
-          <span class="home-about__stat-label">colecții active</span>
+          <span class="home-about__stat-value">98</span>
+          <span class="home-about__stat-label">colecții în 15 ani</span>
         </li>
         <li class="home-about__stat">
           <span class="home-about__stat-value">100%</span>
-          <span class="home-about__stat-label">lucrat manual</span>
+          <span class="home-about__stat-label">calitate</span>
         </li>
         <li class="home-about__stat">
-          <span class="home-about__stat-value">1</span>
-          <span class="home-about__stat-label">atelier boutique</span>
+          <span class="home-about__stat-value">cea mai mare fabrică de broderie</span>
+          <span class="home-about__stat-label">din moldova</span>
         </li>
       </ul>
     </div>
