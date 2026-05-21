@@ -162,11 +162,11 @@ require __DIR__ . '/../includes/header.php';
     </div>
 
     <div class="space-y-8">
-      <figure class="rounded-xl overflow-hidden border border-zinc-200 bg-zinc-100 shadow-sm">
+      <figure class="contact-page__photo-wrap rounded-xl overflow-hidden border border-zinc-200 bg-zinc-100 shadow-sm">
         <img
           src="<?= e($contactPagePhoto) ?>"
           alt="Adrese magazine Alina Bradu: CC UNIC etaj 1, CC GEMENI etaj 2, CC ZORILE etaj 2; showroom str. Ștefan cel Mare 126; Brașov, str. Republicii 1."
-          class="w-full h-auto object-cover max-h-[min(85vh,52rem)] object-center"
+          class="contact-page__photo"
           width="900"
           height="1200"
           loading="lazy"

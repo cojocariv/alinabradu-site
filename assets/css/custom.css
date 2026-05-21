@@ -909,6 +909,20 @@ body {
   font-family: var(--font-serif);
 }
 
+/* Contact photo: full frame visible at any zoom (no top crop from object-cover) */
+.contact-page__photo-wrap {
+  line-height: 0;
+}
+
+.contact-page__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(92vh, 56rem);
+  object-fit: contain;
+  object-position: top center;
+}
+
 /* —— Footer —— */
 .site-footer {
   background: var(--ink);
