@@ -130,7 +130,7 @@ require __DIR__ . '/../includes/header.php';
           <span class="home-about__stat-label">calitate</span>
         </li>
         <li class="home-about__stat">
-          <span class="home-about__stat-value">din moldova</span>
+          <span class="home-about__stat-value">din Moldova</span>
           <span class="home-about__stat-label">cea mai mare fabrică de broderie</span>
         </li>
       </ul>
