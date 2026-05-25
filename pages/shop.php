@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
+require_once __DIR__ . '/../includes/shop_filter_config.php';
 
-/** @var array{rochie_slug:string,subcategories:list<array{label:string,value:string,slug:string}>,sizes:list<string>} $shopFilterConfig */
-$shopFilterConfig = require __DIR__ . '/../config/shop_filters.php';
+$shopFilterConfig = shopFilterConfig();
 $rochieSlug = $shopFilterConfig['rochie_slug'];
 $rochieSubcategories = $shopFilterConfig['subcategories'];
 $shopSizes = $shopFilterConfig['sizes'];
