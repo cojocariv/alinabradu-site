@@ -113,24 +113,105 @@ class ProductModel
         return $options;
     }
 
+    public static function countBySubcategory(string $value, string $slug = ''): int
+    {
+        $sql = 'SELECT COUNT(*) FROM products WHERE subcategory = :val';
+        $params = [':val' => $value];
+        if ($slug !== '') {
+            $sql .= ' OR subcategory_slug = :slug';
+            $params[':slug'] = $slug;
+        }
+        $stmt = getDbConnection()->prepare($sql);
+        $stmt->execute($params);
+        return (int) $stmt->fetchColumn();
+    }
+
+    public static function countBySize(string $size): int
+    {
+        $stmt = getDbConnection()->prepare('SELECT COUNT(*) FROM products WHERE FIND_IN_SET(:size, size)');
+        $stmt->execute([':size' => $size]);
+        return (int) $stmt->fetchColumn();
+    }
+
     public static function filter(array $filters = []): array
     {
         $sql = 'SELECT * FROM products WHERE 1=1';
         $params = [];
 
-        if (!empty($filters['category'])) {
-            $cat = $filters['category'];
-            $sql .= ' AND (category_slug = :filter_cat_slug OR category = :filter_cat_name)';
-            $params[':filter_cat_slug'] = $cat;
-            $params[':filter_cat_name'] = $cat;
+        $categories = $filters['categories'] ?? [];
+        if ($categories === [] && !empty($filters['category'])) {
+            $categories = [(string) $filters['category']];
         }
-        if (!empty($filters['subcategory'])) {
-            $sql .= ' AND subcategory = :subcategory';
-            $params[':subcategory'] = $filters['subcategory'];
+        if ($categories !== []) {
+            $parts = [];
+            foreach (array_values($categories) as $i => $cat) {
+                $cat = trim((string) $cat);
+                if ($cat === '') {
+                    continue;
+                }
+                $slugKey = ':filter_cat_slug_' . $i;
+                $nameKey = ':filter_cat_name_' . $i;
+                $parts[] = "(category_slug = {$slugKey} OR category = {$nameKey})";
+                $params[$slugKey] = $cat;
+                $params[$nameKey] = $cat;
+            }
+            if ($parts !== []) {
+                $sql .= ' AND (' . implode(' OR ', $parts) . ')';
+            }
         }
-        if (!empty($filters['size'])) {
-            $sql .= ' AND FIND_IN_SET(:size, size)';
-            $params[':size'] = $filters['size'];
+
+        $subcategories = $filters['subcategories'] ?? [];
+        if ($subcategories === [] && !empty($filters['subcategory'])) {
+            $subcategories = [(string) $filters['subcategory']];
+        }
+        if ($subcategories !== []) {
+            $parts = [];
+            foreach (array_values($subcategories) as $i => $sub) {
+                if (!is_array($sub)) {
+                    $sub = ['value' => trim((string) $sub), 'slug' => ''];
+                }
+                $val = trim((string) ($sub['value'] ?? ''));
+                $slug = trim((string) ($sub['slug'] ?? ''));
+                if ($val === '' && $slug === '') {
+                    continue;
+                }
+                $valKey = ':sub_val_' . $i;
+                $slugKey = ':sub_slug_' . $i;
+                if ($val !== '' && $slug !== '') {
+                    $parts[] = "(subcategory = {$valKey} OR subcategory_slug = {$slugKey})";
+                    $params[$valKey] = $val;
+                    $params[$slugKey] = $slug;
+                } elseif ($val !== '') {
+                    $parts[] = "subcategory = {$valKey}";
+                    $params[$valKey] = $val;
+                } else {
+                    $parts[] = "subcategory_slug = {$slugKey}";
+                    $params[$slugKey] = $slug;
+                }
+            }
+            if ($parts !== []) {
+                $sql .= ' AND (' . implode(' OR ', $parts) . ')';
+            }
+        }
+
+        $sizes = $filters['sizes'] ?? [];
+        if ($sizes === [] && !empty($filters['size'])) {
+            $sizes = [(string) $filters['size']];
+        }
+        if ($sizes !== []) {
+            $parts = [];
+            foreach (array_values($sizes) as $i => $size) {
+                $size = trim((string) $size);
+                if ($size === '') {
+                    continue;
+                }
+                $key = ':size_' . $i;
+                $parts[] = "FIND_IN_SET({$key}, size)";
+                $params[$key] = $size;
+            }
+            if ($parts !== []) {
+                $sql .= ' AND (' . implode(' OR ', $parts) . ')';
+            }
         }
 
         $sql .= ' ORDER BY id DESC';
