@@ -19,14 +19,21 @@ require __DIR__ . '/../includes/header.php';
       <?php
       $imgUrl = ProductModel::getPrimaryImageUrl($product);
       $galleryUrls = ProductModel::getImageUrls((int) $product['id']);
-      $hoverImgUrl = $galleryUrls[1] ?? null;
+      $hoverImgUrl = null;
+      if (isset($galleryUrls[1])) {
+          $second = trim((string) $galleryUrls[1]);
+          $first = trim((string) ($galleryUrls[0] ?? $imgUrl));
+          if ($second !== '' && $second !== $first) {
+              $hoverImgUrl = $second;
+          }
+      }
       $inStock = (int) ($product['in_stock'] ?? 1) === 1;
       $sizesList = array_filter(array_map('trim', explode(',', (string) $product['size'])));
       $firstSize = $sizesList[0] ?? '';
       ?>
       <article class="bg-[#fffaf2] rounded-lg overflow-hidden shadow-sm border border-[#eadfc9] card-hover">
         <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="block bg-[#fffaf2]">
-          <div class="product-card-media h-72 bg-[#fff6ea] p-3 flex items-center justify-center">
+          <div class="product-card-media h-72 bg-[#fff6ea] p-3 flex items-center justify-center<?= $hoverImgUrl ? ' product-card-media--has-hover' : '' ?>">
             <img src="<?= e($imgUrl) ?>" alt="<?= e($product['name']) ?>" class="product-card-media__img product-card-media__img--primary w-full h-full object-contain" loading="lazy">
             <?php if ($hoverImgUrl): ?>
               <img src="<?= e($hoverImgUrl) ?>" alt="" class="product-card-media__img product-card-media__img--hover w-full h-full object-contain" loading="lazy" aria-hidden="true">

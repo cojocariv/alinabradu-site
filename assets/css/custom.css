@@ -1121,12 +1121,12 @@ p.product-title {
   opacity: 0;
 }
 
-.card-hover:hover .product-card-media__img--primary {
+.card-hover:hover .product-card-media--has-hover .product-card-media__img--primary {
   opacity: 0;
   transform: scale(1.01);
 }
 
-.card-hover:hover .product-card-media__img--hover {
+.card-hover:hover .product-card-media--has-hover .product-card-media__img--hover {
   opacity: 1;
   transform: scale(1.01);
 }
