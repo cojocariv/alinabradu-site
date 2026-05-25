@@ -101,6 +101,28 @@ foreach ($shopSizes as $size) {
     }
 }
 
+require_once __DIR__ . '/../includes/shop_product_card.php';
+
+if (isset($_GET['partial']) && $_GET['partial'] === '1') {
+    header('Content-Type: application/json; charset=utf-8');
+    $offset = ($shopPage - 1) * $shopPerPage;
+    $batchProducts = array_slice($allProducts, $offset, $shopPerPage);
+    ob_start();
+    foreach ($batchProducts as $product) {
+        renderShopProductCard($product);
+    }
+    $html = ob_get_clean();
+    $visibleAfter = min($totalProducts, $shopPage * $shopPerPage);
+    echo json_encode([
+        'html' => $html,
+        'visibleCount' => $visibleAfter,
+        'totalProducts' => $totalProducts,
+        'hasMore' => $visibleAfter < $totalProducts,
+        'nextPage' => $shopPage + 1,
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 $seo = [
     'title' => 'Magazin - Rochii și bluze tradiționale',
     'description' => 'Magazin online Alina Bradu: rochii tradiționale, bluze și fuste premium cu motive etnice.',
@@ -202,54 +224,24 @@ require __DIR__ . '/../includes/header.php';
 
     <div class="shop-catalog min-w-0">
       <?php if ($totalProducts > 0): ?>
-        <p class="text-sm text-ink-muted mb-6">Afișate <?= (int) $visibleCount ?> din <?= (int) $totalProducts ?> produse<?= $totalCatalogProducts > 0 && $selectedCategories === [] && $selectedSubSlugs === [] && $selectedSizes === [] ? ' · catalog: ' . (int) $totalCatalogProducts : '' ?></p>
+        <p id="shopCatalogStatus" class="text-sm text-ink-muted mb-6">Afișate <?= (int) $visibleCount ?> din <?= (int) $totalProducts ?> produse<?= $totalCatalogProducts > 0 && $selectedCategories === [] && $selectedSubSlugs === [] && $selectedSizes === [] ? ' · catalog: ' . (int) $totalCatalogProducts : '' ?></p>
       <?php endif; ?>
 
-      <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div id="shopProductGrid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
         <?php foreach ($products as $product): ?>
-          <?php
-          $imgUrl = ProductModel::getPrimaryImageUrl($product);
-          $galleryUrls = ProductModel::getImageUrls((int) $product['id']);
-          $hoverImgUrl = $galleryUrls[1] ?? null;
-          $inStock = (int) ($product['in_stock'] ?? 1) === 1;
-          $sizesList = array_filter(array_map('trim', explode(',', (string) $product['size'])));
-          $firstSize = $sizesList[0] ?? '';
-          ?>
-          <article class="bg-white overflow-hidden border border-gold/30 card-hover">
-            <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="block bg-cream">
-              <div class="product-card-media h-80 bg-cream p-3 flex items-center justify-center">
-                <img src="<?= e($imgUrl) ?>" alt="<?= e($product['name']) ?>" class="product-card-media__img product-card-media__img--primary w-full h-full object-contain" loading="lazy">
-                <?php if ($hoverImgUrl): ?>
-                  <img src="<?= e($hoverImgUrl) ?>" alt="" class="product-card-media__img product-card-media__img--hover w-full h-full object-contain" loading="lazy" aria-hidden="true">
-                <?php endif; ?>
-              </div>
-            </a>
-            <div class="p-4">
-              <p class="product-name"><?= e($product['name']) ?></p>
-              <p class="text-sm text-ink-muted"><?= e($product['category']) ?> <?= $product['subcategory'] ? ' - ' . e($product['subcategory']) : '' ?></p>
-              <p class="mt-2 text-gold font-semibold"><?= e(formatPrice((float) $product['price'])) ?></p>
-              <?php if ($inStock): ?>
-                <p class="mt-1 text-sm font-medium text-gold">În stoc</p>
-                <?php if ($firstSize !== ''): ?>
-                  <form method="post" action="<?= e(url('/produs/' . $product['slug'])) ?>" class="mt-3">
-                    <input type="hidden" name="size" value="<?= e($firstSize) ?>">
-                    <input type="hidden" name="quantity" value="1">
-                    <button type="submit" class="w-full sm:w-auto bg-ink text-cream text-xs uppercase tracking-wide font-medium px-4 py-2.5 hover:bg-ink-soft transition-colors">Adaugă în coș</button>
-                  </form>
-                <?php endif; ?>
-              <?php else: ?>
-                <p class="mt-1 text-sm font-medium text-ink-muted">La comandă</p>
-                <a href="<?= e(url('/contact?' . http_build_query(['produs' => $product['slug']]))) ?>" class="mt-3 inline-block w-full sm:w-auto bg-ink text-cream text-xs uppercase tracking-wide font-medium px-4 py-2.5 hover:bg-ink-soft text-center no-underline transition-colors">Adaugă în coș</a>
-              <?php endif; ?>
-              <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="inline-block mt-3 text-sm underline">Vezi produs</a>
-            </div>
-          </article>
+          <?php renderShopProductCard($product); ?>
         <?php endforeach; ?>
       </div>
 
       <?php if ($hasMoreProducts): ?>
-        <div class="mt-12 text-center">
-          <a href="<?= e($shopPageUrl($shopNextPage)) ?>" class="btn btn--outline">Arată mai multe</a>
+        <div id="shopLoadMoreWrap" class="mt-12 text-center">
+          <button
+            type="button"
+            id="shopLoadMore"
+            class="btn btn--outline"
+            data-next-page="<?= (int) $shopNextPage ?>"
+            data-fallback-url="<?= e($shopPageUrl($shopNextPage)) ?>"
+          >Arată mai multe</button>
         </div>
       <?php elseif ($totalProducts === 0): ?>
         <p class="mt-10 text-center text-ink-muted">Niciun produs nu corespunde filtrelor selectate.</p>
@@ -281,6 +273,63 @@ require __DIR__ . '/../includes/header.php';
         submitFilters();
       });
     });
+
+    const loadMoreBtn = document.getElementById("shopLoadMore");
+    const productGrid = document.getElementById("shopProductGrid");
+    const statusEl = document.getElementById("shopCatalogStatus");
+    const loadMoreWrap = document.getElementById("shopLoadMoreWrap");
+    const shopBaseUrl = <?= json_encode(url('/magazin'), JSON_THROW_ON_ERROR) ?>;
+
+    if (loadMoreBtn && productGrid) {
+      loadMoreBtn.addEventListener("click", async function () {
+        const nextPage = parseInt(loadMoreBtn.dataset.nextPage || "2", 10);
+        if (!nextPage || loadMoreBtn.disabled) return;
+
+        const params = new URLSearchParams(window.location.search);
+        params.set("page", String(nextPage));
+        params.set("partial", "1");
+
+        const label = loadMoreBtn.textContent;
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.textContent = "Se încarcă…";
+
+        try {
+          const res = await fetch(shopBaseUrl + "?" + params.toString(), {
+            headers: { Accept: "application/json" },
+          });
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          const data = await res.json();
+          if (data.html) {
+            productGrid.insertAdjacentHTML("beforeend", data.html);
+          }
+          if (statusEl && data.visibleCount != null && data.totalProducts != null) {
+            statusEl.textContent = "Afișate " + data.visibleCount + " din " + data.totalProducts + " produse";
+          }
+          params.delete("partial");
+          params.set("page", String(nextPage));
+          history.replaceState(null, "", shopBaseUrl + (params.toString() ? "?" + params.toString() : ""));
+
+          if (data.hasMore && data.nextPage) {
+            loadMoreBtn.dataset.nextPage = String(data.nextPage);
+            const fallback = new URL(shopBaseUrl, window.location.origin);
+            const fbParams = new URLSearchParams(params);
+            fbParams.set("page", String(data.nextPage));
+            fallback.search = fbParams.toString();
+            loadMoreBtn.dataset.fallbackUrl = fallback.pathname + fallback.search;
+          } else if (loadMoreWrap) {
+            loadMoreWrap.remove();
+          }
+        } catch (err) {
+          window.location.href = loadMoreBtn.dataset.fallbackUrl || shopBaseUrl;
+          return;
+        } finally {
+          if (loadMoreBtn.isConnected) {
+            loadMoreBtn.disabled = false;
+            loadMoreBtn.textContent = label;
+          }
+        }
+      });
+    }
   })();
 </script>
 <?php require __DIR__ . '/../includes/footer.php'; ?>

@@ -1,0 +1,46 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * Card produs pentru grila magazinului.
+ */
+function renderShopProductCard(array $product): void
+{
+    $imgUrl = ProductModel::getPrimaryImageUrl($product);
+    $galleryUrls = ProductModel::getImageUrls((int) $product['id']);
+    $hoverImgUrl = $galleryUrls[1] ?? null;
+    $inStock = (int) ($product['in_stock'] ?? 1) === 1;
+    $sizesList = array_filter(array_map('trim', explode(',', (string) $product['size'])));
+    $firstSize = $sizesList[0] ?? '';
+    ?>
+    <article class="bg-white overflow-hidden border border-gold/30 card-hover">
+      <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="block bg-cream">
+        <div class="product-card-media h-80 bg-cream p-3 flex items-center justify-center">
+          <img src="<?= e($imgUrl) ?>" alt="<?= e($product['name']) ?>" class="product-card-media__img product-card-media__img--primary w-full h-full object-contain" loading="lazy">
+          <?php if ($hoverImgUrl): ?>
+            <img src="<?= e($hoverImgUrl) ?>" alt="" class="product-card-media__img product-card-media__img--hover w-full h-full object-contain" loading="lazy" aria-hidden="true">
+          <?php endif; ?>
+        </div>
+      </a>
+      <div class="p-4">
+        <p class="product-name"><?= e($product['name']) ?></p>
+        <p class="text-sm text-ink-muted"><?= e($product['category']) ?> <?= $product['subcategory'] ? ' - ' . e($product['subcategory']) : '' ?></p>
+        <p class="mt-2 text-gold font-semibold"><?= e(formatPrice((float) $product['price'])) ?></p>
+        <?php if ($inStock): ?>
+          <p class="mt-1 text-sm font-medium text-gold">În stoc</p>
+          <?php if ($firstSize !== ''): ?>
+            <form method="post" action="<?= e(url('/produs/' . $product['slug'])) ?>" class="mt-3">
+              <input type="hidden" name="size" value="<?= e($firstSize) ?>">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="w-full sm:w-auto bg-ink text-cream text-xs uppercase tracking-wide font-medium px-4 py-2.5 hover:bg-ink-soft transition-colors">Adaugă în coș</button>
+            </form>
+          <?php endif; ?>
+        <?php else: ?>
+          <p class="mt-1 text-sm font-medium text-ink-muted">La comandă</p>
+          <a href="<?= e(url('/contact?' . http_build_query(['produs' => $product['slug']]))) ?>" class="mt-3 inline-block w-full sm:w-auto bg-ink text-cream text-xs uppercase tracking-wide font-medium px-4 py-2.5 hover:bg-ink-soft text-center no-underline transition-colors">Adaugă în coș</a>
+        <?php endif; ?>
+        <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="inline-block mt-3 text-sm underline">Vezi produs</a>
+      </div>
+    </article>
+    <?php
+}
