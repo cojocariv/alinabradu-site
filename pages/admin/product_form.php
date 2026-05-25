@@ -4,8 +4,13 @@ require_once __DIR__ . '/../../models/ProductModel.php';
 require_once __DIR__ . '/../../models/CategoryModel.php';
 require_once __DIR__ . '/../../includes/admin_auth.php';
 require_once __DIR__ . '/../../includes/admin_upload.php';
+require_once __DIR__ . '/../../includes/shop_filter_config.php';
 
 adminRequireLogin();
+
+$shopFilterCfg = shopFilterConfig();
+$rochieSlug = $shopFilterCfg['rochie_slug'];
+$rochieSubcategories = $shopFilterCfg['subcategories'];
 
 $editId = isset($routeParams['id']) ? (int) $routeParams['id'] : null;
 $isNew = $editId === null || $editId < 1;
@@ -50,7 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = (float) $priceRaw;
     $catKey = (string) ($_POST['category_key'] ?? '');
     $newCategoryName = trim((string) ($_POST['new_category_name'] ?? ''));
-    $subName = trim((string) ($_POST['subcategory'] ?? ''));
+    $subSlugPost = trim((string) ($_POST['subcategory_slug'] ?? ''));
+    $subName = '';
+    $subSlug = null;
     $sizes = preg_replace('/\s+/', '', trim((string) ($_POST['sizes'] ?? '')));
     $urlsRaw = (string) ($_POST['image_urls'] ?? '');
     $featured = isset($_POST['featured_on_home']) ? 1 : 0;
@@ -115,7 +122,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $CATEGORIES[$catForProduct['slug']] = $catForProduct;
         }
         $cat = $catForProduct;
-        $subSlug = $subName !== '' ? slugify($subName) : null;
+        if ($cat['slug'] === $rochieSlug && $subSlugPost !== '') {
+            foreach ($rochieSubcategories as $subOpt) {
+                if ($subOpt['slug'] === $subSlugPost) {
+                    $subName = $subOpt['value'];
+                    $subSlug = $subOpt['slug'];
+                    break;
+                }
+            }
+            if ($subName === '') {
+                $errors[] = 'Subcategoria selectată nu este validă.';
+            }
+        }
 
         $row = [
             'name' => $name,
@@ -152,7 +170,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'price' => $price,
             'category' => $catForProduct !== null ? $catForProduct['name'] : ($CATEGORIES[$catKey]['name'] ?? ''),
             'category_slug' => $catForProduct !== null ? $catForProduct['slug'] : ($CATEGORIES[$catKey]['slug'] ?? ''),
-            'subcategory' => $subName,
+            'subcategory' => $subName !== '' ? $subName : null,
+            'subcategory_slug' => $subSlug,
             'size' => $sizes,
             'featured_on_home' => $featured,
             'home_sort' => $homeSort,
@@ -178,6 +197,30 @@ if ($errors && isset($_POST['category_key']) && isset($CATEGORIES[$_POST['catego
 $newCategoryInput = '';
 if ($errors && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $newCategoryInput = trim((string) ($_POST['new_category_name'] ?? ''));
+}
+
+$rochieCatKey = 'rochii';
+foreach ($CATEGORIES as $key => $c) {
+    if (($c['slug'] ?? '') === $rochieSlug) {
+        $rochieCatKey = (string) $key;
+        break;
+    }
+}
+
+$currentSubSlug = '';
+if ($product) {
+    $currentSubSlug = trim((string) ($product['subcategory_slug'] ?? ''));
+    if ($currentSubSlug === '' && !empty($product['subcategory'])) {
+        foreach ($rochieSubcategories as $subOpt) {
+            if ($subOpt['value'] === $product['subcategory']) {
+                $currentSubSlug = $subOpt['slug'];
+                break;
+            }
+        }
+    }
+}
+if ($errors && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+    $currentSubSlug = trim((string) ($_POST['subcategory_slug'] ?? ''));
 }
 ?><!doctype html>
 <html lang="ro">
@@ -235,9 +278,15 @@ if ($errors && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         <input type="text" name="new_category_name" value="<?= e($newCategoryInput) ?>" placeholder="Ex: Accesorii — lasă gol dacă ai ales categoria de mai sus" class="w-full border rounded px-3 py-2" autocomplete="off">
         <p class="text-xs text-zinc-500 mt-1">Dacă completezi, se salvează categoria în magazin și produsul este legat de ea (nu mai este folosită selecția de deasupra).</p>
       </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Subcategorie (opțional, ex. Colecția Dor)</label>
-        <input type="text" name="subcategory" value="<?= e($product['subcategory'] ?? '') ?>" class="w-full border rounded px-3 py-2">
+      <div id="subcategory-field" class="<?= ($currentCatKey === $rochieCatKey && $newCategoryInput === '') ? '' : 'hidden' ?>">
+        <label class="block text-sm font-medium mb-1" for="subcategory_slug">Subcategorie (colecție Rochie)</label>
+        <select name="subcategory_slug" id="subcategory_slug" class="w-full border rounded px-3 py-2">
+          <option value="">— fără subcategorie —</option>
+          <?php foreach ($rochieSubcategories as $subOpt): ?>
+            <option value="<?= e($subOpt['slug']) ?>" <?= $currentSubSlug === $subOpt['slug'] ? 'selected' : '' ?>><?= e($subOpt['label']) ?></option>
+          <?php endforeach; ?>
+        </select>
+        <p class="text-xs text-zinc-500 mt-1">Disponibil când categoria este „Rochie”.</p>
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Mărimi * (separate prin virgulă)</label>
@@ -274,5 +323,28 @@ if ($errors && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
       </div>
     </form>
   </main>
+  <script>
+    (function () {
+      const rochieKey = <?= json_encode($rochieCatKey, JSON_THROW_ON_ERROR) ?>;
+      const categorySelect = document.getElementById("category_key");
+      const newCategoryInput = document.querySelector('input[name="new_category_name"]');
+      const subField = document.getElementById("subcategory-field");
+
+      function toggleSubcategory() {
+        if (!subField || !categorySelect) return;
+        const isNewCat = newCategoryInput && newCategoryInput.value.trim() !== "";
+        const isRochie = !isNewCat && categorySelect.value === rochieKey;
+        subField.classList.toggle("hidden", !isRochie);
+        if (!isRochie) {
+          const subSelect = document.getElementById("subcategory_slug");
+          if (subSelect) subSelect.value = "";
+        }
+      }
+
+      if (categorySelect) categorySelect.addEventListener("change", toggleSubcategory);
+      if (newCategoryInput) newCategoryInput.addEventListener("input", toggleSubcategory);
+      toggleSubcategory();
+    })();
+  </script>
 </body>
 </html>
