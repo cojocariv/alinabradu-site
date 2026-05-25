@@ -28,4 +28,41 @@ document.addEventListener('DOMContentLoaded', () => {
       setOpen(false);
     });
   }
+
+  const scrollTopBtn = document.getElementById('scrollTopBtn');
+  if (scrollTopBtn) {
+    const showAfter = 320;
+
+    const updateScrollTop = () => {
+      const tallPage = document.documentElement.scrollHeight > window.innerHeight + 400;
+      const scrolled = window.scrollY > showAfter;
+      if (tallPage && scrolled) {
+        scrollTopBtn.removeAttribute('hidden');
+        scrollTopBtn.classList.add('is-visible');
+      } else {
+        scrollTopBtn.setAttribute('hidden', '');
+        scrollTopBtn.classList.remove('is-visible');
+      }
+    };
+
+    let scrollTicking = false;
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(() => {
+          updateScrollTop();
+          scrollTicking = false;
+        });
+      },
+      { passive: true }
+    );
+    window.addEventListener('resize', updateScrollTop);
+    updateScrollTop();
+
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
 });
