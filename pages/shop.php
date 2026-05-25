@@ -20,6 +20,20 @@ $selectedCategories = $shopParseList('category');
 $selectedSubSlugs = $shopParseList('subcategory');
 $selectedSizes = $shopParseList('size');
 
+$allowedSorts = ['name_asc', 'name_desc', 'price_asc', 'price_desc'];
+$selectedSort = trim((string) ($_GET['sort'] ?? ''));
+if (!in_array($selectedSort, $allowedSorts, true)) {
+    $selectedSort = '';
+}
+
+$shopSortOptions = [
+    '' => 'Aleatoriu',
+    'name_asc' => 'Nume A → Z',
+    'name_desc' => 'Nume Z → A',
+    'price_asc' => 'Preț crescător',
+    'price_desc' => 'Preț descrescător',
+];
+
 $selectedSubFilters = [];
 foreach ($rochieSubcategories as $sub) {
     if (in_array($sub['slug'], $selectedSubSlugs, true) || in_array($sub['value'], $selectedSubSlugs, true)) {
@@ -48,6 +62,7 @@ $filters = [
     'categories' => $selectedCategories,
     'subcategories' => $selectedSubFilters,
     'sizes' => $selectedSizes,
+    'sort' => $selectedSort,
 ];
 $shopPerPage = 9;
 $shopPage = max(1, (int) ($_GET['page'] ?? 1));
@@ -65,7 +80,7 @@ $products = array_slice($allProducts, 0, $visibleCount);
 $hasMoreProducts = $visibleCount < $totalProducts;
 $shopNextPage = $shopPage + 1;
 
-$shopPageUrl = static function (int $page) use ($selectedCategories, $selectedSubSlugs, $selectedSizes): string {
+$shopPageUrl = static function (int $page) use ($selectedCategories, $selectedSubSlugs, $selectedSizes, $selectedSort): string {
     $params = [];
     foreach ($selectedCategories as $cat) {
         $params['category'][] = $cat;
@@ -75,6 +90,9 @@ $shopPageUrl = static function (int $page) use ($selectedCategories, $selectedSu
     }
     foreach ($selectedSizes as $size) {
         $params['size'][] = $size;
+    }
+    if ($selectedSort !== '') {
+        $params['sort'] = $selectedSort;
     }
     if ($page > 1) {
         $params['page'] = (string) $page;
@@ -192,6 +210,19 @@ require __DIR__ . '/../includes/header.php';
           </ul>
         </fieldset>
 
+        <fieldset class="shop-filters__group shop-filters__group--sort">
+          <legend class="shop-filters__title">Sortare</legend>
+          <label class="shop-filters__select-label" for="shop-sort">Ordonează după</label>
+          <select name="sort" id="shop-sort" class="shop-filters__select">
+            <?php foreach ($shopSortOptions as $sortValue => $sortLabel): ?>
+              <option value="<?= e($sortValue) ?>" <?= $selectedSort === $sortValue ? 'selected' : '' ?>><?= e($sortLabel) ?></option>
+            <?php endforeach; ?>
+          </select>
+          <?php if ($selectedSort === ''): ?>
+            <p class="shop-filters__hint">Ordine aleatoare (implicit).</p>
+          <?php endif; ?>
+        </fieldset>
+
         <fieldset class="shop-filters__group shop-filters__group--sizes">
           <legend class="shop-filters__title">Mărime</legend>
           <ul class="shop-filters__list shop-filters__list--inline">
@@ -214,7 +245,7 @@ require __DIR__ . '/../includes/header.php';
           </ul>
         </fieldset>
 
-        <?php if ($selectedCategories !== [] || $selectedSubSlugs !== [] || $selectedSizes !== []): ?>
+        <?php if ($selectedCategories !== [] || $selectedSubSlugs !== [] || $selectedSizes !== [] || $selectedSort !== ''): ?>
           <p class="shop-filters__actions">
             <a href="<?= e(url('/magazin')) ?>" class="shop-filters__clear">Resetează filtrele</a>
           </p>
@@ -273,6 +304,11 @@ require __DIR__ . '/../includes/header.php';
         submitFilters();
       });
     });
+
+    const sortSelect = document.getElementById("shop-sort");
+    if (sortSelect) {
+      sortSelect.addEventListener("change", submitFilters);
+    }
 
     const loadMoreBtn = document.getElementById("shopLoadMore");
     const productGrid = document.getElementById("shopProductGrid");

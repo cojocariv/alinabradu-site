@@ -924,10 +924,41 @@ body {
   min-width: 0;
 }
 
+.shop-filters__group--sort,
 .shop-filters__group--sizes {
   margin-top: 1.5rem;
   padding-top: 1.25rem;
   border-top: 1px solid rgba(201, 169, 110, 0.25);
+}
+
+.shop-filters__select-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  margin-bottom: 0.4rem;
+}
+
+.shop-filters__select {
+  width: 100%;
+  border: 1px solid rgba(201, 169, 110, 0.45);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: #fff;
+}
+
+.shop-filters__select:focus {
+  outline: 2px solid rgba(201, 169, 110, 0.45);
+  outline-offset: 1px;
+}
+
+.shop-filters__hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
 }
 
 .shop-filters__title {

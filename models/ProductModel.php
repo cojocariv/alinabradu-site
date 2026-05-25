@@ -220,7 +220,72 @@ class ProductModel
             $stmt->bindValue($key, $value);
         }
         $stmt->execute();
-        return $stmt->fetchAll();
+        $rows = $stmt->fetchAll();
+
+        return self::sortShopProducts($rows, (string) ($filters['sort'] ?? ''), $filters);
+    }
+
+    /**
+     * Sortare magazin: nume, preț sau ordine aleatoare stabilă (per sesiune + filtre).
+     *
+     * @param array<string, mixed> $filterContext
+     */
+    private static function sortShopProducts(array $products, string $sort, array $filterContext): array
+    {
+        if ($products === []) {
+            return $products;
+        }
+
+        $sort = trim($sort);
+        switch ($sort) {
+            case 'name':
+            case 'name_asc':
+                usort($products, static fn (array $a, array $b): int => strcasecmp((string) $a['name'], (string) $b['name']));
+                return $products;
+            case 'name_desc':
+                usort($products, static fn (array $a, array $b): int => strcasecmp((string) $b['name'], (string) $a['name']));
+                return $products;
+            case 'price':
+            case 'price_asc':
+                usort($products, static fn (array $a, array $b): int => (float) $a['price'] <=> (float) $b['price']);
+                return $products;
+            case 'price_desc':
+                usort($products, static fn (array $a, array $b): int => (float) $b['price'] <=> (float) $a['price']);
+                return $products;
+            default:
+                return self::shuffleShopProductsStable($products, $filterContext);
+        }
+    }
+
+    /** @param array<string, mixed> $filterContext */
+    private static function shuffleShopProductsStable(array $products, array $filterContext): array
+    {
+        if (count($products) < 2) {
+            return $products;
+        }
+
+        $fingerprint = json_encode([
+            'categories' => $filterContext['categories'] ?? [],
+            'subcategories' => array_map(
+                static fn ($s) => is_array($s) ? ($s['slug'] ?? $s['value'] ?? '') : $s,
+                $filterContext['subcategories'] ?? []
+            ),
+            'sizes' => $filterContext['sizes'] ?? [],
+        ], JSON_THROW_ON_ERROR);
+
+        $sessionKey = 'shop_rand_' . md5($fingerprint);
+        if (empty($_SESSION[$sessionKey])) {
+            $_SESSION[$sessionKey] = random_int(1, 999_999_999);
+        }
+        $seed = (int) $_SESSION[$sessionKey];
+
+        usort($products, static function (array $a, array $b) use ($seed): int {
+            $ha = crc32((string) ($a['id'] ?? '') . '|' . $seed);
+            $hb = crc32((string) ($b['id'] ?? '') . '|' . $seed);
+            return $ha <=> $hb;
+        });
+
+        return $products;
     }
 
     public static function bySlug(string $slug): ?array
