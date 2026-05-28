@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $seo = [
     'title' => 'Contact - Alina Bradu',
-    'description' => 'Contactează atelierul Alina Bradu: email, telefon, adresă în Chișinău, program. Trimite-ne un mesaj din formular.',
+    'description' => 'Contactează fabrica de broderie Alina Bradu: email, telefon, adresă în Chișinău, program. Trimite-ne un mesaj din formular.',
 ];
 $stores = require __DIR__ . '/../config/stores.php';
 require_once __DIR__ . '/../config/google_maps.php';

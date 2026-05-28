@@ -10,7 +10,7 @@
         <a href="<?= e(url('/')) ?>" class="inline-block mb-4">
           <img src="https://alinabradupozestorage.blob.core.windows.net/poze/image-2-1.png" alt="Alina Bradu" class="h-9 w-auto brightness-0 invert opacity-90" loading="lazy">
         </a>
-        <p class="site-footer__tagline font-serif italic text-cream/80 text-lg leading-snug max-w-xs">Atelier boutique inspirat din portul tradițional moldovenesc.</p>
+        <p class="site-footer__tagline font-serif italic text-cream/80 text-lg leading-snug max-w-xs">Fabrica de broderie inspirat din portul tradițional moldovenesc.</p>
       </div>
       <div>
         <h3 class="site-footer__heading">Navigare</h3>

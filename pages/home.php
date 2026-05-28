@@ -22,7 +22,7 @@ require __DIR__ . '/../includes/header.php';
 <section class="home-hero" aria-label="Colecția Alina Bradu">
   <div class="home-hero__inner max-w-7xl mx-auto">
     <div class="home-hero__content">
-      <p class="home-hero__eyebrow">Atelier boutique · Moldova</p>
+      <p class="home-hero__eyebrow">Cea mai mare fabrică de broderie din Moldova</p>
       <h1 class="home-hero__title">Eleganță tradițională, <em>reinterpretată</em> cu rafinament</h1>
       <p class="home-hero__lead">Piese create manual, cu broderie care poartă amprenta meșteșugului moldovenesc — pentru femeia care alege autenticitatea, nu trendul.</p>
       <div class="home-hero__actions">
@@ -47,7 +47,6 @@ require __DIR__ . '/../includes/header.php';
     <span class="home-marquee__dot" aria-hidden="true">◆</span>
     <span class="home-marquee__text">Tradiție &amp; contemporan</span>
     <span class="home-marquee__dot" aria-hidden="true">◆</span>
-    <span class="home-marquee__text">Atelier Chișinău</span>
     <span class="home-marquee__dot" aria-hidden="true">◆</span>
     <span class="home-marquee__text">Modă moldovenească de autor</span>
     <span class="home-marquee__dot" aria-hidden="true">◆</span>
@@ -59,7 +58,6 @@ require __DIR__ . '/../includes/header.php';
     <span class="home-marquee__dot" aria-hidden="true">◆</span>
     <span class="home-marquee__text">Tradiție &amp; contemporan</span>
     <span class="home-marquee__dot" aria-hidden="true">◆</span>
-    <span class="home-marquee__text">Atelier Chișinău</span>
     <span class="home-marquee__dot" aria-hidden="true">◆</span>
     <span class="home-marquee__text">Modă moldovenească de autor</span>
     <span class="home-marquee__dot" aria-hidden="true">◆</span>
@@ -69,7 +67,7 @@ require __DIR__ . '/../includes/header.php';
 <section class="home-products" aria-labelledby="home-products-title">
   <div class="max-w-7xl mx-auto px-4 md:px-6">
     <header class="home-section-head">
-      <p class="home-section-head__eyebrow">Noutăți din atelier</p>
+      <p class="home-section-head__eyebrow">Noutăți din fabrică</p>
       <h2 id="home-products-title" class="home-section-head__title">Selecție <em>curată</em></h2>
       <a href="<?= e(url('/magazin')) ?>" class="home-section-head__link">Vezi magazinul →</a>
     </header>
@@ -144,7 +142,7 @@ require __DIR__ . '/../includes/header.php';
       <header class="home-contact__header">
         <p class="home-contact__eyebrow">Contact</p>
         <h2 id="home-contact-title" class="home-contact__title">Suntem aici pentru <em>consultații</em> și comenzi</h2>
-        <p class="home-contact__lead">Programează o vizită la atelier, întreabă despre mărimi sau comenzi personalizate — răspundem cu grijă, ca într-o casă de modă.</p>
+        <p class="home-contact__lead">Programează o vizită la fabrică, întreabă despre mărimi sau comenzi personalizate — răspundem cu grijă, ca într-o casă de modă.</p>
       </header>
       <div class="home-contact__channels">
         <a href="tel:<?= e(SITE_PHONE_TEL) ?>" class="home-contact__channel">
