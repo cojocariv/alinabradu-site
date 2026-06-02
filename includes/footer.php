@@ -34,28 +34,40 @@
   $viberUrl = 'viber://chat?number=%2B' . $chatPhone;
   ?>
   <div class="chat-fab" aria-label="Contact rapid">
-    <a
-      href="<?= e($whatsAppUrl) ?>"
-      class="chat-fab__btn chat-fab__btn--whatsapp"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Chat WhatsApp"
-      title="Scrie pe WhatsApp"
+    <button
+      type="button"
+      class="chat-fab__trigger"
+      aria-label="Deschide opțiuni chat"
+      title="Chat rapid"
     >
-      <span class="chat-fab__icon" aria-hidden="true">W</span>
-      <span class="chat-fab__label">WhatsApp</span>
-    </a>
-    <a
-      href="<?= e($viberUrl) ?>"
-      class="chat-fab__btn chat-fab__btn--viber"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Chat Viber"
-      title="Scrie pe Viber"
-    >
-      <span class="chat-fab__icon" aria-hidden="true">V</span>
-      <span class="chat-fab__label">Viber</span>
-    </a>
+      <span class="chat-fab__trigger-icon" aria-hidden="true">💬</span>
+    </button>
+    <div class="chat-fab__menu" role="menu" aria-label="Alege aplicația de chat">
+      <a
+        href="<?= e($whatsAppUrl) ?>"
+        class="chat-fab__btn chat-fab__btn--whatsapp"
+        target="_blank"
+        rel="noopener noreferrer"
+        role="menuitem"
+        aria-label="Chat WhatsApp"
+        title="Scrie pe WhatsApp"
+      >
+        <span class="chat-fab__icon" aria-hidden="true">W</span>
+        <span class="chat-fab__label">WhatsApp</span>
+      </a>
+      <a
+        href="<?= e($viberUrl) ?>"
+        class="chat-fab__btn chat-fab__btn--viber"
+        target="_blank"
+        rel="noopener noreferrer"
+        role="menuitem"
+        aria-label="Chat Viber"
+        title="Scrie pe Viber"
+      >
+        <span class="chat-fab__icon" aria-hidden="true">V</span>
+        <span class="chat-fab__label">Viber</span>
+      </a>
+    </div>
   </div>
   <button
     type="button"
