@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-12 md:py-14 grid md:grid-cols-2 gap-10">
       <div>
         <a href="<?= e(url('/')) ?>" class="inline-block mb-4">
-          <img src="https://alinabradupozestorage.blob.core.windows.net/poze/image-2-1.png" alt="Alina Bradu" class="h-9 w-auto brightness-0 invert opacity-90" loading="lazy">
+          <img src="https://alinabradupozestorage.blob.core.windows.net/poze/image-2-1.png" alt="Alina Bradu" class="h-9 md:h-10 w-auto opacity-95" loading="lazy">
         </a>
         <p class="site-footer__tagline font-serif italic text-cream/80 text-lg leading-snug max-w-xs">Fabrica de broderie inspirat din portul tradițional moldovenesc.</p>
       </div>
