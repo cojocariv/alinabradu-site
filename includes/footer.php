@@ -10,7 +10,7 @@
       <div>
         <h3 class="site-footer__heading">Navigare</h3>
         <ul class="site-footer__links">
-          <li><a href="<?= e(url('/magazin')) ?>">Magazin</a></li>
+          <li><a href="<?= e(url('/magazin')) ?>">Catalog</a></li>
           <li><a href="<?= e(url('/despre-noi')) ?>">Despre noi</a></li>
           <li><a href="<?= e(url('/contact')) ?>">Contact</a></li>
           <li><a href="<?= e(url('/cos')) ?>">Coș</a></li>
