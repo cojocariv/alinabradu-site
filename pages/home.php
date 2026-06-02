@@ -8,7 +8,7 @@ if (count($products) === 0) {
 }
 $featuredProduct = $products[0] ?? null;
 $gridProducts = $featuredProduct ? array_slice($products, 1, 5) : [];
-$heroImage = 'https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png';
+$heroVideoId = 'sRy1nbNMFrQ';
 $seo = [
     'title' => 'Alina Bradu — Creație cu accent',
     'description' => 'Modă moldovenească de autor: broderie artizanală, colecții boutique și piese care îmbină tradiția cu eleganța contemporană.',
@@ -28,8 +28,17 @@ require __DIR__ . '/../includes/header.php';
       </div>
     </div>
     <div class="home-hero__separator" aria-hidden="true"></div>
-    <div class="home-hero__visual">
-      <img src="<?= e($heroImage) ?>" alt="Colecție Alina Bradu" class="home-hero__image" fetchpriority="high" width="900" height="1100">
+    <div class="home-hero__visual" aria-hidden="true">
+      <div class="home-hero__video-wrap">
+        <iframe
+          class="home-hero__video"
+          src="https://www.youtube-nocookie.com/embed/<?= e($heroVideoId) ?>?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=<?= e($heroVideoId) ?>&amp;controls=0&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3"
+          title="Alina Bradu — broderie tradițională"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          loading="lazy"
+        ></iframe>
+      </div>
     </div>
   </div>
 </section>
