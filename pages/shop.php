@@ -149,7 +149,7 @@ require __DIR__ . '/../includes/header.php';
 ?>
 <section class="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-12">
   <p class="text-[0.65rem] uppercase tracking-boutique text-gold font-medium mb-2">Colecții</p>
-  <h1 class="font-serif text-4xl md:text-5xl text-ink mb-8 font-medium tracking-tight">Magazin</h1>
+  <h1 class="font-serif text-4xl md:text-5xl text-ink mb-8 font-medium tracking-tight">Shop</h1>
 
   <?php if ($shopLoadError !== null): ?>
     <p class="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">Listă temporar indisponibilă (<?= e($shopLoadError) ?>). Încearcă reîncărcarea paginii.</p>
