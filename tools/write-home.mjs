@@ -94,7 +94,7 @@ require __DIR__ . '/../includes/header.php';
   <${d} class="max-w-7xl mx-auto px-4 md:px-6">
     <header class="home-section-head">
       <p class="home-section-head__eyebrow">Noutăți din atelier</p>
-      <h2 id="home-products-title" class="home-section-head__title">Selecție <em>curată</em></h2>
+      <h2 id="home-products-title" class="home-section-head__title">Top <em>produse</em></h2>
       <a href="<?= e(url('/magazin')) ?>" class="home-section-head__link">Vezi magazinul →</a>
     </header>
     <?php if ($featuredProduct || count($gridProducts) > 0): ?>

@@ -65,7 +65,7 @@ $orgSchema = [
       <div class="flex items-center gap-2 md:gap-5">
         <nav class="header-nav hidden md:flex items-center gap-7 text-[0.7rem] uppercase tracking-boutique font-medium" aria-label="Meniu principal">
           <a href="<?= e(url('/')) ?>" class="header-nav__link">Acasă</a>
-          <a href="<?= e(url('/magazin')) ?>" class="header-nav__link">Magazin</a>
+          <a href="<?= e(url('/magazin')) ?>" class="header-nav__link">Catalog</a>
           <a href="<?= e(url('/despre-noi')) ?>" class="header-nav__link">Despre noi</a>
           <a href="<?= e(url('/contact')) ?>" class="header-nav__link">Contact</a>
           <a href="<?= e(url('/cos')) ?>" class="header-nav__link">Coș <span class="text-gold">(<?= cartItemsCount() ?>)</span></a>
