@@ -74,7 +74,7 @@ require __DIR__ . '/../includes/header.php';
           <div class="mt-3 flex items-center gap-3">
             <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="inline-block text-sm underline">Vezi produs</a>
             <a
-              href="<?= e($whatsAppUrl) ?>"
+              href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Comandă pe WhatsApp"

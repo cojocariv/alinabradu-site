@@ -133,7 +133,7 @@ $productSchema = [
       <div class="flex flex-wrap items-center gap-3">
         <button type="submit" class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700">Adaugă în coș</button>
         <a
-          href="<?= e($whatsAppUrl) ?>"
+          href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex items-center gap-2 border border-[#25D366]/45 text-[#25D366] px-4 py-3 rounded hover:bg-[#25D366]/10 transition-colors"
@@ -162,7 +162,7 @@ $productSchema = [
       <div class="flex flex-wrap items-center gap-3">
         <button type="submit" class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700">Adaugă în coș</button>
         <a
-          href="<?= e($whatsAppUrl) ?>"
+          href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex items-center gap-2 border border-[#25D366]/45 text-[#25D366] px-4 py-3 rounded hover:bg-[#25D366]/10 transition-colors"

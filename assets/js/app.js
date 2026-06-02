@@ -65,4 +65,33 @@ document.addEventListener('DOMContentLoaded', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
+
+  document.querySelectorAll('a[data-whatsapp-popup="1"]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href') || '';
+      if (!href) return;
+      e.preventDefault();
+
+      const popupWidth = 520;
+      const popupHeight = 760;
+      const dualLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+      const dualTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
+      const winWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
+      const winHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+      const left = Math.max(0, Math.floor(dualLeft + (winWidth - popupWidth) / 2));
+      const top = Math.max(0, Math.floor(dualTop + (winHeight - popupHeight) / 2));
+
+      const popup = window.open(
+        href,
+        'whatsappPopup',
+        `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`
+      );
+
+      if (!popup) {
+        window.open(href, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      popup.focus();
+    });
+  });
 });

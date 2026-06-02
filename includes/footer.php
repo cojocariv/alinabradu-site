@@ -44,7 +44,7 @@
     </button>
     <div class="chat-fab__menu" role="menu" aria-label="Alege aplicația de chat">
       <a
-        href="<?= e($whatsAppUrl) ?>"
+        href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"
         class="chat-fab__btn chat-fab__btn--whatsapp"
         target="_blank"
         rel="noopener noreferrer"
