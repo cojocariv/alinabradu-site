@@ -1,9 +1,6 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
-if (!defined('SITE_EMAIL')) {
-    require_once __DIR__ . '/../config/contact.php';
-}
 $headerOverlay = true;
 $products = ProductModel::featuredHome(12);
 if (count($products) === 0) {
@@ -132,36 +129,6 @@ require __DIR__ . '/../includes/header.php';
           <span class="home-about__stat-label">cea mai mare fabrică de broderie</span>
         </li>
       </ul>
-    </div>
-  </div>
-</section>
-
-<section class="home-contact" aria-labelledby="home-contact-title">
-  <div class="max-w-7xl mx-auto px-4 md:px-6">
-    <div class="home-contact__inner">
-      <header class="home-contact__header">
-        <p class="home-contact__eyebrow">Contact</p>
-        <h2 id="home-contact-title" class="home-contact__title">Suntem aici pentru <em>consultații</em> și comenzi</h2>
-        <p class="home-contact__lead">Programează o vizită la fabrică, întreabă despre mărimi sau comenzi personalizate — răspundem cu grijă, ca într-o casă de modă.</p>
-      </header>
-      <div class="home-contact__channels">
-        <a href="tel:<?= e(SITE_PHONE_TEL) ?>" class="home-contact__channel">
-          <span class="home-contact__channel-label">Telefon</span>
-          <span class="home-contact__channel-value"><?= e(SITE_PHONE_DISPLAY) ?></span>
-        </a>
-        <a href="mailto:<?= e(SITE_EMAIL) ?>" class="home-contact__channel">
-          <span class="home-contact__channel-label">Email</span>
-          <span class="home-contact__channel-value"><?= e(SITE_EMAIL) ?></span>
-        </a>
-        <a href="https://api.whatsapp.com/send?phone=37368693056" target="_blank" rel="noopener noreferrer" class="home-contact__channel">
-          <span class="home-contact__channel-label">WhatsApp</span>
-          <span class="home-contact__channel-value">Scrie-ne acum</span>
-        </a>
-      </div>
-      <div class="home-contact__actions">
-        <a href="<?= e(url('/contact')) ?>" class="btn btn--light">Formular de contact</a>
-        <a href="<?= e(url('/magazin')) ?>" class="btn btn--ghost-light">Explorează magazinul</a>
-      </div>
     </div>
   </div>
 </section>
