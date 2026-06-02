@@ -2,6 +2,7 @@
 declare(strict_types=1);
 $headerOverlay = $headerOverlay ?? false;
 $bodyClass = $bodyClass ?? '';
+$headPreloadVideo = $headPreloadVideo ?? '';
 $seo = mergeSeo($seo ?? []);
 $orgSchema = [
     '@context' => 'https://schema.org',
@@ -53,7 +54,10 @@ $orgSchema = [
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="<?= e(url('/assets/css/custom.css')) ?>?v=8">
+  <?php if ($headPreloadVideo !== ''): ?>
+  <link rel="preload" href="<?= e($headPreloadVideo) ?>" as="video" type="video/mp4">
+  <?php endif; ?>
+  <link rel="stylesheet" href="<?= e(url('/assets/css/custom.css')) ?>?v=9">
   <script>document.documentElement.classList.add('js');</script>
   <script type="application/ld+json"><?= json_encode($orgSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?></script>
 </head>

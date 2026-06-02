@@ -312,6 +312,10 @@ body {
 }
 
 /* Acasă: video fix pe viewport, conținutul face scroll deasupra */
+.page-home {
+  background: var(--ink);
+}
+
 .page-home .home-hero__bg {
   position: fixed;
   inset: 0;
@@ -369,6 +373,14 @@ body {
   object-position: center;
   transform: translate(-50%, -50%);
   pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.home-hero__video-wrap.is-ready .home-hero__video-native {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.35s ease;
 }
 
 .home-hero__scrim {
