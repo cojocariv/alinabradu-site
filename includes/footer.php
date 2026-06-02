@@ -23,6 +23,40 @@
       </p>
     </div>
   </footer>
+  <?php
+  if (!defined('SITE_PHONE_TEL')) {
+      require_once __DIR__ . '/../config/contact.php';
+  }
+  $chatPhoneRaw = preg_replace('/\D+/', '', (string) SITE_PHONE_TEL) ?? '';
+  $chatPhone = ltrim($chatPhoneRaw, '+');
+  $chatMessage = rawurlencode('Bună! Aș dori mai multe detalii despre produse.');
+  $whatsAppUrl = 'https://wa.me/' . $chatPhone . '?text=' . $chatMessage;
+  $viberUrl = 'viber://chat?number=%2B' . $chatPhone;
+  ?>
+  <div class="chat-fab" aria-label="Contact rapid">
+    <a
+      href="<?= e($whatsAppUrl) ?>"
+      class="chat-fab__btn chat-fab__btn--whatsapp"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat WhatsApp"
+      title="Scrie pe WhatsApp"
+    >
+      <span class="chat-fab__icon" aria-hidden="true">W</span>
+      <span class="chat-fab__label">WhatsApp</span>
+    </a>
+    <a
+      href="<?= e($viberUrl) ?>"
+      class="chat-fab__btn chat-fab__btn--viber"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat Viber"
+      title="Scrie pe Viber"
+    >
+      <span class="chat-fab__icon" aria-hidden="true">V</span>
+      <span class="chat-fab__label">Viber</span>
+    </a>
+  </div>
   <button
     type="button"
     class="scroll-top"

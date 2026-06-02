@@ -1163,6 +1163,58 @@ p.product-title {
 }
 
 /* —— Scroll to top —— */
+.chat-fab {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 1.5rem;
+  z-index: 91;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.chat-fab__btn {
+  min-width: 9.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.62rem 0.8rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  box-shadow: 0 10px 24px rgba(26, 20, 16, 0.28);
+  transition: transform 0.2s var(--ease-out), filter 0.2s var(--ease-out);
+}
+
+.chat-fab__btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.chat-fab__icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.chat-fab__btn--whatsapp {
+  background: #25d366;
+}
+
+.chat-fab__btn--viber {
+  background: #7360f2;
+}
+
 .scroll-top {
   position: fixed;
   right: 1.25rem;
@@ -1212,6 +1264,17 @@ p.product-title {
 }
 
 @media (max-width: 640px) {
+  .chat-fab {
+    left: 1rem;
+    bottom: 1rem;
+  }
+
+  .chat-fab__btn {
+    min-width: 8.9rem;
+    padding: 0.58rem 0.72rem;
+    font-size: 0.74rem;
+  }
+
   .scroll-top {
     right: 1rem;
     bottom: 1rem;
@@ -1228,7 +1291,7 @@ p.product-title {
 
   .btn:hover,
   .home-products__card:hover,
-  .home-contact__channel:hover {
+  .chat-fab__btn:hover {
     transform: none;
   }
 
