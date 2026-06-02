@@ -6,6 +6,9 @@ declare(strict_types=1);
  */
 function renderShopProductCard(array $product): void
 {
+    if (!defined('SITE_PHONE_TEL')) {
+        require_once __DIR__ . '/../config/contact.php';
+    }
     $imgUrl = ProductModel::getPrimaryImageUrl($product);
     $galleryUrls = ProductModel::getImageUrls((int) $product['id']);
     $hoverImgUrl = null;
@@ -19,6 +22,17 @@ function renderShopProductCard(array $product): void
     $inStock = (int) ($product['in_stock'] ?? 1) === 1;
     $sizesList = array_filter(array_map('trim', explode(',', (string) $product['size'])));
     $firstSize = $sizesList[0] ?? '';
+    $phone = preg_replace('/\D+/', '', (string) SITE_PHONE_TEL) ?? '';
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host = (string) ($_SERVER['HTTP_HOST'] ?? '');
+    $productPath = url('/produs/' . $product['slug']);
+    $productUrl = $host !== '' ? ($scheme . '://' . $host . $productPath) : $productPath;
+    $whatsAppText = rawurlencode(
+        "Bună! Doresc să comand produsul \"{$product['name']}\".\n" .
+        "Link produs: {$productUrl}\n" .
+        "Poză produs: {$imgUrl}"
+    );
+    $whatsAppUrl = 'https://wa.me/' . $phone . '?text=' . $whatsAppText;
     ?>
     <article class="bg-white overflow-hidden border border-gold/30 card-hover">
       <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="block bg-cream">
@@ -46,7 +60,17 @@ function renderShopProductCard(array $product): void
           <p class="mt-1 text-sm font-medium text-ink-muted">La comandă</p>
           <a href="<?= e(url('/contact?' . http_build_query(['produs' => $product['slug']]))) ?>" class="mt-3 inline-block w-full sm:w-auto bg-ink text-cream text-xs uppercase tracking-wide font-medium px-4 py-2.5 hover:bg-ink-soft text-center no-underline transition-colors">Adaugă în coș</a>
         <?php endif; ?>
-        <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="inline-block mt-3 text-sm underline">Vezi produs</a>
+        <div class="mt-3 flex items-center gap-3">
+          <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="inline-block text-sm underline">Vezi produs</a>
+          <a
+            href="<?= e($whatsAppUrl) ?>"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Comandă pe WhatsApp"
+            title="Comandă pe WhatsApp"
+            class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-[#25D366]/45 text-[#25D366] hover:bg-[#25D366]/10 transition-colors"
+          >W</a>
+        </div>
       </div>
     </article>
     <?php

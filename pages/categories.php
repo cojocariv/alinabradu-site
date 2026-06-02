@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
+if (!defined('SITE_PHONE_TEL')) {
+    require_once __DIR__ . '/../config/contact.php';
+}
 
 $category = $routeParams['category'] ?? '';
 $subcategory = $routeParams['subcategory'] ?? null;
@@ -30,6 +33,17 @@ require __DIR__ . '/../includes/header.php';
       $inStock = (int) ($product['in_stock'] ?? 1) === 1;
       $sizesList = array_filter(array_map('trim', explode(',', (string) $product['size'])));
       $firstSize = $sizesList[0] ?? '';
+      $phone = preg_replace('/\D+/', '', (string) SITE_PHONE_TEL) ?? '';
+      $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+      $host = (string) ($_SERVER['HTTP_HOST'] ?? '');
+      $productPath = url('/produs/' . $product['slug']);
+      $productUrl = $host !== '' ? ($scheme . '://' . $host . $productPath) : $productPath;
+      $whatsAppText = rawurlencode(
+          "Bună! Doresc să comand produsul \"{$product['name']}\".\n" .
+          "Link produs: {$productUrl}\n" .
+          "Poză produs: {$imgUrl}"
+      );
+      $whatsAppUrl = 'https://wa.me/' . $phone . '?text=' . $whatsAppText;
       ?>
       <article class="bg-[#fffaf2] rounded-lg overflow-hidden shadow-sm border border-[#eadfc9] card-hover">
         <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="block bg-[#fffaf2]">
@@ -57,7 +71,17 @@ require __DIR__ . '/../includes/header.php';
             <p class="mt-1 text-sm font-medium text-zinc-500">La comanda</p>
             <a href="<?= e(url('/contact?' . http_build_query(['produs' => $product['slug']]))) ?>" class="mt-3 inline-block w-full sm:w-auto bg-zinc-900 text-white text-sm px-4 py-2 rounded hover:bg-zinc-800 text-center no-underline">Adaugă în coș</a>
           <?php endif; ?>
-          <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="inline-block mt-3 text-sm underline">Vezi produs</a>
+          <div class="mt-3 flex items-center gap-3">
+            <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="inline-block text-sm underline">Vezi produs</a>
+            <a
+              href="<?= e($whatsAppUrl) ?>"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Comandă pe WhatsApp"
+              title="Comandă pe WhatsApp"
+              class="inline-flex items-center justify-center w-8 h-8 rounded-full border border-[#25D366]/45 text-[#25D366] hover:bg-[#25D366]/10 transition-colors"
+            >W</a>
+          </div>
         </div>
       </article>
     <?php endforeach; ?>
