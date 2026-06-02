@@ -311,6 +311,39 @@ body {
   background: var(--ink);
 }
 
+/* Acasă: video fix pe viewport, conținutul face scroll deasupra */
+.page-home .home-hero__bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+}
+
+.page-home .home-hero {
+  z-index: 1;
+  background: transparent;
+  overflow: visible;
+}
+
+.page-home .home-marquee,
+.page-home .home-products,
+.page-home .home-about,
+.page-home .site-footer {
+  position: relative;
+  z-index: 2;
+}
+
+.page-home .home-products,
+.page-home .home-about {
+  background: var(--cream);
+}
+
+.page-home .home-hero__video-wrap {
+  transform: translateZ(0);
+}
+
 .home-hero__bg {
   position: absolute;
   inset: 0;

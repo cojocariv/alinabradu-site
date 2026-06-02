@@ -29,6 +29,7 @@ if (!defined('SITE_EMAIL')) {
     require_once __DIR__ . '/../config/contact.php';
 }
 $headerOverlay = true;
+$bodyClass = 'page-home';
 $products = ProductModel::featuredHome(12);
 if (count($products) === 0) {
     $products = ProductModel::featured(8);

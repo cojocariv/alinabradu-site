@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 $headerOverlay = $headerOverlay ?? false;
+$bodyClass = $bodyClass ?? '';
 $seo = mergeSeo($seo ?? []);
 $orgSchema = [
     '@context' => 'https://schema.org',
@@ -52,11 +53,11 @@ $orgSchema = [
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="<?= e(url('/assets/css/custom.css')) ?>?v=7">
+  <link rel="stylesheet" href="<?= e(url('/assets/css/custom.css')) ?>?v=8">
   <script>document.documentElement.classList.add('js');</script>
   <script type="application/ld+json"><?= json_encode($orgSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?></script>
 </head>
-<body class="bg-cream text-ink font-sans antialiased">
+<body class="bg-cream text-ink font-sans antialiased<?= $bodyClass !== '' ? ' ' . e($bodyClass) : '' ?>">
   <header class="site-header <?= $headerOverlay ? 'site-header--overlay' : 'site-header--solid' ?>">
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-3.5 flex items-center justify-between gap-3">
       <a href="<?= e(url('/')) ?>" class="site-header__logo shrink-0">

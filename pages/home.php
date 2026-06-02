@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/../models/ProductModel.php';
 $headerOverlay = true;
+$bodyClass = 'page-home';
 $products = ProductModel::featuredHome(12);
 if (count($products) === 0) {
     $products = ProductModel::featured(8);
