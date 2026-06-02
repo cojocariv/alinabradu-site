@@ -18,15 +18,12 @@ require __DIR__ . '/../includes/header.php';
 
 <section class="home-hero" aria-label="Colecția Alina Bradu">
   <div class="home-hero__bg" aria-hidden="true">
-    <div class="home-hero__video-wrap">
-      <iframe
-        class="home-hero__video"
-        src="https://www.youtube-nocookie.com/embed/<?= e($heroVideoId) ?>?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=<?= e($heroVideoId) ?>&amp;controls=0&amp;disablekb=1&amp;fs=0&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3&amp;cc_load_policy=0"
-        title=""
-        tabindex="-1"
-        allow="autoplay; encrypted-media"
-        referrerpolicy="strict-origin-when-cross-origin"
-      ></iframe>
+    <div
+      class="home-hero__video-wrap is-loading"
+      data-home-hero-video
+      data-video-id="<?= e($heroVideoId) ?>"
+    >
+      <div id="homeHeroVideoPlayer" class="home-hero__video-target"></div>
       <div class="home-hero__video-shield" aria-hidden="true"></div>
     </div>
     <div class="home-hero__scrim"></div>

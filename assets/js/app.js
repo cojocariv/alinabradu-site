@@ -94,4 +94,90 @@ document.addEventListener('DOMContentLoaded', () => {
       popup.focus();
     });
   });
+
+  initHomeHeroVideo();
 });
+
+function initHomeHeroVideo() {
+  const wrap = document.querySelector('[data-home-hero-video]');
+  if (!wrap || wrap.dataset.heroVideoInit === '1') return;
+
+  const videoId = wrap.getAttribute('data-video-id') || '';
+  const mountId = 'homeHeroVideoPlayer';
+  if (!videoId || !document.getElementById(mountId)) return;
+
+  wrap.dataset.heroVideoInit = '1';
+
+  const markPlaying = () => {
+    wrap.classList.add('is-playing');
+    wrap.classList.remove('is-loading');
+  };
+
+  const createPlayer = () => {
+    if (typeof YT === 'undefined' || !YT.Player) return;
+
+    new YT.Player(mountId, {
+      videoId,
+      host: 'https://www.youtube-nocookie.com',
+      width: '100%',
+      height: '100%',
+      playerVars: {
+        autoplay: 1,
+        mute: 1,
+        controls: 0,
+        disablekb: 1,
+        fs: 0,
+        playsinline: 1,
+        rel: 0,
+        modestbranding: 1,
+        iv_load_policy: 3,
+        cc_load_policy: 0,
+        enablejsapi: 1,
+        origin: window.location.origin,
+      },
+      events: {
+        onReady(event) {
+          event.target.mute();
+          event.target.playVideo();
+        },
+        onStateChange(event) {
+          if (event.data === YT.PlayerState.PLAYING) {
+            markPlaying();
+          } else if (event.data === YT.PlayerState.ENDED) {
+            event.target.seekTo(0, true);
+            event.target.playVideo();
+          } else if (event.data === YT.PlayerState.PAUSED) {
+            event.target.playVideo();
+          }
+        },
+      },
+    });
+  };
+
+  const bootApi = () => {
+    if (window.YT && window.YT.Player) {
+      createPlayer();
+      return;
+    }
+
+    const prevReady = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      if (typeof prevReady === 'function') prevReady();
+      createPlayer();
+    };
+
+    if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+    }
+  };
+
+  bootApi();
+
+  window.setTimeout(() => {
+    if (!wrap.classList.contains('is-playing')) {
+      markPlaying();
+    }
+  }, 5000);
+}
