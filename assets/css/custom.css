@@ -324,7 +324,7 @@ body {
   background: var(--ink);
 }
 
-.home-hero__video-target {
+.home-hero__video-native {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -332,35 +332,10 @@ body {
   height: 100vh;
   min-width: 100%;
   min-height: 100%;
-  transform: translate(-50%, -50%) scale(1.18);
+  object-fit: cover;
+  object-position: center;
+  transform: translate(-50%, -50%);
   pointer-events: none;
-}
-
-.home-hero__video-target iframe {
-  width: 100% !important;
-  height: 100% !important;
-  border: 0;
-  pointer-events: none;
-}
-
-/* Hide player until playing so YouTube chrome never flashes on load */
-.home-hero__video-wrap.is-loading .home-hero__video-target {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.home-hero__video-wrap.is-playing .home-hero__video-target {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.5s ease;
-}
-
-/* Blocks hover/click so YouTube chrome (play, logo) never appears */
-.home-hero__video-shield {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  cursor: default;
 }
 
 .home-hero__scrim {

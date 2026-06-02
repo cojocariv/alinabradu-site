@@ -35,7 +35,8 @@ if (count($products) === 0) {
 }
 $featuredProduct = $products[0] ?? null;
 $gridProducts = $featuredProduct ? array_slice($products, 1, 5) : [];
-$heroVideoId = 'sRy1nbNMFrQ';
+require_once __DIR__ . '/../includes/home_hero_config.php';
+$heroVideo = homeHeroVideoConfig();
 $seo = [
     'title' => 'Alina Bradu — Creație cu accent',
     'description' => 'Modă moldovenească de autor: broderie artizanală, colecții boutique și piese care îmbină tradiția cu eleganța contemporană.',
@@ -45,13 +46,21 @@ require __DIR__ . '/../includes/header.php';
 
 <${sec} class="home-hero" aria-label="Colecția Alina Bradu">
   <${d} class="home-hero__bg" aria-hidden="true">
-    <${d}
-      class="home-hero__video-wrap is-loading"
-      data-home-hero-video
-      data-video-id="<?= e($heroVideoId) ?>"
-    >
-      <${d} id="homeHeroVideoPlayer" class="home-hero__video-target"></${d}>
-      <${d} class="home-hero__video-shield" aria-hidden="true"></${d}>
+    <${d} class="home-hero__video-wrap">
+      <video
+        class="home-hero__video-native"
+        autoplay
+        muted
+        loop
+        playsinline
+        disablepictureinpicture
+        disableremoteplayback
+        preload="auto"
+        poster="<?= e($heroVideo['poster']) ?>"
+        aria-hidden="true"
+      >
+        <source src="<?= e($heroVideo['mp4']) ?>" type="video/mp4">
+      </video>
     </${d}>
     <${d} class="home-hero__scrim"></${d}>
   </${d}>
