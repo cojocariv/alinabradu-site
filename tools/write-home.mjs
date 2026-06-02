@@ -44,6 +44,18 @@ require __DIR__ . '/../includes/header.php';
 ?>
 
 <${sec} class="home-hero" aria-label="Colecția Alina Bradu">
+  <${d} class="home-hero__bg" aria-hidden="true">
+    <${d} class="home-hero__video-wrap">
+      <iframe
+        class="home-hero__video"
+        src="https://www.youtube-nocookie.com/embed/<?= e($heroVideoId) ?>?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=<?= e($heroVideoId) ?>&amp;controls=0&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3"
+        title="Alina Bradu — broderie tradițională"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+      ></iframe>
+    </${d}>
+    <${d} class="home-hero__scrim"></${d}>
+  </${d}>
   <${d} class="home-hero__inner max-w-7xl mx-auto">
     <${d} class="home-hero__content">
       <p class="home-hero__eyebrow">Atelier boutique · Moldova</p>
@@ -51,20 +63,7 @@ require __DIR__ . '/../includes/header.php';
       <p class="home-hero__lead">Piese create manual, cu broderie care poartă amprenta meșteșugului moldovenesc — pentru femeia care alege autenticitatea, nu trendul.</p>
       <${d} class="home-hero__actions">
         <a href="<?= e(url('/magazin')) ?>" class="btn btn--primary">Descoperă colecțiile</a>
-        <a href="<?= e(url('/despre-noi')) ?>" class="btn btn--ghost">Povestea brandului</a>
-      </${d}>
-    </${d}>
-    <${d} class="home-hero__separator" aria-hidden="true"></${d}>
-    <${d} class="home-hero__visual" aria-hidden="true">
-      <${d} class="home-hero__video-wrap">
-        <iframe
-          class="home-hero__video"
-          src="https://www.youtube-nocookie.com/embed/<?= e($heroVideoId) ?>?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=<?= e($heroVideoId) ?>&amp;controls=0&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3"
-          title="Alina Bradu — broderie tradițională"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          loading="lazy"
-        ></iframe>
+        <a href="<?= e(url('/despre-noi')) ?>" class="btn btn--ghost-light">Povestea brandului</a>
       </${d}>
     </${d}>
   </${d}>
