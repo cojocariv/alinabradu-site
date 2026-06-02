@@ -333,20 +333,31 @@ body {
   min-width: 100%;
   min-height: 100%;
   border: 0;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(1.18);
   pointer-events: none;
+}
+
+/* Blocks hover/click so YouTube chrome (play, logo) never appears */
+.home-hero__video-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  cursor: default;
 }
 
 .home-hero__scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    105deg,
-    rgba(26, 20, 16, 0.88) 0%,
-    rgba(26, 20, 16, 0.72) 38%,
-    rgba(26, 20, 16, 0.45) 62%,
-    rgba(26, 20, 16, 0.25) 100%
-  );
+  z-index: 3;
+  background:
+    linear-gradient(to top, rgba(26, 20, 16, 0.92) 0%, rgba(26, 20, 16, 0.5) 8%, transparent 16%),
+    linear-gradient(
+      105deg,
+      rgba(26, 20, 16, 0.88) 0%,
+      rgba(26, 20, 16, 0.72) 38%,
+      rgba(26, 20, 16, 0.45) 62%,
+      rgba(26, 20, 16, 0.25) 100%
+    );
   pointer-events: none;
 }
 

@@ -48,11 +48,13 @@ require __DIR__ . '/../includes/header.php';
     <${d} class="home-hero__video-wrap">
       <iframe
         class="home-hero__video"
-        src="https://www.youtube-nocookie.com/embed/<?= e($heroVideoId) ?>?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=<?= e($heroVideoId) ?>&amp;controls=0&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3"
-        title="Alina Bradu — broderie tradițională"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        src="https://www.youtube-nocookie.com/embed/<?= e($heroVideoId) ?>?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=<?= e($heroVideoId) ?>&amp;controls=0&amp;disablekb=1&amp;fs=0&amp;playsinline=1&amp;rel=0&amp;modestbranding=1&amp;iv_load_policy=3&amp;cc_load_policy=0"
+        title=""
+        tabindex="-1"
+        allow="autoplay; encrypted-media"
         referrerpolicy="strict-origin-when-cross-origin"
       ></iframe>
+      <${d} class="home-hero__video-shield" aria-hidden="true"></${d}>
     </${d}>
     <${d} class="home-hero__scrim"></${d}>
   </${d}>
