@@ -17,6 +17,11 @@ $orgSchema = [
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <?php if ($headPreloadVideo !== ''): ?>
+  <link rel="preconnect" href="https://alinabradupozestorage.blob.core.windows.net" crossorigin>
+  <link rel="dns-prefetch" href="//alinabradupozestorage.blob.core.windows.net">
+  <link rel="preload" href="<?= e($headPreloadVideo) ?>" as="video" type="video/mp4" fetchpriority="high">
+  <?php endif; ?>
   <link rel="icon" type="image/png" href="https://alinabradupozestorage.blob.core.windows.net/poze/favicon.png">
   <link rel="apple-touch-icon" href="https://alinabradupozestorage.blob.core.windows.net/poze/favicon.png">
   <title><?= e($seo['title']) ?></title>
@@ -54,10 +59,7 @@ $orgSchema = [
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <?php if ($headPreloadVideo !== ''): ?>
-  <link rel="preload" href="<?= e($headPreloadVideo) ?>" as="video" type="video/mp4">
-  <?php endif; ?>
-  <link rel="stylesheet" href="<?= e(url('/assets/css/custom.css')) ?>?v=9">
+  <link rel="stylesheet" href="<?= e(url('/assets/css/custom.css')) ?>?v=10">
   <script>document.documentElement.classList.add('js');</script>
   <script type="application/ld+json"><?= json_encode($orgSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?></script>
 </head>

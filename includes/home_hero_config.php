@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 /**
  * Fundal video hero (HTML5). La fiecare încărcare de pagină se alege aleator un MP4.
+ * Pentru pornire rapidă: MP4 max ~8–15 MB, 720p, H.264, cu „fast start” (moov la început).
+ * CapCut: export 720p; apoi ffmpeg -i in.mp4 -c copy -movflags +faststart out.mp4
  * Opțional: config/home_hero.php poate suprascrie lista pe server.
  *
  * @return array{mp4:string,poster:string}

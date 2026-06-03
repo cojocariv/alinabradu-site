@@ -24,6 +24,7 @@ require __DIR__ . '/../includes/header.php';
     <div class="home-hero__video-wrap">
       <video
         class="home-hero__video-native"
+        src="<?= e($heroVideo['mp4']) ?>"
         autoplay
         muted
         loop
@@ -32,10 +33,32 @@ require __DIR__ . '/../includes/header.php';
         disableremoteplayback
         preload="auto"
         aria-hidden="true"
-      >
-        <source src="<?= e($heroVideo['mp4']) ?>" type="video/mp4">
-      </video>
+      ></video>
     </div>
+    <script>
+    (function () {
+      var v = document.querySelector('.home-hero__video-native');
+      var wrap = v && v.closest('.home-hero__video-wrap');
+      if (!v || !wrap) return;
+      v.defaultMuted = true;
+      v.muted = true;
+      var ready = function () { wrap.classList.add('is-ready'); };
+      var play = function () {
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      };
+      v.addEventListener('loadedmetadata', play, { once: true });
+      v.addEventListener('loadeddata', ready, { once: true });
+      if (v.readyState >= 2) {
+        ready();
+        play();
+      } else if (v.readyState >= 1) {
+        play();
+      } else {
+        play();
+      }
+    })();
+    </script>
     <div class="home-hero__scrim"></div>
   </div>
   <div class="home-hero__inner max-w-7xl mx-auto">
