@@ -15,8 +15,8 @@ function homeHeroVideoConfig(): array
     if ($base === null) {
         $base = [
             'videos' => [
-                'https://alinabradupozestorage.blob.core.windows.net/poze/amrita.mp4',
-                'https://alinabradupozestorage.blob.core.windows.net/poze/spirit.mp4',
+                'https://alinabradupozestorage.blob.core.windows.net/poze/amrita-web.mp4',
+                'https://alinabradupozestorage.blob.core.windows.net/poze/spirit-web.mp4',
             ],
             'poster' => 'https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png',
         ];
