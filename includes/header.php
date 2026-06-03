@@ -67,7 +67,7 @@ $orgSchema = [
   <header class="site-header <?= $headerOverlay ? 'site-header--overlay' : 'site-header--solid' ?>">
     <div class="max-w-7xl mx-auto px-4 md:px-6 py-3.5 flex items-center justify-between gap-3">
       <a href="<?= e(url('/')) ?>" class="site-header__logo shrink-0">
-        <img src="https://alinabradupozestorage.blob.core.windows.net/poze/image-2-1.png" alt="Alina Bradu" class="h-9 md:h-10 w-auto" loading="lazy">
+        <img src="https://alinabradupozestorage.blob.core.windows.net/poze/image-2-1.png" alt="Alina Bradu" class="h-12 md:h-14 w-auto" loading="lazy">
       </a>
       <div class="flex items-center gap-2 md:gap-5">
         <nav class="header-nav hidden md:flex items-center gap-7 uppercase tracking-boutique font-medium" aria-label="Meniu principal">
