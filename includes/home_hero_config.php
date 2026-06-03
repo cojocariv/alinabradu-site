@@ -13,8 +13,8 @@ function homeHeroVideoConfig(): array
     if ($base === null) {
         $base = [
             'videos' => [
-                'https://alinabradupozestorage.blob.core.windows.net/poze/01%20COLECTIA%20%20ETNO%20SPIRIT-%20TEXT%20.mp4',
-                'https://alinabradupozestorage.blob.core.windows.net/poze/03%20COLECTIA%20%20AMRITA%20-%20TEXT%20.mp4',
+                'https://alinabradupozestorage.blob.core.windows.net/poze/amrita.mp4',
+                'https://alinabradupozestorage.blob.core.windows.net/poze/spirit.mp4',
             ],
             'poster' => 'https://alinabradupozestorage.blob.core.windows.net/poze/Rectangle-1-5.png',
         ];
