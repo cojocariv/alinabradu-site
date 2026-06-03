@@ -31,8 +31,11 @@ require __DIR__ . '/../includes/header.php';
       <p class="about-page__eyebrow">Cea mai mare fabrică de broderie din Moldova</p>
       <h1 id="about-page-title" class="about-page__title">Despre <em>noi</em></h1>
       <p class="about-page__lead">
-        Alina Bradu este un brand boutique care reinventează portul tradițional moldovenesc într-un limbaj modern, feminin și rafinat.
-        Fiecare piesă este creată cu atenție la detalii, broderii autentice și croieli contemporane.
+      Alina Bradu este un brand despre Noi ca neam, despre rădăcinile profunde și forța care o primim atunci când purtăm cu mândrie ADN-ul Național. 
+
+Credem cu tărie că tradiția rămâne cu adevărat vie atunci când broderia respiră pe pieptul nostru zi de zi. Ea ne oferă rădăcini pentru a fi puternici și aripi pentru a zbura.
+
+Bine ați venit în universul Alina Bradu... Locul unde creăm priviri fericite !
       </p>
     </div>
   </section>
