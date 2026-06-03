@@ -87,7 +87,7 @@ $seo = ['title' => 'Produse - Admin'];
           <thead>
             <tr class="border-b text-left text-zinc-500">
               <th class="py-2 pr-2">Pe homepage</th>
-              <th class="py-2 pr-2">Ordine</th>
+              <th class="py-2 pr-2" title="1 = piesa evidențiată; 2, 3… = grilă">Poziție afișată</th>
               <th class="py-2 pr-2">Nume</th>
               <th class="py-2">Preț</th>
             </tr>
@@ -137,7 +137,8 @@ $seo = ['title' => 'Produse - Admin'];
             <th class="p-3 whitespace-nowrap">În stoc</th>
             <th class="p-3">Categorie</th>
             <th class="p-3">Preț</th>
-            <th class="p-3">Homepage</th>
+            <th class="p-3 whitespace-nowrap">Pe homepage</th>
+            <th class="p-3 whitespace-nowrap" title="Ordinea pe pagina principală (1 = evidențiat)">Poziție afișată</th>
             <th class="p-3"></th>
           </tr>
         </thead>
@@ -147,6 +148,10 @@ $seo = ['title' => 'Produse - Admin'];
             $thumbUrl = ProductModel::getPrimaryImageUrl($p);
             $thumbUrlEsc = htmlspecialchars($thumbUrl, ENT_QUOTES, 'UTF-8');
             $inStockRow = (int) ($p['in_stock'] ?? 1) === 1;
+            $onHomepage = !empty($p['featured_on_home']);
+            $homePosition = $onHomepage
+                ? ProductModel::displayHomeSort((int) ($p['home_sort'] ?? 0), true)
+                : null;
             ?>
             <tr class="border-b border-zinc-100 hover:bg-zinc-50">
               <td class="p-3"><?= (int) $p['id'] ?></td>
@@ -174,7 +179,14 @@ $seo = ['title' => 'Produse - Admin'];
               </td>
               <td class="p-3"><?= e($p['category']) ?></td>
               <td class="p-3"><?= e(formatPrice((float) $p['price'])) ?></td>
-              <td class="p-3"><?= !empty($p['featured_on_home']) ? 'Da' : '—' ?></td>
+              <td class="p-3"><?= $onHomepage ? 'Da' : '—' ?></td>
+              <td class="p-3 tabular-nums text-center">
+                <?php if ($homePosition !== null): ?>
+                  <span class="<?= $homePosition === ProductModel::HOME_SORT_FEATURED ? 'font-semibold text-gold' : '' ?>"><?= (int) $homePosition ?></span>
+                <?php else: ?>
+                  <span class="text-zinc-400">—</span>
+                <?php endif; ?>
+              </td>
               <td class="p-3 text-right space-x-2">
                 <a href="<?= e(url('/admin/produse/' . (int) $p['id'])) ?>" class="text-gold hover:underline">Modifică</a>
                 <form method="post" class="inline" onsubmit="return confirm('Ștergi acest produs?');">
