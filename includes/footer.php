@@ -37,9 +37,10 @@
     <button
       type="button"
       class="chat-fab__trigger"
-      aria-label="Deschide opțiuni chat"
-      title="Chat rapid"
+      aria-label="Discută cu noi — deschide opțiuni chat"
+      title="Discută cu noi"
     >
+      <span class="chat-fab__cta">Discută cu noi</span>
       <span class="chat-fab__trigger-icon" aria-hidden="true">💬</span>
     </button>
     <div class="chat-fab__menu" role="menu" aria-label="Alege aplicația de chat">
