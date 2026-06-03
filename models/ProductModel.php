@@ -21,14 +21,21 @@ class ProductModel
         return $stmt->fetchAll();
     }
 
-    /** Produse marcate pentru homepage (după migrare admin). */
-    public static function featuredHome(int $limit = 12): array
+    /**
+     * Produse bifate în admin pentru homepage (toate, în ordinea setată).
+     * Fără limită de număr — lista e controlată din admin.
+     */
+    public static function featuredHome(?int $limit = null): array
     {
-        $sql = 'SELECT * FROM products WHERE featured_on_home = 1' . self::publicWhereInStock() . ' ORDER BY home_sort ASC, id DESC LIMIT :limit';
-        $stmt = getDbConnection()->prepare($sql);
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll();
+        $sql = 'SELECT * FROM products WHERE featured_on_home = 1 ORDER BY home_sort ASC, id DESC';
+        if ($limit !== null && $limit > 0) {
+            $sql .= ' LIMIT :limit';
+            $stmt = getDbConnection()->prepare($sql);
+            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        }
+        return getDbConnection()->query($sql)->fetchAll();
     }
 
     public static function countInCategory(string $name, string $slug): int

@@ -69,7 +69,7 @@ $seo = ['title' => 'Produse - Admin'];
     <?php endif; ?>
 
     <h1 class="font-serif text-3xl mb-2">Produse</h1>
-    <p class="text-sm text-zinc-600 mb-6">Bifează produsele care apar în blocul „Produse noi” de pe pagina principală și setează ordinea (număr mic = primul).</p>
+    <p class="text-sm text-zinc-600 mb-6">Bifează produsele care apar în blocul „Top produse” de pe pagina principală și setează ordinea (număr mic = primul; primul din listă = piesa mare evidențiată).</p>
 
     <form method="post" class="mb-10 bg-white rounded-lg border border-zinc-200 p-4 shadow-sm">
       <input type="hidden" name="save_homepage" value="1">

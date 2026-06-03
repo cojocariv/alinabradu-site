@@ -30,12 +30,12 @@ if (!defined('SITE_EMAIL')) {
 }
 $headerOverlay = true;
 $bodyClass = 'page-home';
-$products = ProductModel::featuredHome(12);
+$products = ProductModel::featuredHome();
 if (count($products) === 0) {
     $products = ProductModel::featured(8);
 }
 $featuredProduct = $products[0] ?? null;
-$gridProducts = $featuredProduct ? array_slice($products, 1, 5) : [];
+$gridProducts = count($products) > 1 ? array_slice($products, 1) : [];
 require_once __DIR__ . '/../includes/home_hero_config.php';
 $heroVideo = homeHeroVideoConfig();
 $headPreloadVideo = $heroVideo['mp4'];
