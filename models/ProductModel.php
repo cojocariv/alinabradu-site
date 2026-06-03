@@ -365,7 +365,7 @@ class ProductModel
 
     public static function allForAdmin(): array
     {
-        $sql = 'SELECT * FROM products ORDER BY id DESC';
+        $sql = 'SELECT * FROM products ORDER BY featured_on_home DESC, ' . self::homeSortOrderSql();
         return getDbConnection()->query($sql)->fetchAll();
     }
 
