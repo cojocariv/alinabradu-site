@@ -1,4 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const overlayHeader = document.querySelector('.site-header--overlay');
+  if (overlayHeader && document.body.classList.contains('page-home')) {
+    const scrollThreshold = 40;
+    let headerScrollTicking = false;
+
+    const updateHeaderScrollBlur = () => {
+      overlayHeader.classList.toggle('site-header--scrolled', window.scrollY > scrollThreshold);
+      headerScrollTicking = false;
+    };
+
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (headerScrollTicking) return;
+        headerScrollTicking = true;
+        requestAnimationFrame(updateHeaderScrollBlur);
+      },
+      { passive: true }
+    );
+    updateHeaderScrollBlur();
+  }
+
   const mobileMenuButton = document.querySelector('[data-mobile-menu-btn]');
   const mobileMenu = document.querySelector('[data-mobile-menu]');
   if (mobileMenuButton && mobileMenu) {

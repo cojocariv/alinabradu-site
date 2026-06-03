@@ -92,6 +92,6 @@
     </svg>
   </button>
   <link rel="stylesheet" href="<?= e(url('/assets/css/product-names.css')) ?>?v=2">
-  <script src="<?= e(url('/assets/js/app.js')) ?>?v=7"></script>
+  <script src="<?= e(url('/assets/js/app.js')) ?>?v=8"></script>
 </body>
 </html>
