@@ -10,21 +10,24 @@ class ProductModel
     public const HOME_SORT_FEATURED = 1;
     public const HOME_SORT_DEFAULT = 9999;
 
-    /** Ordine homepage: 1 = piesa evidențiată; restul (pe homepage) = 9999 automat. */
+    /** Ordine homepage: 1 = piesa evidențiată; 2, 3… pentru restul; gol/0 → 9999. */
     public static function normalizeHomeSort(int $sort, bool $featured): int
     {
         if (!$featured) {
             return 0;
         }
-        return $sort === self::HOME_SORT_FEATURED ? self::HOME_SORT_FEATURED : self::HOME_SORT_DEFAULT;
+        if ($sort < 1) {
+            return self::HOME_SORT_DEFAULT;
+        }
+        return $sort;
     }
 
     public static function displayHomeSort(int $sort, bool $featured): int
     {
         if (!$featured) {
-            return self::HOME_SORT_DEFAULT;
+            return 0;
         }
-        return (int) $sort === self::HOME_SORT_FEATURED ? self::HOME_SORT_FEATURED : self::HOME_SORT_DEFAULT;
+        return $sort > 0 ? $sort : self::HOME_SORT_DEFAULT;
     }
 
     private static function homeSortOrderSql(): string
