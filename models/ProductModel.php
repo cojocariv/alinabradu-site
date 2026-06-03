@@ -7,13 +7,24 @@ require_once __DIR__ . '/CategoryModel.php';
 
 class ProductModel
 {
-    /** Ordine homepage: 1 = piesa evidențiată, 2, 3… */
+    public const HOME_SORT_FEATURED = 1;
+    public const HOME_SORT_DEFAULT = 9999;
+
+    /** Ordine homepage: 1 = piesa evidențiată; restul (pe homepage) = 9999 automat. */
     public static function normalizeHomeSort(int $sort, bool $featured): int
     {
         if (!$featured) {
             return 0;
         }
-        return $sort < 1 ? 1 : $sort;
+        return $sort === self::HOME_SORT_FEATURED ? self::HOME_SORT_FEATURED : self::HOME_SORT_DEFAULT;
+    }
+
+    public static function displayHomeSort(int $sort, bool $featured): int
+    {
+        if (!$featured) {
+            return self::HOME_SORT_DEFAULT;
+        }
+        return (int) $sort === self::HOME_SORT_FEATURED ? self::HOME_SORT_FEATURED : self::HOME_SORT_DEFAULT;
     }
 
     private static function homeSortOrderSql(): string

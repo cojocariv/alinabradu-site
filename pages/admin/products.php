@@ -77,7 +77,7 @@ $seo = ['title' => 'Produse - Admin'];
     <?php endif; ?>
 
     <h1 class="font-serif text-3xl mb-2">Produse</h1>
-    <p class="text-sm text-zinc-600 mb-6">Bifează produsele pentru „Top produse” pe pagina principală. <strong>Ordine 1</strong> = piesa evidențiată (card mare), apoi 2, 3…</p>
+    <p class="text-sm text-zinc-600 mb-6">Bifează produsele pentru „Top produse” pe pagina principală. <strong>Ordine 1</strong> = piesa evidențiată; celelalte bifate primesc automat <strong>9999</strong>.</p>
 
     <form method="post" class="mb-10 bg-white rounded-lg border border-zinc-200 p-4 shadow-sm">
       <input type="hidden" name="save_homepage" value="1">
@@ -99,13 +99,8 @@ $seo = ['title' => 'Produse - Admin'];
                   <input type="checkbox" name="featured[]" value="<?= (int) $p['id'] ?>" <?= !empty($p['featured_on_home']) ? 'checked' : '' ?>>
                 </td>
                 <td class="py-2 pr-2">
-                  <?php
-                  $homeSortDisplay = ProductModel::normalizeHomeSort(
-                      (int) ($p['home_sort'] ?? 0),
-                      !empty($p['featured_on_home'])
-                  );
-                  ?>
-                  <input type="number" name="home_sort[<?= (int) $p['id'] ?>]" value="<?= $homeSortDisplay ?>" min="1" step="1" class="w-16 border rounded px-1 py-0.5">
+                  <?php $homeSortDisplay = ProductModel::displayHomeSort((int) ($p['home_sort'] ?? 0), !empty($p['featured_on_home'])); ?>
+                  <input type="number" name="home_sort[<?= (int) $p['id'] ?>]" value="<?= $homeSortDisplay ?>" min="1" step="1" class="w-20 border rounded px-1 py-0.5" title="1 = piesa evidențiată, altfel 9999">
                 </td>
                 <td class="py-2 pr-2"><?= e($p['name']) ?></td>
                 <td class="py-2"><?= e(formatPrice((float) $p['price'])) ?></td>

@@ -312,8 +312,8 @@ if ($errors && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
           <span>Afișează în „Produse noi” pe pagina principală</span>
         </label>
         <div class="flex items-center gap-2">
-          <span class="text-sm">Ordine pe homepage (1 = piesa evidențiată)</span>
-          <input type="number" name="home_sort" value="<?= ProductModel::normalizeHomeSort((int) ($product['home_sort'] ?? 0), !empty($product['featured_on_home'])) ?>" min="1" step="1" class="w-20 border rounded px-2 py-1">
+          <span class="text-sm">Ordine (1 = evidențiată, altfel 9999 automat)</span>
+          <input type="number" name="home_sort" value="<?= ProductModel::displayHomeSort((int) ($product['home_sort'] ?? 0), !empty($product['featured_on_home'])) ?>" min="1" step="1" class="w-24 border rounded px-2 py-1">
         </div>
       </div>
 
