@@ -10,6 +10,8 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Jost', system-ui, sans-serif;
+  --accent-red: #a63d4a;
+  --accent-red-dark: #7d2a35;
 }
 
 body {
@@ -1206,37 +1208,46 @@ p.product-title {
   transform: scale(1.01);
 }
 
-/* —— Scroll to top —— */
+/* —— Chat FAB (dreapta) & scroll to top (stânga) —— */
 .chat-fab {
   position: fixed;
-  left: 1.25rem;
+  right: 1.25rem;
+  left: auto;
   bottom: 1.5rem;
   z-index: 91;
   display: flex;
   flex-direction: column-reverse;
-  align-items: flex-start;
+  align-items: flex-end;
 }
 
 .chat-fab__trigger {
-  width: 3.2rem;
-  height: 3.2rem;
-  border: 0;
+  width: 4.25rem;
+  height: 4.25rem;
+  border: 2px solid var(--gold);
   border-radius: 9999px;
-  background: linear-gradient(135deg, #25d366 0%, #7360f2 100%);
-  color: #fff;
-  box-shadow: 0 10px 24px rgba(26, 20, 16, 0.28);
+  background: linear-gradient(145deg, var(--accent-red) 0%, var(--accent-red-dark) 100%);
+  color: var(--cream);
+  box-shadow:
+    0 12px 28px rgba(26, 20, 16, 0.32),
+    inset 0 1px 0 rgba(251, 246, 238, 0.15);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+  transition:
+    transform 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out);
   animation: chatFabPulse 2.2s ease-in-out infinite;
 }
 
 .chat-fab__trigger:hover,
 .chat-fab:focus-within .chat-fab__trigger {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 14px 30px rgba(26, 20, 16, 0.32);
+  transform: translateY(-2px) scale(1.03);
+  border-color: var(--gold-light);
+  box-shadow:
+    0 16px 34px rgba(26, 20, 16, 0.36),
+    0 0 0 1px rgba(201, 169, 110, 0.25);
 }
 
 .chat-fab__trigger:focus-visible {
@@ -1245,8 +1256,9 @@ p.product-title {
 }
 
 .chat-fab__trigger-icon {
-  font-size: 1.25rem;
+  font-size: 1.65rem;
   line-height: 1;
+  filter: drop-shadow(0 1px 1px rgba(26, 20, 16, 0.2));
 }
 
 .chat-fab__menu {
@@ -1314,20 +1326,25 @@ p.product-title {
 @keyframes chatFabPulse {
   0%,
   100% {
-    box-shadow: 0 10px 24px rgba(26, 20, 16, 0.28), 0 0 0 0 rgba(115, 96, 242, 0.2);
+    box-shadow:
+      0 12px 28px rgba(26, 20, 16, 0.32),
+      0 0 0 0 rgba(166, 61, 74, 0.35);
   }
   50% {
-    box-shadow: 0 12px 28px rgba(26, 20, 16, 0.34), 0 0 0 9px rgba(115, 96, 242, 0);
+    box-shadow:
+      0 14px 32px rgba(26, 20, 16, 0.36),
+      0 0 0 10px rgba(166, 61, 74, 0);
   }
 }
 
 .scroll-top {
   position: fixed;
-  right: 1.25rem;
+  left: 1.25rem;
+  right: auto;
   bottom: 1.5rem;
   z-index: 90;
-  width: 3rem;
-  height: 3rem;
+  width: 3.15rem;
+  height: 3.15rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1371,13 +1388,18 @@ p.product-title {
 
 @media (max-width: 640px) {
   .chat-fab {
-    left: 1rem;
+    right: 1rem;
+    left: auto;
     bottom: 1rem;
   }
 
   .chat-fab__trigger {
-    width: 3rem;
-    height: 3rem;
+    width: 3.85rem;
+    height: 3.85rem;
+  }
+
+  .chat-fab__trigger-icon {
+    font-size: 1.5rem;
   }
 
   .chat-fab__btn {
@@ -1387,10 +1409,11 @@ p.product-title {
   }
 
   .scroll-top {
-    right: 1rem;
+    left: 1rem;
+    right: auto;
     bottom: 1rem;
-    width: 2.75rem;
-    height: 2.75rem;
+    width: 2.85rem;
+    height: 2.85rem;
   }
 }
 
