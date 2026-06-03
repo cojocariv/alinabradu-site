@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+$headerOverlay = true;
 $seo = [
     'title' => 'Despre noi - Alina Bradu',
     'description' => 'Povestea fabricii de broderie Alina Bradu: tradiție, feminitate și eleganță contemporană.',
@@ -25,12 +26,15 @@ require __DIR__ . '/../includes/header.php';
     ></video>
     <div class="about-page__scrim"></div>
   </div>
-  <section class="about-page__content max-w-6xl mx-auto px-4 py-12">
-    <h1 class="font-serif text-4xl mb-6 drop-shadow-sm">Despre noi</h1>
-    <p class="max-w-2xl leading-8 text-zinc-700 drop-shadow-sm">
-      Alina Bradu este un brand boutique care reinventează portul tradițional moldovenesc într-un limbaj modern, feminin și rafinat.
-      Fiecare piesă este creată cu atenție la detalii, broderii autentice și croieli contemporane.
-    </p>
+  <section class="about-page__content" aria-labelledby="about-page-title">
+    <div class="about-page__inner">
+      <p class="about-page__eyebrow">Cea mai mare fabrică de broderie din Moldova</p>
+      <h1 id="about-page-title" class="about-page__title">Despre <em>noi</em></h1>
+      <p class="about-page__lead">
+        Alina Bradu este un brand boutique care reinventează portul tradițional moldovenesc într-un limbaj modern, feminin și rafinat.
+        Fiecare piesă este creată cu atenție la detalii, broderii autentice și croieli contemporane.
+      </p>
+    </div>
   </section>
 </div>
 <script>
