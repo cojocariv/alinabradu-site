@@ -7,6 +7,20 @@ require_once __DIR__ . '/CategoryModel.php';
 
 class ProductModel
 {
+    /** Ordine homepage: 1 = piesa evidențiată, 2, 3… */
+    public static function normalizeHomeSort(int $sort, bool $featured): int
+    {
+        if (!$featured) {
+            return 0;
+        }
+        return $sort < 1 ? 1 : $sort;
+    }
+
+    private static function homeSortOrderSql(): string
+    {
+        return 'CASE WHEN home_sort < 1 THEN 999999 ELSE home_sort END ASC, id DESC';
+    }
+
     private static function publicWhereInStock(): string
     {
         return ' AND in_stock = 1';
@@ -27,7 +41,7 @@ class ProductModel
      */
     public static function featuredHome(?int $limit = null): array
     {
-        $sql = 'SELECT * FROM products WHERE featured_on_home = 1 ORDER BY home_sort ASC, id DESC';
+        $sql = 'SELECT * FROM products WHERE featured_on_home = 1 ORDER BY ' . self::homeSortOrderSql();
         if ($limit !== null && $limit > 0) {
             $sql .= ' LIMIT :limit';
             $stmt = getDbConnection()->prepare($sql);
@@ -403,7 +417,7 @@ class ProductModel
             ':size' => $data['size'],
             ':image' => $data['image'],
             ':featured_on_home' => $data['featured_on_home'] ?? 0,
-            ':home_sort' => $data['home_sort'] ?? 0,
+            ':home_sort' => self::normalizeHomeSort((int) ($data['home_sort'] ?? 0), !empty($data['featured_on_home'])),
             ':in_stock' => $data['in_stock'] ?? 1,
         ]);
         return (int) getDbConnection()->lastInsertId();
@@ -427,7 +441,7 @@ class ProductModel
             ':subcategory_slug' => $data['subcategory_slug'],
             ':size' => $data['size'],
             ':featured_on_home' => $data['featured_on_home'] ?? 0,
-            ':home_sort' => $data['home_sort'] ?? 0,
+            ':home_sort' => self::normalizeHomeSort((int) ($data['home_sort'] ?? 0), !empty($data['featured_on_home'])),
             ':in_stock' => $data['in_stock'] ?? 1,
         ]);
     }
@@ -448,7 +462,7 @@ class ProductModel
             if ($pid < 1) {
                 continue;
             }
-            $sort = (int) ($sortByProductId[$pid] ?? 0);
+            $sort = self::normalizeHomeSort((int) ($sortByProductId[$pid] ?? 0), true);
             $stmt = $pdo->prepare('UPDATE products SET featured_on_home = 1, home_sort = ? WHERE id = ?');
             $stmt->execute([$sort, $pid]);
         }

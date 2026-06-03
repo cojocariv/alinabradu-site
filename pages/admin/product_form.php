@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sizes = preg_replace('/\s+/', '', trim((string) ($_POST['sizes'] ?? '')));
     $urlsRaw = (string) ($_POST['image_urls'] ?? '');
     $featured = isset($_POST['featured_on_home']) ? 1 : 0;
-    $homeSort = (int) ($_POST['home_sort'] ?? 0);
+    $homeSort = ProductModel::normalizeHomeSort((int) ($_POST['home_sort'] ?? 0), (bool) $featured);
     $inStock = isset($_POST['in_stock']) ? 1 : 0;
 
     $slug = $slugInput !== '' ? slugify($slugInput) : slugify($name);
@@ -312,8 +312,8 @@ if ($errors && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
           <span>Afișează în „Produse noi” pe pagina principală</span>
         </label>
         <div class="flex items-center gap-2">
-          <span class="text-sm">Ordine pe homepage</span>
-          <input type="number" name="home_sort" value="<?= (int) ($product['home_sort'] ?? 0) ?>" class="w-20 border rounded px-2 py-1">
+          <span class="text-sm">Ordine pe homepage (1 = piesa evidențiată)</span>
+          <input type="number" name="home_sort" value="<?= ProductModel::normalizeHomeSort((int) ($product['home_sort'] ?? 0), !empty($product['featured_on_home'])) ?>" min="1" step="1" class="w-20 border rounded px-2 py-1">
         </div>
       </div>
 
