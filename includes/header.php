@@ -59,7 +59,7 @@ $orgSchema = [
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="<?= e(url('/assets/css/custom.css')) ?>?v=10">
+  <link rel="stylesheet" href="<?= e(url('/assets/css/custom.css')) ?>?v=11">
   <script>document.documentElement.classList.add('js');</script>
   <script type="application/ld+json"><?= json_encode($orgSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?></script>
 </head>
@@ -70,7 +70,7 @@ $orgSchema = [
         <img src="https://alinabradupozestorage.blob.core.windows.net/poze/image-2-1.png" alt="Alina Bradu" class="h-9 md:h-10 w-auto" loading="lazy">
       </a>
       <div class="flex items-center gap-2 md:gap-5">
-        <nav class="header-nav hidden md:flex items-center gap-7 text-[0.7rem] uppercase tracking-boutique font-medium" aria-label="Meniu principal">
+        <nav class="header-nav hidden md:flex items-center gap-7 uppercase tracking-boutique font-medium" aria-label="Meniu principal">
           <a href="<?= e(url('/')) ?>" class="header-nav__link">Acasă</a>
           <a href="<?= e(url('/magazin')) ?>" class="header-nav__link">Catalog</a>
           <a href="<?= e(url('/despre-noi')) ?>" class="header-nav__link">Despre noi</a>
@@ -95,7 +95,7 @@ $orgSchema = [
       </div>
     </div>
     <div id="site-mobile-nav" data-mobile-menu class="site-header__drawer hidden md:hidden">
-      <nav class="max-w-7xl mx-auto px-5 py-5 flex flex-col gap-0.5 text-sm uppercase tracking-boutique font-medium" aria-label="Meniu mobil">
+      <nav class="site-header__drawer-nav max-w-7xl mx-auto px-5 py-5 flex flex-col gap-0.5 uppercase tracking-boutique font-medium" aria-label="Meniu mobil">
         <a href="<?= e(url('/')) ?>" class="site-header__drawer-link">Acasă</a>
         <a href="<?= e(url('/magazin')) ?>" class="site-header__drawer-link">Magazin</a>
         <a href="<?= e(url('/despre-noi')) ?>" class="site-header__drawer-link">Despre noi</a>

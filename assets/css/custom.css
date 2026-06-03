@@ -97,6 +97,20 @@ body {
   color: var(--gold);
 }
 
+.header-nav {
+  font-size: 0.9375rem;
+}
+
+@media (min-width: 1024px) {
+  .header-nav {
+    font-size: 1rem;
+  }
+}
+
+.site-header__drawer-nav {
+  font-size: 1.0625rem;
+}
+
 .header-nav__link {
   position: relative;
   display: inline-block;
