@@ -29,9 +29,9 @@
   }
   $chatPhoneRaw = preg_replace('/\D+/', '', (string) SITE_PHONE_TEL) ?? '';
   $chatPhone = ltrim($chatPhoneRaw, '+');
-  $chatMessage = rawurlencode('Bună! Aș dori mai multe detalii despre produse.');
-  $whatsAppUrl = 'https://wa.me/' . $chatPhone . '?text=' . $chatMessage;
-  $viberUrl = 'viber://chat?number=%2B' . $chatPhone;
+  $chatMessagePlain = 'Bună! Aș dori mai multe detalii despre produse.';
+  $whatsAppUrl = 'https://wa.me/' . $chatPhone . '?text=' . rawurlencode($chatMessagePlain);
+  $viberUrl = productViberOrderUrl($chatMessagePlain);
   ?>
   <div class="chat-fab" aria-label="Contact rapid">
     <div class="chat-fab__trigger-wrap">
@@ -66,7 +66,7 @@
         <span class="chat-fab__label">WhatsApp</span>
       </a>
       <a
-        href="<?= e($viberUrl) ?>"
+        href="<?= e($viberUrl) ?>" data-viber-popup="1"
         class="chat-fab__btn chat-fab__btn--viber"
         target="_blank"
         rel="noopener noreferrer"
@@ -92,6 +92,6 @@
     </svg>
   </button>
   <link rel="stylesheet" href="<?= e(url('/assets/css/product-names.css')) ?>?v=2">
-  <script src="<?= e(url('/assets/js/app.js')) ?>?v=6"></script>
+  <script src="<?= e(url('/assets/js/app.js')) ?>?v=7"></script>
 </body>
 </html>

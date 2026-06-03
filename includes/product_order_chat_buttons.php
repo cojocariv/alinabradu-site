@@ -24,7 +24,7 @@ $compact = $compact ?? false;
     class="product-chat-btn product-chat-btn--wa product-chat-btn--icon"
   ><span aria-hidden="true">W</span></a>
   <a
-    href="<?= e($viberUrl) ?>"
+    href="<?= e($viberUrl) ?>" data-viber-popup="1"
     target="_blank"
     rel="noopener noreferrer"
     aria-label="<?= e($viberLabel) ?>"
@@ -42,7 +42,7 @@ $compact = $compact ?? false;
     <span><?= e($whatsAppLabel) ?></span>
   </a>
   <a
-    href="<?= e($viberUrl) ?>"
+    href="<?= e($viberUrl) ?>" data-viber-popup="1"
     target="_blank"
     rel="noopener noreferrer"
     class="product-chat-btn product-chat-btn--viber"

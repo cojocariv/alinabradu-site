@@ -109,7 +109,8 @@ function productWhatsAppOrderUrl(string $plainMessage): string
     return 'https://wa.me/' . $phone . '?text=' . rawurlencode($plainMessage);
 }
 
-function productViberOrderUrl(string $plainMessage): string
+/** Link deep Viber (chat + mesaj draft) — folosit din pagina popup. */
+function viberChatDeepLink(string $plainMessage): string
 {
     if (!defined('SITE_PHONE_TEL')) {
         require_once __DIR__ . '/../config/contact.php';
@@ -117,4 +118,10 @@ function productViberOrderUrl(string $plainMessage): string
     $phone = ltrim(preg_replace('/\D+/', '', (string) SITE_PHONE_TEL) ?? '', '+');
 
     return 'viber://chat?number=%2B' . $phone . '&draft=' . rawurlencode($plainMessage);
+}
+
+/** URL pagină popup (mesaj vizibil pe desktop + deschidere Viber). */
+function productViberOrderUrl(string $plainMessage): string
+{
+    return url('/viber-comanda?text=' . rawurlencode($plainMessage));
 }

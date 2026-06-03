@@ -98,6 +98,7 @@ $routes = [
     'contact' => __DIR__ . '/pages/contact.php',
     'cos' => __DIR__ . '/pages/cart.php',
     'checkout' => __DIR__ . '/pages/checkout.php',
+    'viber-comanda' => __DIR__ . '/pages/viber_order.php',
 ];
 
 if (isset($routes[$path])) {
