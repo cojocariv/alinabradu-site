@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim((string) ($_POST['name'] ?? ''));
     $slugInput = trim((string) ($_POST['slug'] ?? ''));
     $description = trim((string) ($_POST['description'] ?? ''));
-    $priceRaw = str_replace(',', '.', trim((string) ($_POST['price'] ?? '0')));
-    $price = (float) $priceRaw;
+    $priceRaw = str_replace(',', '.', trim((string) ($_POST['price'] ?? '')));
+    $price = $priceRaw === '' ? 0.0 : (float) $priceRaw;
     $catKey = (string) ($_POST['category_key'] ?? '');
     $newCategoryName = trim((string) ($_POST['new_category_name'] ?? ''));
     $subSlugPost = trim((string) ($_POST['subcategory_slug'] ?? ''));
@@ -74,8 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($description === '') {
         $errors[] = 'Descrierea este obligatorie.';
     }
-    if ($price <= 0) {
-        $errors[] = 'Prețul trebuie să fie pozitiv.';
+    if ($price < 0) {
+        $errors[] = 'Prețul nu poate fi negativ.';
     }
     $catForProduct = null;
     if ($newCategoryName !== '') {
@@ -261,8 +261,8 @@ if ($errors && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         <textarea name="description" rows="6" required class="w-full border rounded px-3 py-2"><?= e($product['description'] ?? '') ?></textarea>
       </div>
       <div>
-        <label class="block text-sm font-medium mb-1">Preț (MDL) *</label>
-        <input type="text" name="price" required value="<?= e(isset($product['price']) ? (string) $product['price'] : '') ?>" class="w-full max-w-xs border rounded px-3 py-2">
+        <label class="block text-sm font-medium mb-1">Preț (MDL)</label>
+        <input type="text" name="price" value="<?= e(isset($product['price']) && (float) $product['price'] > 0 ? (string) $product['price'] : '') ?>" placeholder="Opțional" class="w-full max-w-xs border rounded px-3 py-2">
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Categorie *</label>
