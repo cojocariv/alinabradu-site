@@ -34,15 +34,24 @@
   $viberUrl = 'viber://chat?number=%2B' . $chatPhone;
   ?>
   <div class="chat-fab" aria-label="Contact rapid">
-    <button
-      type="button"
-      class="chat-fab__trigger"
-      aria-label="Discută cu noi — deschide opțiuni chat"
-      title="Discută cu noi"
-    >
-      <span class="chat-fab__cta">Discută cu noi</span>
-      <span class="chat-fab__trigger-icon" aria-hidden="true">💬</span>
-    </button>
+    <div class="chat-fab__trigger-wrap">
+      <svg class="chat-fab__label-ring" viewBox="0 0 140 140" aria-hidden="true">
+        <defs>
+          <path id="chatFabTextPath" fill="none" d="M 70,70 m -56,0 a 56,56 0 1,1 112,0 a 56,56 0 1,1 -112,0"></path>
+        </defs>
+        <text class="chat-fab__label-ring-text">
+          <textPath href="#chatFabTextPath" xlink:href="#chatFabTextPath" startOffset="50%" text-anchor="middle">· Discută cu noi ·</textPath>
+        </text>
+      </svg>
+      <button
+        type="button"
+        class="chat-fab__trigger"
+        aria-label="Discută cu noi — deschide opțiuni chat"
+        title="Discută cu noi"
+      >
+        <span class="chat-fab__trigger-icon" aria-hidden="true">💬</span>
+      </button>
+    </div>
     <div class="chat-fab__menu" role="menu" aria-label="Alege aplicația de chat">
       <a
         href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"

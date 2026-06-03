@@ -1220,12 +1220,39 @@ p.product-title {
   align-items: flex-end;
 }
 
+.chat-fab__trigger-wrap {
+  position: relative;
+  width: 7.75rem;
+  height: 7.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-fab__label-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.chat-fab__label-ring-text {
+  fill: var(--cream);
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
 .chat-fab__trigger {
-  width: auto;
-  max-width: calc(100vw - 2rem);
-  min-height: 4.75rem;
-  padding: 0.4rem 0.45rem 0.4rem 1.2rem;
-  gap: 0.75rem;
+  position: relative;
+  z-index: 1;
+  width: 5rem;
+  height: 5rem;
+  padding: 0;
   border: 2px solid var(--gold);
   border-radius: 9999px;
   background: linear-gradient(145deg, var(--accent-red) 0%, var(--accent-red-dark) 100%);
@@ -1235,9 +1262,9 @@ p.product-title {
     inset 0 1px 0 rgba(251, 246, 238, 0.15);
   cursor: pointer;
   display: inline-flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   transition:
     transform 0.2s var(--ease-out),
     box-shadow 0.2s var(--ease-out),
@@ -1245,19 +1272,7 @@ p.product-title {
   animation: chatFabPulse 2.2s ease-in-out infinite;
 }
 
-.chat-fab__cta {
-  font-family: var(--font-sans);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  line-height: 1.2;
-  white-space: nowrap;
-  color: var(--cream);
-  text-shadow: 0 1px 2px rgba(26, 20, 16, 0.25);
-}
-
-.chat-fab__trigger:hover,
+.chat-fab:hover .chat-fab__trigger,
 .chat-fab:focus-within .chat-fab__trigger {
   transform: translateY(-2px) scale(1.03);
   border-color: var(--gold-light);
@@ -1272,17 +1287,8 @@ p.product-title {
 }
 
 .chat-fab__trigger-icon {
-  flex-shrink: 0;
-  width: 4.75rem;
-  height: 4.75rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.15rem;
+  font-size: 2.35rem;
   line-height: 1;
-  border-radius: 9999px;
-  background: rgba(26, 20, 16, 0.12);
-  border: 1px solid rgba(251, 246, 238, 0.22);
   filter: drop-shadow(0 1px 2px rgba(26, 20, 16, 0.2));
 }
 
@@ -1418,21 +1424,23 @@ p.product-title {
     bottom: 1rem;
   }
 
-  .chat-fab__trigger {
-    min-height: 4.15rem;
-    padding: 0.35rem 0.4rem 0.35rem 1rem;
-    gap: 0.55rem;
+  .chat-fab__trigger-wrap {
+    width: 6.75rem;
+    height: 6.75rem;
   }
 
-  .chat-fab__cta {
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
+  .chat-fab__label-ring-text {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+  }
+
+  .chat-fab__trigger {
+    width: 4.35rem;
+    height: 4.35rem;
   }
 
   .chat-fab__trigger-icon {
-    width: 4rem;
-    height: 4rem;
-    font-size: 1.85rem;
+    font-size: 2rem;
   }
 
   .chat-fab__btn {
