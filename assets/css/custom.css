@@ -1578,3 +1578,58 @@ p.product-title {
     transition: opacity 0.15s, visibility 0.15s;
   }
 }
+
+.product-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.product-chat-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  border: 1px solid transparent;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.product-chat-btn__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.product-chat-btn--wa {
+  border-color: rgba(37, 211, 102, 0.45);
+  color: #25d366;
+  background: transparent;
+}
+
+.product-chat-btn--wa:hover {
+  background: rgba(37, 211, 102, 0.1);
+}
+
+.product-chat-btn--viber {
+  border-color: rgba(115, 96, 242, 0.45);
+  color: #7360f2;
+  background: transparent;
+}
+
+.product-chat-btn--viber:hover {
+  background: rgba(115, 96, 242, 0.1);
+}
+
+.product-chat-btn--icon {
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}

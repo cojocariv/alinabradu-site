@@ -55,17 +55,13 @@ $seo = [
 ];
 require __DIR__ . '/../includes/header.php';
 $inStockProduct = (int) ($product['in_stock'] ?? 1) === 1;
-$phone = preg_replace('/\D+/', '', (string) SITE_PHONE_TEL) ?? '';
-$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-$host = (string) ($_SERVER['HTTP_HOST'] ?? '');
-$productPath = url('/produs/' . $product['slug']);
-$productUrl = $host !== '' ? ($scheme . '://' . $host . $productPath) : $productPath;
-$whatsAppText = rawurlencode(
-    "Bună! Doresc să comand produsul \"{$product['name']}\".\n" .
-    "Link produs: {$productUrl}\n" .
-    "Poză produs: " . ((string) ($productImages[0] ?? $product['image']))
+$orderMessage = productOrderMessage(
+    (string) $product['name'],
+    (string) $product['slug'],
+    (string) ($productImages[0] ?? $product['image'])
 );
-$whatsAppUrl = 'https://wa.me/' . $phone . '?text=' . $whatsAppText;
+$whatsAppUrl = productWhatsAppOrderUrl($orderMessage);
+$viberUrl = productViberOrderUrl($orderMessage);
 $offerAvailability = $inStockProduct ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder';
 $productSchema = [
     '@context' => 'https://schema.org',
@@ -130,17 +126,9 @@ $productSchema = [
           class="w-full max-w-[8rem] border p-2 rounded"
         >
       </div>
-      <div class="flex flex-wrap items-center gap-3">
+      <div class="product-page-actions">
         <button type="submit" class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700">Adaugă în coș</button>
-        <a
-          href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 border border-[#25D366]/45 text-[#25D366] px-4 py-3 rounded hover:bg-[#25D366]/10 transition-colors"
-        >
-          <span>W</span>
-          <span>Comandă pe WhatsApp</span>
-        </a>
+        <?php require __DIR__ . '/../includes/product_order_chat_buttons.php'; ?>
       </div>
     </form>
     <?php else: ?>
@@ -159,17 +147,13 @@ $productSchema = [
         <input id="com-qty" type="number" name="cantitate" min="1" max="99" value="1" required class="w-full max-w-[8rem] border p-2 rounded">
       </div>
       <p class="text-sm text-zinc-500">Produs la comandă — vei fi redirecționat către formularul de contact pentru a finaliza cererea.</p>
-      <div class="flex flex-wrap items-center gap-3">
+      <div class="product-page-actions">
         <button type="submit" class="bg-zinc-900 text-white px-6 py-3 rounded hover:bg-zinc-700">Adaugă în coș</button>
-        <a
-          href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 border border-[#25D366]/45 text-[#25D366] px-4 py-3 rounded hover:bg-[#25D366]/10 transition-colors"
-        >
-          <span>W</span>
-          <span>Solicitare la comandă</span>
-        </a>
+        <?php
+        $whatsAppLabel = 'Solicitare la comandă';
+        $viberLabel = 'Solicitare pe Viber';
+        require __DIR__ . '/../includes/product_order_chat_buttons.php';
+        ?>
       </div>
     </form>
     <?php endif; ?>

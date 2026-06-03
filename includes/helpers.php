@@ -85,3 +85,36 @@ function mergeSeo(array $seo): array
 {
     return array_merge(seoDefaults(), $seo);
 }
+
+/** Mesaj precompletat pentru comandă WhatsApp / Viber. */
+function productOrderMessage(string $productName, string $productSlug, string $imageUrl): string
+{
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host = (string) ($_SERVER['HTTP_HOST'] ?? '');
+    $productPath = url('/produs/' . $productSlug);
+    $productUrl = $host !== '' ? ($scheme . '://' . $host . $productPath) : $productPath;
+
+    return "Bună! Doresc să comand produsul \"{$productName}\".\n"
+        . "Link produs: {$productUrl}\n"
+        . "Poză produs: {$imageUrl}";
+}
+
+function productWhatsAppOrderUrl(string $plainMessage): string
+{
+    if (!defined('SITE_PHONE_TEL')) {
+        require_once __DIR__ . '/../config/contact.php';
+    }
+    $phone = preg_replace('/\D+/', '', (string) SITE_PHONE_TEL) ?? '';
+
+    return 'https://wa.me/' . $phone . '?text=' . rawurlencode($plainMessage);
+}
+
+function productViberOrderUrl(string $plainMessage): string
+{
+    if (!defined('SITE_PHONE_TEL')) {
+        require_once __DIR__ . '/../config/contact.php';
+    }
+    $phone = ltrim(preg_replace('/\D+/', '', (string) SITE_PHONE_TEL) ?? '', '+');
+
+    return 'viber://chat?number=%2B' . $phone . '&draft=' . rawurlencode($plainMessage);
+}
