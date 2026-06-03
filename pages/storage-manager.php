@@ -253,8 +253,17 @@ declare(strict_types=1);
             Selectează toate afișate
         </label>
         <span class="bulk-bar__count" id="selectionCount">0 selectate</span>
+        <button type="button" class="btn btn--gold btn--sm" id="btnCopySelectedUrls" disabled hidden>Copiază toate URL-urile</button>
         <button type="button" class="btn btn--danger btn--sm" id="btnDeleteSelected" disabled>Șterge selectate</button>
         <button type="button" class="btn btn--ghost btn--sm" id="btnClearSelection" disabled>Anulează selecția</button>
+    </div>
+    <div class="panel" id="copyUrlsPanel" hidden>
+        <label for="copyUrlsTextarea" style="margin-bottom:0.5rem">Link-uri selectate (câte unul pe rând)</label>
+        <textarea id="copyUrlsTextarea" readonly rows="6" style="width:100%;font-family:ui-monospace,monospace;font-size:0.8rem;padding:0.65rem;border:1px solid #ccc;border-radius:4px;resize:vertical"></textarea>
+        <div style="margin-top:0.5rem;display:flex;flex-wrap:wrap;gap:0.5rem">
+            <button type="button" class="btn btn--gold btn--sm" id="btnCopySelectedUrlsAgain">Copiază în clipboard</button>
+            <button type="button" class="btn btn--ghost btn--sm" id="btnHideCopyPanel">Ascunde</button>
+        </div>
     </div>
     <div class="file-list" id="fileList" aria-live="polite"></div>
 
@@ -325,6 +334,21 @@ declare(strict_types=1);
             countEl.classList.toggle("has-selection", n > 0);
             delBtn.disabled = n === 0 || busy;
             clearBtn.disabled = n === 0 || busy;
+            const copyBtn = document.getElementById("btnCopySelectedUrls");
+            const copyPanel = document.getElementById("copyUrlsPanel");
+            const copyTextarea = document.getElementById("copyUrlsTextarea");
+            if (copyBtn) {
+                copyBtn.hidden = n === 0;
+                copyBtn.disabled = n === 0 || busy;
+            }
+            if (copyPanel && copyTextarea) {
+                if (n === 0) {
+                    copyPanel.hidden = true;
+                } else {
+                    copyTextarea.value = getSelectedUrlsInOrder().join("\n");
+                    copyPanel.hidden = n < 2;
+                }
+            }
             const visible = getFilteredBlobs();
             const selectedVisible = visible.filter((name) => selectedBlobs.has(name)).length;
             selectAll.checked = visible.length > 0 && selectedVisible === visible.length;
@@ -349,6 +373,41 @@ declare(strict_types=1);
         function blobPublicUrl(name) {
             const path = name.split("/").map(encodeURIComponent).join("/");
             return baseUrl + "/" + path + "?" + sasToken;
+        }
+
+        function getSelectedUrlsInOrder() {
+            const visible = getFilteredBlobs();
+            const ordered = visible.filter((name) => selectedBlobs.has(name));
+            const rest = [...selectedBlobs].filter((name) => !ordered.includes(name));
+            return [...ordered, ...rest].map((name) => blobPublicUrl(name));
+        }
+
+        async function copyTextToClipboard(text, btn) {
+            try {
+                await navigator.clipboard.writeText(text);
+                if (btn) {
+                    const prev = btn.textContent;
+                    btn.textContent = "Copiat!";
+                    setTimeout(() => { btn.textContent = prev; }, 2000);
+                }
+                setStatus("Copiate " + text.split("\n").filter(Boolean).length + " URL-uri în clipboard.", "ok");
+            } catch (e) {
+                const ta = document.getElementById("copyUrlsTextarea");
+                if (ta) {
+                    ta.hidden = false;
+                    ta.focus();
+                    ta.select();
+                    setStatus("Selectează textul din casetă și copiază manual (Ctrl+C).", "error");
+                } else {
+                    alert("Nu s-a putut copia: " + e.message);
+                }
+            }
+        }
+
+        async function copySelectedUrls(btn) {
+            const urls = getSelectedUrlsInOrder();
+            if (!urls.length) return;
+            await copyTextToClipboard(urls.join("\n"), btn);
         }
 
         function normalizePrefix(raw) {
@@ -593,6 +652,26 @@ declare(strict_types=1);
         });
 
         document.getElementById("btnDeleteSelected").addEventListener("click", () => deleteSelected());
+
+        document.getElementById("btnCopySelectedUrls").addEventListener("click", (e) => {
+            const panel = document.getElementById("copyUrlsPanel");
+            const ta = document.getElementById("copyUrlsTextarea");
+            if (panel && ta && selectedBlobs.size > 0) {
+                ta.value = getSelectedUrlsInOrder().join("\n");
+                panel.hidden = false;
+            }
+            copySelectedUrls(e.currentTarget);
+        });
+
+        document.getElementById("btnCopySelectedUrlsAgain").addEventListener("click", (e) => {
+            const ta = document.getElementById("copyUrlsTextarea");
+            copyTextToClipboard(ta?.value || "", e.currentTarget);
+        });
+
+        document.getElementById("btnHideCopyPanel").addEventListener("click", () => {
+            const panel = document.getElementById("copyUrlsPanel");
+            if (panel) panel.hidden = true;
+        });
 
         document.getElementById("btnSelectResolution").addEventListener("click", () => {
             if (busy) return;
