@@ -20,6 +20,9 @@ function slugify(string $text): string
 
 function formatPrice(float $price): string
 {
+    if ($price <= 0) {
+        return 'Preț la cerere';
+    }
     return number_format($price, 2, ',', '.') . ' MDL';
 }
 

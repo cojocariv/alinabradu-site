@@ -262,7 +262,14 @@ if ($errors && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Preț (MDL)</label>
-        <input type="text" name="price" value="<?= e(isset($product['price']) && (float) $product['price'] > 0 ? (string) $product['price'] : '') ?>" placeholder="Opțional" class="w-full max-w-xs border rounded px-3 py-2">
+        <p class="text-xs text-zinc-500 mb-1">Opțional — lasă gol dacă prețul nu e afișat (pe site: „Preț la cerere”).</p>
+        <?php
+        $priceFormValue = '';
+        if (isset($product['price']) && (float) $product['price'] > 0) {
+            $priceFormValue = (string) $product['price'];
+        }
+        ?>
+        <input type="text" name="price" value="<?= e($priceFormValue) ?>" class="w-full max-w-xs border rounded px-3 py-2" inputmode="decimal" placeholder="ex. 1200">
       </div>
       <div>
         <label class="block text-sm font-medium mb-1">Categorie *</label>
