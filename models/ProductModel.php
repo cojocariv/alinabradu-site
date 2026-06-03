@@ -452,6 +452,12 @@ class ProductModel
         $stmt->execute([$id]);
     }
 
+    /** Scoate toate produsele din blocul „Top produse” de pe homepage. */
+    public static function clearHomepageSelection(): void
+    {
+        getDbConnection()->exec('UPDATE products SET featured_on_home = 0, home_sort = 0');
+    }
+
     /** Resetează toate steagurile, apoi marchează ID-urile date cu ordinea din $sortMap[id] = int */
     public static function saveHomepageSelection(array $featuredIds, array $sortByProductId): void
     {

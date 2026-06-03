@@ -21,6 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         redirectTo('/admin/produse');
     }
+    if (isset($_POST['clear_homepage'])) {
+        ProductModel::clearHomepageSelection();
+        redirectTo('/admin/produse?cleared=1');
+    }
     if (isset($_POST['save_homepage'])) {
         $featured = $_POST['featured'] ?? [];
         if (!is_array($featured)) {
@@ -42,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $products = ProductModel::allForAdmin();
 $saved = isset($_GET['saved']);
+$cleared = isset($_GET['cleared']);
 $seo = ['title' => 'Produse - Admin'];
 ?><!doctype html>
 <html lang="ro">
@@ -66,6 +71,9 @@ $seo = ['title' => 'Produse - Admin'];
   <main class="max-w-6xl mx-auto px-4 py-8">
     <?php if ($saved): ?>
       <p class="mb-4 text-green-700 text-sm bg-green-50 border border-green-200 rounded px-3 py-2">Setările pentru pagina principală au fost salvate.</p>
+    <?php endif; ?>
+    <?php if ($cleared): ?>
+      <p class="mb-4 text-amber-900 text-sm bg-amber-50 border border-amber-200 rounded px-3 py-2">Toate produsele au fost scoase din „Produse noi” pe homepage.</p>
     <?php endif; ?>
 
     <h1 class="font-serif text-3xl mb-2">Produse</h1>
@@ -106,7 +114,18 @@ $seo = ['title' => 'Produse - Admin'];
           </tbody>
         </table>
       </div>
-      <button type="submit" class="mt-4 bg-gold text-white px-4 py-2 rounded hover:opacity-90">Salvează selecția homepage</button>
+      <div class="mt-4 flex flex-wrap items-center gap-3">
+        <button type="submit" class="bg-gold text-white px-4 py-2 rounded hover:opacity-90">Salvează selecția homepage</button>
+        <button
+          type="submit"
+          name="clear_homepage"
+          value="1"
+          class="text-sm px-4 py-2 rounded border border-red-200 bg-red-50 text-red-800 hover:bg-red-100"
+          onclick="return confirm('Scoți toate produsele din „Produse noi” de pe pagina principală?');"
+        >
+          Dezactivează toate de pe homepage
+        </button>
+      </div>
     </form>
 
     <div class="flex justify-between items-center mb-4">
