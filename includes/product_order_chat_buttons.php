@@ -2,21 +2,32 @@
 declare(strict_types=1);
 
 /**
- * Butoane comandă WhatsApp + Viber.
- *
  * @var string $whatsAppUrl
  * @var string $viberUrl
  * @var string $whatsAppLabel
  * @var string $viberLabel
- * @var bool $compact Icon-only (card magazin)
+ * @var bool $compact
+ * @var string $chatSource
+ * @var int $chatProductId
+ * @var string $chatProductSlug
+ * @var string $chatProductName
  */
 $whatsAppLabel = $whatsAppLabel ?? 'Comandă pe WhatsApp';
 $viberLabel = $viberLabel ?? 'Comandă pe Viber';
 $compact = $compact ?? false;
+$chatSource = $chatSource ?? 'product';
+$chatProductId = isset($chatProductId) ? (int) $chatProductId : 0;
+$chatProductSlug = $chatProductSlug ?? '';
+$chatProductName = $chatProductName ?? '';
+
+$chatTrackAttrs = ' data-chat-source="' . e($chatSource) . '"'
+    . ' data-product-id="' . ($chatProductId > 0 ? (string) $chatProductId : '') . '"'
+    . ' data-product-slug="' . e($chatProductSlug) . '"'
+    . ' data-product-name="' . e($chatProductName) . '"';
 ?>
 <?php if ($compact): ?>
   <a
-    href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"
+    href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"<?= $chatTrackAttrs ?>
     target="_blank"
     rel="noopener noreferrer"
     aria-label="<?= e($whatsAppLabel) ?>"
@@ -24,7 +35,7 @@ $compact = $compact ?? false;
     class="product-chat-btn product-chat-btn--wa product-chat-btn--icon"
   ><span aria-hidden="true">W</span></a>
   <a
-    href="<?= e($viberUrl) ?>" data-viber-popup="1"
+    href="<?= e($viberUrl) ?>" data-viber-popup="1"<?= $chatTrackAttrs ?>
     target="_blank"
     rel="noopener noreferrer"
     aria-label="<?= e($viberLabel) ?>"
@@ -33,7 +44,7 @@ $compact = $compact ?? false;
   ><span aria-hidden="true">V</span></a>
 <?php else: ?>
   <a
-    href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"
+    href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"<?= $chatTrackAttrs ?>
     target="_blank"
     rel="noopener noreferrer"
     class="product-chat-btn product-chat-btn--wa"
@@ -42,7 +53,7 @@ $compact = $compact ?? false;
     <span><?= e($whatsAppLabel) ?></span>
   </a>
   <a
-    href="<?= e($viberUrl) ?>" data-viber-popup="1"
+    href="<?= e($viberUrl) ?>" data-viber-popup="1"<?= $chatTrackAttrs ?>
     target="_blank"
     rel="noopener noreferrer"
     class="product-chat-btn product-chat-btn--viber"

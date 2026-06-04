@@ -62,6 +62,11 @@ if ($path === 'admin/despre') {
     require __DIR__ . '/pages/admin/about_gallery.php';
     exit;
 }
+if ($path === 'admin/contacte-chat') {
+    adminRequireLogin();
+    require __DIR__ . '/pages/admin/chat_contacts.php';
+    exit;
+}
 if (preg_match('#^admin/produse/(\d+)$#', $path, $adm)) {
     adminRequireLogin();
     $routeParams['id'] = (int) $adm[1];
@@ -100,6 +105,7 @@ $routes = [
     'checkout' => __DIR__ . '/pages/checkout.php',
     'viber-comanda' => __DIR__ . '/pages/viber_order.php',
     'test' => __DIR__ . '/pages/test.php',
+    'api/chat-contact' => __DIR__ . '/pages/api/chat_contact.php',
 ];
 
 if (isset($routes[$path])) {

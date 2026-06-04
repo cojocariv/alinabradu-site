@@ -26,6 +26,10 @@ function renderShopProductCard(array $product): void
     $whatsAppUrl = productWhatsAppOrderUrl($orderMessage);
     $viberUrl = productViberOrderUrl($orderMessage);
     $compact = true;
+    $chatSource = 'shop_card';
+    $chatProductId = (int) $product['id'];
+    $chatProductSlug = (string) $product['slug'];
+    $chatProductName = (string) $product['name'];
     ?>
     <article class="bg-white overflow-hidden border border-gold/30 card-hover">
       <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="block bg-cream">

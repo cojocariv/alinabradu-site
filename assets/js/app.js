@@ -88,6 +88,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const chatTrackUrl = document.body.dataset.chatTrackUrl || '';
+
+  const messagePreviewFromHref = (href) => {
+    try {
+      const u = new URL(href, window.location.origin);
+      const text = u.searchParams.get('text') || u.searchParams.get('q');
+      if (text) {
+        return text.length > 500 ? text.slice(0, 500) : text;
+      }
+    } catch (_) {
+      /* ignore */
+    }
+    return '';
+  };
+
+  const trackChatContact = (link, channel) => {
+    if (!chatTrackUrl || !link) return;
+
+    const payload = {
+      channel,
+      source: link.dataset.chatSource || 'unknown',
+      page_path: window.location.pathname + window.location.search,
+      product_id: link.dataset.productId || '',
+      product_slug: link.dataset.productSlug || '',
+      product_name: link.dataset.productName || '',
+      message_preview: messagePreviewFromHref(link.getAttribute('href') || ''),
+    };
+
+    const body = JSON.stringify(payload);
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(chatTrackUrl, new Blob([body], { type: 'application/json' }));
+      return;
+    }
+    fetch(chatTrackUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      keepalive: true,
+    }).catch(() => {});
+  };
+
   const openChatPopup = (href, windowName) => {
     const popupWidth = 520;
     const popupHeight = 760;
@@ -116,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const href = link.getAttribute('href') || '';
       if (!href) return;
       e.preventDefault();
+      trackChatContact(link, 'whatsapp');
       openChatPopup(href, 'whatsappPopup');
     });
   });
@@ -125,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const href = link.getAttribute('href') || '';
       if (!href) return;
       e.preventDefault();
+      trackChatContact(link, 'viber');
       openChatPopup(href, 'viberPopup');
     });
   });

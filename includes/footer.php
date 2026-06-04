@@ -54,7 +54,7 @@
     </div>
     <div class="chat-fab__menu" role="menu" aria-label="Alege aplicația de chat">
       <a
-        href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1"
+        href="<?= e($whatsAppUrl) ?>" data-whatsapp-popup="1" data-chat-source="footer_fab"
         class="chat-fab__btn chat-fab__btn--whatsapp"
         target="_blank"
         rel="noopener noreferrer"
@@ -66,7 +66,7 @@
         <span class="chat-fab__label">WhatsApp</span>
       </a>
       <a
-        href="<?= e($viberUrl) ?>" data-viber-popup="1"
+        href="<?= e($viberUrl) ?>" data-viber-popup="1" data-chat-source="footer_fab"
         class="chat-fab__btn chat-fab__btn--viber"
         target="_blank"
         rel="noopener noreferrer"
@@ -92,6 +92,6 @@
     </svg>
   </button>
   <link rel="stylesheet" href="<?= e(url('/assets/css/product-names.css')) ?>?v=2">
-  <script src="<?= e(url('/assets/js/app.js')) ?>?v=8"></script>
+  <script src="<?= e(url('/assets/js/app.js')) ?>?v=9"></script>
 </body>
 </html>

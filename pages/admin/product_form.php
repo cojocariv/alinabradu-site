@@ -235,6 +235,7 @@ if ($errors && ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     <span class="font-serif text-lg"><?= $isNew ? 'Produs nou' : 'Modifică produs' ?></span>
     <nav class="flex gap-4 text-sm">
       <a href="<?= e(url('/admin/produse')) ?>" class="hover:underline">← Produse</a>
+      <a href="<?= e(url('/admin/contacte-chat')) ?>" class="hover:underline">Contacte chat</a>
       <a href="<?= e(url('/admin/despre')) ?>" class="hover:underline">Despre noi</a>
       <a href="<?= e(url('/admin/logout')) ?>" class="hover:underline">Ieșire</a>
     </nav>

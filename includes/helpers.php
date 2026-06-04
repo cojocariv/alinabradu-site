@@ -125,3 +125,24 @@ function productViberOrderUrl(string $plainMessage): string
 {
     return url('/viber-comanda?text=' . rawurlencode($plainMessage));
 }
+
+function clientIpAddress(): string
+{
+    $candidates = [
+        (string) ($_SERVER['HTTP_CF_CONNECTING_IP'] ?? ''),
+        (string) ($_SERVER['HTTP_X_FORWARDED_FOR'] ?? ''),
+        (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
+    ];
+
+    foreach ($candidates as $raw) {
+        if ($raw === '') {
+            continue;
+        }
+        $first = trim(explode(',', $raw)[0]);
+        if (filter_var($first, FILTER_VALIDATE_IP)) {
+            return $first;
+        }
+    }
+
+    return '';
+}

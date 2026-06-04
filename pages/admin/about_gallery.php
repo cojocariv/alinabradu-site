@@ -42,6 +42,7 @@ $seo = ['title' => 'Galerie Despre noi - Admin'];
     <span class="font-serif text-lg">Admin — Alina Bradu</span>
     <nav class="flex gap-4 text-sm">
       <a href="<?= e(url('/admin/produse')) ?>" class="hover:underline">Produse</a>
+      <a href="<?= e(url('/admin/contacte-chat')) ?>" class="hover:underline">Contacte chat</a>
       <a href="<?= e(url('/admin/despre')) ?>" class="text-gold">Despre noi</a>
       <a href="<?= e(url('/')) ?>" class="hover:underline">Site</a>
       <a href="<?= e(url('/admin/logout')) ?>" class="hover:underline">Ieșire</a>

@@ -62,6 +62,10 @@ $orderMessage = productOrderMessage(
 );
 $whatsAppUrl = productWhatsAppOrderUrl($orderMessage);
 $viberUrl = productViberOrderUrl($orderMessage);
+$chatSource = 'product';
+$chatProductId = (int) $product['id'];
+$chatProductSlug = (string) $product['slug'];
+$chatProductName = (string) $product['name'];
 $offerAvailability = $inStockProduct ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder';
 $productSchema = [
     '@context' => 'https://schema.org',

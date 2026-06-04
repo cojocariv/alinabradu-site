@@ -37,6 +37,10 @@ require __DIR__ . '/../includes/header.php';
       $whatsAppUrl = productWhatsAppOrderUrl($orderMessage);
       $viberUrl = productViberOrderUrl($orderMessage);
       $compact = true;
+      $chatSource = 'category';
+      $chatProductId = (int) $product['id'];
+      $chatProductSlug = (string) $product['slug'];
+      $chatProductName = (string) $product['name'];
       ?>
       <article class="bg-[#fffaf2] rounded-lg overflow-hidden shadow-sm border border-[#eadfc9] card-hover">
         <a href="<?= e(url('/produs/' . $product['slug'])) ?>" class="block bg-[#fffaf2]">
