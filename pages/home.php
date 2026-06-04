@@ -16,6 +16,10 @@ $seo = [
     'title' => 'Alina Bradu — Creație cu accent',
     'description' => 'Modă moldovenească de autor: broderie artizanală, colecții boutique și piese care îmbină tradiția cu eleganța contemporană.',
 ];
+$homeSearchQuery = trim((string) ($_GET['q'] ?? ''));
+if (mb_strlen($homeSearchQuery) > 120) {
+    $homeSearchQuery = mb_substr($homeSearchQuery, 0, 120);
+}
 require __DIR__ . '/../includes/header.php';
 ?>
 
@@ -70,6 +74,15 @@ require __DIR__ . '/../includes/header.php';
         <a href="<?= e(url('/magazin')) ?>" class="btn btn--primary">Descoperă colecțiile</a>
         <a href="<?= e(url('/despre-noi')) ?>" class="btn btn--ghost-light">Povestea brandului</a>
       </div>
+      <?php
+      $productSearchQuery = $homeSearchQuery;
+      $productSearchInputId = 'home-hero-search';
+      $productSearchLabel = 'Caută în catalog';
+      $productSearchPlaceholder = 'Denumire produs…';
+      $productSearchWrapperClass = 'home-hero__search';
+      $productSearchStandalone = true;
+      require __DIR__ . '/../includes/product_search_bar.php';
+      ?>
     </div>
   </div>
 </section>
@@ -108,6 +121,14 @@ require __DIR__ . '/../includes/header.php';
       <h2 id="home-products-title" class="home-section-head__title">Top <em>produse</em></h2>
       <a href="<?= e(url('/magazin')) ?>" class="home-section-head__link">Vezi magazinul →</a>
     </header>
+    <?php
+    $productSearchQuery = $homeSearchQuery;
+    $productSearchInputId = 'home-products-search';
+    $productSearchLabel = 'Caută produse după denumire';
+    $productSearchWrapperClass = 'home-products__search';
+    $productSearchStandalone = true;
+    require __DIR__ . '/../includes/product_search_bar.php';
+    ?>
     <?php if ($featuredProduct || count($gridProducts) > 0): ?>
     <div class="home-products__grid">
       <?php if ($featuredProduct): ?>

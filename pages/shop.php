@@ -167,23 +167,13 @@ require __DIR__ . '/../includes/header.php';
   <div class="lg:grid lg:grid-cols-[minmax(220px,260px)_1fr] gap-8 lg:gap-10 items-start">
     <aside class="shop-filters" aria-label="Filtre magazin">
       <form id="shopFilters" method="get" action="<?= e(url('/magazin')) ?>">
-        <fieldset class="shop-filters__group shop-filters__group--search">
-          <legend class="shop-filters__title">Căutare</legend>
-          <label class="shop-filters__select-label" for="shop-search">Denumire produs</label>
-          <div class="shop-search">
-            <input
-              type="search"
-              name="q"
-              id="shop-search"
-              class="shop-search__input"
-              value="<?= e($searchQuery) ?>"
-              placeholder="Ex: Rochie Andreea"
-              autocomplete="off"
-              enterkeyhint="search"
-            >
-            <button type="submit" class="shop-search__btn">Caută</button>
-          </div>
-        </fieldset>
+        <?php
+        $productSearchQuery = $searchQuery;
+        $productSearchInputId = 'shop-search';
+        $productSearchLegend = 'Căutare';
+        $productSearchStandalone = false;
+        require __DIR__ . '/../includes/product_search_bar.php';
+        ?>
 
         <fieldset class="shop-filters__group">
           <legend class="shop-filters__title">Tip produs</legend>
