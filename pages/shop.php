@@ -26,6 +26,11 @@ if (!in_array($selectedSort, $allowedSorts, true)) {
     $selectedSort = '';
 }
 
+$searchQuery = trim((string) ($_GET['q'] ?? ''));
+if (mb_strlen($searchQuery) > 120) {
+    $searchQuery = mb_substr($searchQuery, 0, 120);
+}
+
 $shopSortOptions = [
     '' => 'Aleatoriu',
     'name_asc' => 'Nume A → Z',
@@ -63,6 +68,7 @@ $filters = [
     'subcategories' => $selectedSubFilters,
     'sizes' => $selectedSizes,
     'sort' => $selectedSort,
+    'q' => $searchQuery,
 ];
 $shopPerPage = 9;
 $shopPage = max(1, (int) ($_GET['page'] ?? 1));
@@ -80,7 +86,7 @@ $products = array_slice($allProducts, 0, $visibleCount);
 $hasMoreProducts = $visibleCount < $totalProducts;
 $shopNextPage = $shopPage + 1;
 
-$shopPageUrl = static function (int $page) use ($selectedCategories, $selectedSubSlugs, $selectedSizes, $selectedSort): string {
+$shopPageUrl = static function (int $page) use ($selectedCategories, $selectedSubSlugs, $selectedSizes, $selectedSort, $searchQuery): string {
     $params = [];
     foreach ($selectedCategories as $cat) {
         $params['category'][] = $cat;
@@ -93,6 +99,9 @@ $shopPageUrl = static function (int $page) use ($selectedCategories, $selectedSu
     }
     if ($selectedSort !== '') {
         $params['sort'] = $selectedSort;
+    }
+    if ($searchQuery !== '') {
+        $params['q'] = $searchQuery;
     }
     if ($page > 1) {
         $params['page'] = (string) $page;
@@ -158,6 +167,24 @@ require __DIR__ . '/../includes/header.php';
   <div class="lg:grid lg:grid-cols-[minmax(220px,260px)_1fr] gap-8 lg:gap-10 items-start">
     <aside class="shop-filters" aria-label="Filtre magazin">
       <form id="shopFilters" method="get" action="<?= e(url('/magazin')) ?>">
+        <fieldset class="shop-filters__group shop-filters__group--search">
+          <legend class="shop-filters__title">Căutare</legend>
+          <label class="shop-filters__select-label" for="shop-search">Denumire produs</label>
+          <div class="shop-search">
+            <input
+              type="search"
+              name="q"
+              id="shop-search"
+              class="shop-search__input"
+              value="<?= e($searchQuery) ?>"
+              placeholder="Ex: Rochie Andreea"
+              autocomplete="off"
+              enterkeyhint="search"
+            >
+            <button type="submit" class="shop-search__btn">Caută</button>
+          </div>
+        </fieldset>
+
         <fieldset class="shop-filters__group">
           <legend class="shop-filters__title">Tip produs</legend>
           <ul class="shop-filters__list">
@@ -245,7 +272,7 @@ require __DIR__ . '/../includes/header.php';
           </ul>
         </fieldset>
 
-        <?php if ($selectedCategories !== [] || $selectedSubSlugs !== [] || $selectedSizes !== [] || $selectedSort !== ''): ?>
+        <?php if ($selectedCategories !== [] || $selectedSubSlugs !== [] || $selectedSizes !== [] || $selectedSort !== '' || $searchQuery !== ''): ?>
           <p class="shop-filters__actions">
             <a href="<?= e(url('/magazin')) ?>" class="shop-filters__clear">Resetează filtrele</a>
           </p>
@@ -254,8 +281,11 @@ require __DIR__ . '/../includes/header.php';
     </aside>
 
     <div class="shop-catalog min-w-0">
+      <?php if ($searchQuery !== ''): ?>
+        <p class="text-sm text-ink-muted mb-4">Rezultate pentru: <strong class="text-ink font-medium"><?= e($searchQuery) ?></strong></p>
+      <?php endif; ?>
       <?php if ($totalProducts > 0): ?>
-        <p id="shopCatalogStatus" class="text-sm text-ink-muted mb-6">Afișate <?= (int) $visibleCount ?> din <?= (int) $totalProducts ?> produse<?= $totalCatalogProducts > 0 && $selectedCategories === [] && $selectedSubSlugs === [] && $selectedSizes === [] ? ' · catalog: ' . (int) $totalCatalogProducts : '' ?></p>
+        <p id="shopCatalogStatus" class="text-sm text-ink-muted mb-6">Afișate <?= (int) $visibleCount ?> din <?= (int) $totalProducts ?> produse<?= $totalCatalogProducts > 0 && $selectedCategories === [] && $selectedSubSlugs === [] && $selectedSizes === [] && $searchQuery === '' ? ' · catalog: ' . (int) $totalCatalogProducts : '' ?></p>
       <?php endif; ?>
 
       <div id="shopProductGrid" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -275,7 +305,7 @@ require __DIR__ . '/../includes/header.php';
           >Arată mai multe</button>
         </div>
       <?php elseif ($totalProducts === 0): ?>
-        <p class="mt-10 text-center text-ink-muted">Niciun produs nu corespunde filtrelor selectate.</p>
+        <p class="mt-10 text-center text-ink-muted">Niciun produs nu corespunde căutării sau filtrelor selectate.</p>
       <?php endif; ?>
     </div>
   </div>
@@ -308,6 +338,21 @@ require __DIR__ . '/../includes/header.php';
     const sortSelect = document.getElementById("shop-sort");
     if (sortSelect) {
       sortSelect.addEventListener("change", submitFilters);
+    }
+
+    const searchInput = document.getElementById("shop-search");
+    if (searchInput) {
+      let searchDebounce = null;
+      searchInput.addEventListener("input", function () {
+        window.clearTimeout(searchDebounce);
+        searchDebounce = window.setTimeout(submitFilters, 450);
+      });
+      searchInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          window.clearTimeout(searchDebounce);
+          submitFilters();
+        }
+      });
     }
 
     const loadMoreBtn = document.getElementById("shopLoadMore");

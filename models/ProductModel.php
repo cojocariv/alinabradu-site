@@ -249,6 +249,12 @@ class ProductModel
             }
         }
 
+        $search = trim((string) ($filters['q'] ?? $filters['search'] ?? ''));
+        if ($search !== '') {
+            $sql .= ' AND name LIKE :search_q';
+            $params[':search_q'] = '%' . $search . '%';
+        }
+
         $sql .= ' ORDER BY id DESC';
         $stmt = getDbConnection()->prepare($sql);
         foreach ($params as $key => $value) {
@@ -306,6 +312,7 @@ class ProductModel
                 $filterContext['subcategories'] ?? []
             ),
             'sizes' => $filterContext['sizes'] ?? [],
+            'q' => trim((string) ($filterContext['q'] ?? '')),
         ], JSON_THROW_ON_ERROR);
 
         $sessionKey = 'shop_rand_' . md5($fingerprint);
