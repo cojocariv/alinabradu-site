@@ -8,3 +8,4 @@ config/mail.local.php
 logs/*
 !logs/.gitkeep
 config/*
+config/contact.php
