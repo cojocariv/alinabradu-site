@@ -1337,6 +1337,20 @@ body {
   padding: 1.25rem 0;
 }
 
+.site-footer__credit {
+  margin-top: 0.35rem;
+}
+
+.site-footer__credit-link {
+  color: rgba(251, 246, 238, 0.5);
+  text-decoration: none;
+  transition: color 0.2s var(--ease-out);
+}
+
+.site-footer__credit-link:hover {
+  color: var(--gold);
+}
+
 /* —— Shared cards (shop etc.) —— */
 .card-hover {
   transition:

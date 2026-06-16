@@ -21,6 +21,9 @@
       <p class="max-w-7xl mx-auto px-4 md:px-6 text-center text-xs text-cream/40 tracking-wide">
         © <?= date('Y') ?> Alina Bradu · Creație cu accent
       </p>
+      <p class="site-footer__credit max-w-7xl mx-auto px-4 md:px-6 text-center text-xs text-cream/35 tracking-wide">
+        Created by <a href="https://smartsolutions.md" target="_blank" rel="noopener noreferrer" class="site-footer__credit-link">smartsolutions.md</a>
+      </p>
     </div>
   </footer>
   <?php
