@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../includes/ip_geo.php';
 
 class ChatContactModel
 {
@@ -40,10 +41,22 @@ class ChatContactModel
         $userAgent = self::truncate(trim((string) ($data['user_agent'] ?? '')), 512);
         $userAgent = $userAgent !== '' ? $userAgent : null;
 
+        $geoCity = null;
+        $geoCountry = null;
+        $geoRegion = null;
+        if ($ip !== null) {
+            $geo = lookupIpGeo($ip);
+            if ($geo !== null) {
+                $geoCity = self::truncate($geo['city'], 120) ?: null;
+                $geoCountry = self::truncate($geo['country'], 120) ?: null;
+                $geoRegion = self::truncate($geo['region'], 120) ?: null;
+            }
+        }
+
         $sql = 'INSERT INTO chat_contact_leads
-            (channel, source, page_path, product_id, product_slug, product_name, message_preview, ip_address, user_agent)
+            (channel, source, page_path, product_id, product_slug, product_name, message_preview, ip_address, geo_city, geo_country, geo_region, user_agent)
             VALUES
-            (:channel, :source, :page_path, :product_id, :product_slug, :product_name, :message_preview, :ip_address, :user_agent)';
+            (:channel, :source, :page_path, :product_id, :product_slug, :product_name, :message_preview, :ip_address, :geo_city, :geo_country, :geo_region, :user_agent)';
 
         $stmt = getDbConnection()->prepare($sql);
         $stmt->bindValue(':channel', $channel);
@@ -54,6 +67,9 @@ class ChatContactModel
         $stmt->bindValue(':product_name', $productName);
         $stmt->bindValue(':message_preview', $messagePreview);
         $stmt->bindValue(':ip_address', $ip);
+        $stmt->bindValue(':geo_city', $geoCity);
+        $stmt->bindValue(':geo_country', $geoCountry);
+        $stmt->bindValue(':geo_region', $geoRegion);
         $stmt->bindValue(':user_agent', $userAgent);
         $stmt->execute();
 
@@ -75,9 +91,84 @@ class ChatContactModel
         return $stmt->fetchAll();
     }
 
+    /**
+     * Completează oraș/țară pentru înregistrările vechi (un lookup per IP unic).
+     *
+     * @param list<array<string, mixed>> $leads
+     * @return list<array<string, mixed>>
+     */
+    public static function hydrateGeoForList(array $leads): array
+    {
+        if ($leads === []) {
+            return $leads;
+        }
+
+        /** @var array<string, array{city: string, country: string, region: string}|null> $geoByIp */
+        $geoByIp = [];
+        $pendingIds = [];
+
+        foreach ($leads as $idx => $lead) {
+            if (self::leadHasGeo($lead)) {
+                continue;
+            }
+
+            $ip = trim((string) ($lead['ip_address'] ?? ''));
+            if ($ip === '') {
+                continue;
+            }
+
+            if (!array_key_exists($ip, $geoByIp)) {
+                $geoByIp[$ip] = lookupIpGeo($ip);
+            }
+
+            $geo = $geoByIp[$ip];
+            if ($geo === null) {
+                continue;
+            }
+
+            $leadId = (int) ($lead['id'] ?? 0);
+            if ($leadId > 0) {
+                $pendingIds[$leadId] = $geo;
+            }
+
+            $leads[$idx]['geo_city'] = $geo['city'];
+            $leads[$idx]['geo_country'] = $geo['country'];
+            $leads[$idx]['geo_region'] = $geo['region'];
+        }
+
+        foreach ($pendingIds as $leadId => $geo) {
+            self::updateGeo($leadId, $geo);
+        }
+
+        return $leads;
+    }
+
+    /** @param array{city: string, country: string, region: string} $geo */
+    public static function updateGeo(int $leadId, array $geo): void
+    {
+        if ($leadId < 1) {
+            return;
+        }
+
+        $sql = 'UPDATE chat_contact_leads SET geo_city = :city, geo_country = :country, geo_region = :region WHERE id = :id';
+        $stmt = getDbConnection()->prepare($sql);
+        $stmt->bindValue(':city', self::truncate($geo['city'], 120) ?: null);
+        $stmt->bindValue(':country', self::truncate($geo['country'], 120) ?: null);
+        $stmt->bindValue(':region', self::truncate($geo['region'], 120) ?: null);
+        $stmt->bindValue(':id', $leadId, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
     public static function countAll(): int
     {
         return (int) getDbConnection()->query('SELECT COUNT(*) FROM chat_contact_leads')->fetchColumn();
+    }
+
+    /** @param array<string, mixed> $lead */
+    private static function leadHasGeo(array $lead): bool
+    {
+        return trim((string) ($lead['geo_city'] ?? '')) !== ''
+            || trim((string) ($lead['geo_country'] ?? '')) !== '';
     }
 
     private static function truncate(string $value, int $max): string
