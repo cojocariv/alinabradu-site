@@ -16,6 +16,7 @@
           <li><a href="<?= e(url('/cos')) ?>">Coș</a></li>
           <li><a href="<?= e(url('/politica-confidentialitate')) ?>">Confidențialitate</a></li>
           <li><a href="<?= e(url('/politica-cookies')) ?>">Cookies</a></li>
+          <li><a href="<?= e(url('/cerere-date-personale')) ?>">Drepturile tale (date personale)</a></li>
           <li><button type="button" class="site-footer__cookie-settings" data-cookie-settings>Setări cookies</button></li>
         </ul>
       </div>

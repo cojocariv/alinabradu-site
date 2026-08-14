@@ -159,7 +159,7 @@ require __DIR__ . '/../includes/header.php';
           </div>
           <label class="flex gap-3 items-start text-sm text-zinc-600 cursor-pointer">
             <input type="checkbox" name="privacy_consent" value="1" required class="mt-0.5 shrink-0 rounded border-zinc-300 text-gold focus:ring-gold/40"<?= !empty($_POST['privacy_consent']) ? ' checked' : '' ?>>
-            <span>Am citit și sunt de acord cu <a href="<?= e(url('/politica-confidentialitate')) ?>" class="text-gold hover:underline" target="_blank" rel="noopener noreferrer">Politica de confidențialitate</a> privind prelucrarea datelor mele personale. <span class="text-red-600">*</span></span>
+            <span>Sunt de acord ca datele mele personale (nume, email, telefon, mesaj) să fie prelucrate de <?= e(DATA_CONTROLLER_NAME) ?> în scopul răspunsului la solicitarea mea, conform <a href="<?= e(url('/politica-confidentialitate')) ?>" class="text-gold hover:underline" target="_blank" rel="noopener noreferrer">Politicii de confidențialitate</a> și <?= e(PRIVACY_LAW_SHORT) ?>. <span class="text-red-600">*</span></span>
           </label>
           <button type="submit" class="w-full sm:w-auto bg-zinc-900 text-white px-8 py-3 rounded-lg hover:bg-zinc-800 transition-colors font-medium">Trimite mesajul</button>
         </form>

@@ -1879,6 +1879,15 @@ p.product-title {
   color: #1a1410;
 }
 
+.legal-page__body table {
+  border-collapse: collapse;
+}
+
+.legal-page__body th,
+.legal-page__body td {
+  vertical-align: top;
+}
+
 .contact-map__consent-placeholder {
   display: flex;
   flex-direction: column;

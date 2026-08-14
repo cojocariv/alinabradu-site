@@ -56,7 +56,7 @@ $orgSchema = [
       }
     }
   </script>
-  <link rel="stylesheet" href="<?= e(url('/assets/css/custom.css')) ?>?v=23">
+  <link rel="stylesheet" href="<?= e(url('/assets/css/custom.css')) ?>?v=24">
   <script>document.documentElement.classList.add('js');</script>
   <script type="application/ld+json"><?= json_encode($orgSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?></script>
 </head>

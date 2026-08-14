@@ -89,6 +89,7 @@ if ($path === 'sitemap.xml') {
         url('/contact'),
         url('/politica-confidentialitate'),
         url('/politica-cookies'),
+        url('/cerere-date-personale'),
     ];
     $products = ProductModel::filter();
     echo '<?xml version="1.0" encoding="UTF-8"?>';
@@ -114,6 +115,7 @@ $routes = [
     'test' => __DIR__ . '/pages/test.php',
     'politica-confidentialitate' => __DIR__ . '/pages/privacy.php',
     'politica-cookies' => __DIR__ . '/pages/cookies.php',
+    'cerere-date-personale' => __DIR__ . '/pages/data_subject_request.php',
     'api/chat-contact' => __DIR__ . '/pages/api/chat_contact.php',
 ];
 

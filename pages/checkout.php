@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../models/OrderModel.php';
+require_once __DIR__ . '/../config/contact.php';
 
 $cart = $_SESSION['cart'] ?? [];
 if (!$cart) {
@@ -65,11 +66,11 @@ require __DIR__ . '/../includes/header.php';
       <p class="font-semibold">Total plată: <?= e(formatPrice($total)) ?></p>
       <label class="flex gap-3 items-start text-sm text-zinc-600 cursor-pointer">
         <input type="checkbox" name="privacy_consent" value="1" required class="mt-0.5 shrink-0 rounded border-zinc-300">
-        <span>Am citit și sunt de acord cu <a href="<?= e(url('/politica-confidentialitate')) ?>" class="text-gold hover:underline" target="_blank" rel="noopener noreferrer">Politica de confidențialitate</a> privind prelucrarea datelor pentru comanda mea. <span class="text-red-600">*</span></span>
+        <span>Sunt de acord ca datele mele (nume, telefon, adresă) să fie prelucrate pentru procesarea și livrarea comenzii, conform <a href="<?= e(url('/politica-confidentialitate')) ?>" class="text-gold hover:underline" target="_blank" rel="noopener noreferrer">Politicii de confidențialitate</a> și <?= e(PRIVACY_LAW_SHORT) ?>. <span class="text-red-600">*</span></span>
       </label>
       <label class="flex gap-3 items-start text-sm text-zinc-600 cursor-pointer">
         <input type="checkbox" name="marketing_consent" value="1" class="mt-0.5 shrink-0 rounded border-zinc-300">
-        <span>Doresc să primesc oferte și noutăți (opțional).</span>
+        <span>Sunt de acord să primesc oferte și noutăți comerciale (consimțământ separat, opțional; poate fi retras oricând).</span>
       </label>
       <button class="bg-zinc-900 text-white px-6 py-3 rounded">Trimite comanda</button>
     </form>

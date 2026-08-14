@@ -33,10 +33,37 @@ if (!defined('PRIVACY_EMAIL')) {
     define('PRIVACY_EMAIL', is_string($envPrivacy) && $envPrivacy !== '' ? $envPrivacy : 'admin@alinabradu.com');
 }
 
-if (!defined('CNPDP_NAME')) {
-    define('CNPDP_NAME', 'Centrul Național pentru Protecția Datelor cu Caracter Personal');
+if (!defined('CNPDCP_NAME')) {
+    define('CNPDCP_NAME', 'Centrul Național pentru Protecția Datelor cu Caracter Personal');
 }
 
+if (!defined('CNPDCP_URL')) {
+    define('CNPDCP_URL', 'https://datepersonale.md');
+}
+
+/** @deprecated Folosește CNPDCP_NAME */
+if (!defined('CNPDP_NAME')) {
+    define('CNPDP_NAME', CNPDCP_NAME);
+}
+
+/** @deprecated Folosește CNPDCP_URL */
 if (!defined('CNPDP_URL')) {
-    define('CNPDP_URL', 'https://datepersonale.md');
+    define('CNPDP_URL', CNPDCP_URL);
+}
+
+/** Legea nr. 195 din 25.07.2024 — publicată MO 23.08.2024, în vigoare 23.08.2026. */
+if (!defined('PRIVACY_LAW_SHORT')) {
+    define('PRIVACY_LAW_SHORT', 'Legea nr. 195/2024');
+}
+
+if (!defined('PRIVACY_LAW_FULL')) {
+    define('PRIVACY_LAW_FULL', 'Legea nr. 195 din 25 iulie 2024 privind protecția datelor cu caracter personal');
+}
+
+if (!defined('PRIVACY_LAW_EFFECTIVE')) {
+    define('PRIVACY_LAW_EFFECTIVE', '23 august 2026');
+}
+
+if (!defined('PRIVACY_LAW_URL')) {
+    define('PRIVACY_LAW_URL', 'https://www.legis.md/cautare/getResults?doc_id=144681&lang=ro');
 }
