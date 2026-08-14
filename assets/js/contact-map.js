@@ -205,12 +205,65 @@
 		document.head.appendChild(script);
 	}
 
-	if (apiKey) {
-		initGoogle();
-	} else {
-		const started = initLeaflet();
-		if (!started) {
-			console.error("contact-map: Leaflet nu este încărcat");
-		}
+	function showMapPlaceholder() {
+		if (!canvas) return;
+		canvas.innerHTML =
+			'<p class="contact-map__consent-placeholder">Harta interactivă necesită cookie-uri funcționale. ' +
+			'<button type="button" class="contact-map__consent-btn" data-cookie-settings>Acceptă în setări cookies</button></p>';
 	}
+
+	function loadLeafletAssets(callback) {
+		if (window.L) {
+			callback();
+			return;
+		}
+		const css = document.createElement("link");
+		css.rel = "stylesheet";
+		css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+		css.integrity = "sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=";
+		css.crossOrigin = "anonymous";
+		document.head.appendChild(css);
+
+		const script = document.createElement("script");
+		script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+		script.integrity = "sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=";
+		script.crossOrigin = "anonymous";
+		script.onload = callback;
+		document.head.appendChild(script);
+	}
+
+	function startMap() {
+		if (canvas) {
+			canvas.innerHTML = "";
+		}
+		if (apiKey) {
+			initGoogle();
+			return;
+		}
+		loadLeafletAssets(() => {
+			const started = initLeaflet();
+			if (!started) {
+				console.error("contact-map: Leaflet nu este încărcat");
+			}
+		});
+	}
+
+	function whenMapAllowed(fn) {
+		if (typeof window.hasFunctionalConsent === "function" && window.hasFunctionalConsent()) {
+			fn();
+			return;
+		}
+		showMapPlaceholder();
+		window.addEventListener(
+			"cookieconsent",
+			(e) => {
+				if (e.detail && e.detail.level === "all") {
+					fn();
+				}
+			},
+			{ once: true }
+		);
+	}
+
+	whenMapAllowed(startMap);
 })();

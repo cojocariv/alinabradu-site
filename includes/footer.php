@@ -14,6 +14,9 @@
           <li><a href="<?= e(url('/despre-noi')) ?>">Despre noi</a></li>
           <li><a href="<?= e(url('/contact')) ?>">Contact</a></li>
           <li><a href="<?= e(url('/cos')) ?>">Coș</a></li>
+          <li><a href="<?= e(url('/politica-confidentialitate')) ?>">Confidențialitate</a></li>
+          <li><a href="<?= e(url('/politica-cookies')) ?>">Cookies</a></li>
+          <li><button type="button" class="site-footer__cookie-settings" data-cookie-settings>Setări cookies</button></li>
         </ul>
       </div>
     </div>
@@ -96,7 +99,9 @@
       <path d="M12 19V5M5 12l7-7 7 7"/>
     </svg>
   </button>
+  <?php require __DIR__ . '/cookie_consent.php'; ?>
   <link rel="stylesheet" href="<?= e(url('/assets/css/product-names.css')) ?>?v=2">
-  <script src="<?= e(url('/assets/js/app.js')) ?>?v=9"></script>
+  <script src="<?= e(url('/assets/js/cookie-consent.js')) ?>?v=1"></script>
+  <script src="<?= e(url('/assets/js/app.js')) ?>?v=10"></script>
 </body>
 </html>

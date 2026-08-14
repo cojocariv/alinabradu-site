@@ -57,6 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (mb_strlen($defaults['message']) > 8000) {
         $errors[] = 'Mesajul este prea lung.';
     }
+    if (empty($_POST['privacy_consent'])) {
+        $errors[] = 'Trebuie să accepți politica de confidențialitate pentru a trimite mesajul.';
+    }
 
     if (!$errors) {
         $subject = '[Contact site] ' . mb_substr($defaults['name'], 0, 80);
@@ -88,8 +91,6 @@ $contactPagePhoto = 'https://alinabradupozestorage.blob.core.windows.net/poze/ph
 require __DIR__ . '/../includes/header.php';
 ?>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script type="application/json" id="contact-stores-data"><?= $storesJson ?></script>
 <section class="contact-map-section" aria-label="Hartă — locații magazine">
   <div
@@ -156,6 +157,10 @@ require __DIR__ . '/../includes/header.php';
             <label for="contact-message" class="block text-sm font-medium text-zinc-700 mb-1">Mesaj <span class="text-red-600">*</span></label>
             <textarea id="contact-message" name="message" required rows="6" maxlength="8000" class="w-full border border-zinc-300 rounded-lg px-3 py-2.5 focus:ring-2 focus:ring-gold/40 focus:border-gold outline-none resize-y"><?= e($defaults['message']) ?></textarea>
           </div>
+          <label class="flex gap-3 items-start text-sm text-zinc-600 cursor-pointer">
+            <input type="checkbox" name="privacy_consent" value="1" required class="mt-0.5 shrink-0 rounded border-zinc-300 text-gold focus:ring-gold/40"<?= !empty($_POST['privacy_consent']) ? ' checked' : '' ?>>
+            <span>Am citit și sunt de acord cu <a href="<?= e(url('/politica-confidentialitate')) ?>" class="text-gold hover:underline" target="_blank" rel="noopener noreferrer">Politica de confidențialitate</a> privind prelucrarea datelor mele personale. <span class="text-red-600">*</span></span>
+          </label>
           <button type="submit" class="w-full sm:w-auto bg-zinc-900 text-white px-8 py-3 rounded-lg hover:bg-zinc-800 transition-colors font-medium">Trimite mesajul</button>
         </form>
       <?php endif; ?>
@@ -233,5 +238,5 @@ require __DIR__ . '/../includes/header.php';
     </div>
   </div>
 </section>
-<script src="<?= e(url('/assets/js/contact-map.js')) ?>?v=3" defer></script>
+<script src="<?= e(url('/assets/js/contact-map.js')) ?>?v=4" defer></script>
 <?php require __DIR__ . '/../includes/footer.php'; ?>

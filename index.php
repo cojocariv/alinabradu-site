@@ -82,7 +82,14 @@ if ($path === 'mail-diagnose') {
 if ($path === 'sitemap.xml') {
     header('Content-Type: application/xml; charset=utf-8');
     $host = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
-    $staticUrls = [url('/'), url('/magazin'), url('/despre-noi'), url('/contact')];
+    $staticUrls = [
+        url('/'),
+        url('/magazin'),
+        url('/despre-noi'),
+        url('/contact'),
+        url('/politica-confidentialitate'),
+        url('/politica-cookies'),
+    ];
     $products = ProductModel::filter();
     echo '<?xml version="1.0" encoding="UTF-8"?>';
     echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
@@ -105,6 +112,8 @@ $routes = [
     'checkout' => __DIR__ . '/pages/checkout.php',
     'viber-comanda' => __DIR__ . '/pages/viber_order.php',
     'test' => __DIR__ . '/pages/test.php',
+    'politica-confidentialitate' => __DIR__ . '/pages/privacy.php',
+    'politica-cookies' => __DIR__ . '/pages/cookies.php',
     'api/chat-contact' => __DIR__ . '/pages/api/chat_contact.php',
 ];
 

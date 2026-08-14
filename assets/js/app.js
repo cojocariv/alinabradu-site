@@ -105,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const trackChatContact = (link, channel) => {
     if (!chatTrackUrl || !link) return;
+    if (typeof window.hasFunctionalConsent === 'function' && !window.hasFunctionalConsent()) return;
 
     const payload = {
       channel,
