@@ -157,19 +157,92 @@ body {
 }
 
 .header-social__btn {
-  padding: 0.5rem;
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.35rem 0.45rem 0.15rem;
   border-radius: 999px;
-  transition: color 0.25s, background 0.25s;
+  transition: color 0.25s var(--ease-out), background 0.25s var(--ease-out), transform 0.25s var(--ease-out);
 }
 
-.header-social__btn:hover {
+.header-social__icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
+  transition: transform 0.25s var(--ease-out);
+}
+
+.header-social__icon--drawer {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.header-social__label {
+  position: absolute;
+  top: calc(100% - 0.05rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(0.2rem);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--gold);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.22s var(--ease-out),
+    transform 0.22s var(--ease-out),
+    visibility 0.22s;
+}
+
+.header-social__btn:hover,
+.header-social__btn:focus-visible {
   color: var(--gold);
   background: rgba(201, 169, 110, 0.12);
+  transform: translateY(-1px);
+}
+
+.header-social__btn:hover .header-social__icon,
+.header-social__btn:focus-visible .header-social__icon {
+  transform: scale(1.08);
+}
+
+.header-social__btn:hover .header-social__label,
+.header-social__btn:focus-visible .header-social__label {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0.35rem);
 }
 
 .header-social__btn--drawer {
   color: var(--cream);
   background: rgba(255, 255, 255, 0.08);
+}
+
+.header-social__btn--drawer .header-social__label {
+  position: static;
+  transform: none;
+  margin-top: 0.2rem;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.header-social__btn--drawer:hover .header-social__label,
+.header-social__btn--drawer:focus-visible .header-social__label {
+  max-height: 1rem;
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: none) {
+  .header-social__label {
+    display: none;
+  }
 }
 
 /* —— Buttons —— */
@@ -1697,6 +1770,20 @@ p.product-title {
   .header-nav__link:hover {
     letter-spacing: inherit;
     transform: none;
+  }
+
+  .header-social__btn:hover,
+  .header-social__btn:focus-visible {
+    transform: none;
+  }
+
+  .header-social__btn:hover .header-social__icon,
+  .header-social__btn:focus-visible .header-social__icon {
+    transform: none;
+  }
+
+  .header-social__label {
+    transition: opacity 0.15s, visibility 0.15s;
   }
 
   .btn:hover,
