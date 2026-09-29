@@ -708,6 +708,62 @@ body {
   opacity: 1;
 }
 
+.home-promo__sound-btn {
+  position: absolute;
+  left: 0.75rem;
+  bottom: 0.75rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid rgba(251, 246, 238, 0.35);
+  border-radius: 999px;
+  background: rgba(26, 20, 16, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--cream);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s var(--ease-out), border-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
+}
+
+.home-promo__sound-btn:hover {
+  background: rgba(26, 20, 16, 0.88);
+  border-color: rgba(201, 169, 110, 0.55);
+  color: var(--gold-light);
+}
+
+.home-promo__sound-btn.is-unmuted {
+  border-color: rgba(201, 169, 110, 0.65);
+  color: var(--gold-light);
+}
+
+.home-promo__sound-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.home-promo__sound-icon--on {
+  display: none;
+}
+
+.home-promo__sound-btn.is-unmuted .home-promo__sound-icon--off {
+  display: none;
+}
+
+.home-promo__sound-btn.is-unmuted .home-promo__sound-icon--on {
+  display: block;
+}
+
+.home-promo__sound-label {
+  white-space: nowrap;
+}
+
 .home-promo__badge {
   position: absolute;
   top: 0.85rem;
