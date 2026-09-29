@@ -10,6 +10,7 @@ if (count($products) === 0) {
 $featuredProduct = $products[0] ?? null;
 $gridProducts = count($products) > 1 ? array_slice($products, 1) : [];
 require_once __DIR__ . '/../includes/home_hero_config.php';
+require_once __DIR__ . '/../includes/home_promo_config.php';
 $heroVideo = homeHeroVideoConfig();
 $headPreloadVideo = $heroVideo['mp4'];
 $seo = [
@@ -113,6 +114,8 @@ require __DIR__ . '/../includes/header.php';
     <span class="home-marquee__dot" aria-hidden="true">◆</span>
   </div>
 </div>
+
+<?php require __DIR__ . '/../includes/home_promo_section.php'; ?>
 
 <section class="home-products" aria-labelledby="home-products-title">
   <div class="max-w-7xl mx-auto px-4 md:px-6">
