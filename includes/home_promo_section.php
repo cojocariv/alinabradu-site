@@ -16,13 +16,39 @@ $homePromo = homePromoVideoConfig();
           <video
             class="home-promo__video"
             src="<?= e($homePromo['video']) ?>"
-            controls
+            autoplay
+            muted
+            loop
             playsinline
-            preload="metadata"
+            disablepictureinpicture
+            disableremoteplayback
+            preload="auto"
             poster="<?= e($homePromo['poster']) ?>"
             aria-label="Video promoțional — voucher cadou și reducere pentru profesori"
           ></video>
         </div>
+        <script>
+        (function () {
+          var v = document.querySelector('.home-promo__video');
+          var frame = v && v.closest('.home-promo__video-frame');
+          if (!v || !frame) return;
+          v.defaultMuted = true;
+          v.muted = true;
+          var ready = function () { frame.classList.add('is-ready'); };
+          var play = function () {
+            var p = v.play();
+            if (p && p.catch) p.catch(function () {});
+          };
+          v.addEventListener('loadeddata', ready, { once: true });
+          if (v.readyState >= 2) {
+            ready();
+            play();
+          } else {
+            v.addEventListener('loadedmetadata', play, { once: true });
+            play();
+          }
+        })();
+        </script>
       </div>
 
       <div class="home-promo__copy">

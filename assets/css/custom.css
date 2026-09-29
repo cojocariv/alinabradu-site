@@ -700,6 +700,12 @@ body {
   object-fit: contain;
   vertical-align: middle;
   background: #000;
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-out);
+}
+
+.home-promo__video-frame.is-ready .home-promo__video {
+  opacity: 1;
 }
 
 .home-promo__badge {
